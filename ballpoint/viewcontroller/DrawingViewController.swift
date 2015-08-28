@@ -25,15 +25,38 @@ class DrawingViewController: UIViewController {
   }
   
   
-  @objc func clearView() {
+  func clearView() {
     drawingView.removeFromSuperview()
     drawingView = DrawingView(frame: UIScreen.mainScreen().bounds)
     view.addSubview(drawingView)
   }
   
   
+  override func canBecomeFirstResponder() -> Bool {
+    return true
+  }
+
+
+  override func motionBegan(motion: UIEventSubtype, withEvent event: UIEvent) {
+    if motion == UIEventSubtype.MotionShake {
+      clearView()
+    }
+  }
+  
+  
   override func prefersStatusBarHidden() -> Bool {
     return true
+  }
+  
+  
+  override func viewDidAppear(animated: Bool) {
+    super.viewDidAppear(animated)
+    becomeFirstResponder()
+  }
+  
+  override func viewDidDisappear(animated: Bool) {
+    resignFirstResponder()
+    super.viewDidDisappear(animated)
   }
   
   
