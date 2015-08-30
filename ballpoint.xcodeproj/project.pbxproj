@@ -14,7 +14,6 @@
 		42A112B91B8EB4D800503D9F /* DrawingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112B81B8EB4D800503D9F /* DrawingViewController.swift */; };
 		42A112BD1B8EB4E700503D9F /* DrawingView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112BA1B8EB4E700503D9F /* DrawingView.swift */; };
 		42A112BE1B8EB4E700503D9F /* PainterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112BB1B8EB4E700503D9F /* PainterView.swift */; };
-		42A112BF1B8EB4E700503D9F /* PendingCanvasView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112BC1B8EB4E700503D9F /* PendingCanvasView.swift */; };
 		42A112C31B8EB50A00503D9F /* Brush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112C01B8EB50A00503D9F /* Brush.swift */; };
 		42A112C41B8EB50A00503D9F /* CanvasPhotographer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112C11B8EB50A00503D9F /* CanvasPhotographer.swift */; };
 		42A112C51B8EB50A00503D9F /* Stroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112C21B8EB50A00503D9F /* Stroke.swift */; };
@@ -45,7 +44,6 @@
 		42A112B81B8EB4D800503D9F /* DrawingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DrawingViewController.swift; path = viewcontroller/DrawingViewController.swift; sourceTree = "<group>"; };
 		42A112BA1B8EB4E700503D9F /* DrawingView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DrawingView.swift; path = view/DrawingView.swift; sourceTree = "<group>"; };
 		42A112BB1B8EB4E700503D9F /* PainterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PainterView.swift; path = view/PainterView.swift; sourceTree = "<group>"; };
-		42A112BC1B8EB4E700503D9F /* PendingCanvasView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PendingCanvasView.swift; path = view/PendingCanvasView.swift; sourceTree = "<group>"; };
 		42A112C01B8EB50A00503D9F /* Brush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Brush.swift; path = renderer/Brush.swift; sourceTree = "<group>"; };
 		42A112C11B8EB50A00503D9F /* CanvasPhotographer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CanvasPhotographer.swift; path = renderer/CanvasPhotographer.swift; sourceTree = "<group>"; };
 		42A112C21B8EB50A00503D9F /* Stroke.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Stroke.swift; path = renderer/Stroke.swift; sourceTree = "<group>"; };
@@ -136,7 +134,6 @@
 			children = (
 				42A112BA1B8EB4E700503D9F /* DrawingView.swift */,
 				42A112BB1B8EB4E700503D9F /* PainterView.swift */,
-				42A112BC1B8EB4E700503D9F /* PendingCanvasView.swift */,
 			);
 			name = view;
 			sourceTree = "<group>";
@@ -278,7 +275,6 @@
 			files = (
 				42A112C31B8EB50A00503D9F /* Brush.swift in Sources */,
 				42A112C41B8EB50A00503D9F /* CanvasPhotographer.swift in Sources */,
-				42A112BF1B8EB4E700503D9F /* PendingCanvasView.swift in Sources */,
 				42A112BD1B8EB4E700503D9F /* DrawingView.swift in Sources */,
 				42A112931B8EB1D000503D9F /* AppDelegate.swift in Sources */,
 				42A112CA1B8EB66300503D9F /* Constants.swift in Sources */,

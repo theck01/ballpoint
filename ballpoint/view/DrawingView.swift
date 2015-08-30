@@ -16,14 +16,11 @@ class DrawingView: UIView, PainterViewDelegate {
   //drawings.
   static let kDefaultBrush = CircularBrush(radius: 2)
   static let kDefaultPaintColor = UIColor.blackColor()
-  
-  /// The image view that backs the canvas, providing a persistant view of all
-  /// completed strokes.
-  private var completedCanvas: UIImageView
-  
-  /// The canvas upon which pending strokes are painted.
-  private var pendingCanvas: PendingCanvasView
-  
+
+  /// The map of strokes that require drawing.
+  private var pendingStrokes: (ids: Set<StrokeId>, strokes: [Stroke]) =
+  (ids: Set(), strokes: [])
+
   /// The photographer that converts drawings to images.
   private var photographer: CanvasPhotographer
   
@@ -43,18 +40,16 @@ class DrawingView: UIView, PainterViewDelegate {
       }
     }
   }
-  
-  
+
+  /// The current graphics context. Only valid during a -drawRect call, cached
+  /// for speed.
+  private var context: CGContext!
+
+
   init(frame: CGRect, editable: Bool = true) {
     let bounds = CGRect(origin: CGPointZero, size: frame.size)
     
-    pendingCanvas = PendingCanvasView(frame: bounds)
-    pendingCanvas.backgroundColor = UIColor.clearColor()
-    
     photographer = CanvasPhotographer(imageSize: bounds.size)
-    
-    completedCanvas = UIImageView(image: photographer.snapshot)
-    completedCanvas.backgroundColor = UIColor.clearColor()
     
     painter = editable ?
         PainterView(
@@ -64,31 +59,91 @@ class DrawingView: UIView, PainterViewDelegate {
     painter?.backgroundColor = UIColor.clearColor()
     
     super.init(frame: frame)
+
+    backgroundColor = UIColor.clearColor()
     
     painter?.delegate = self
     
-    addSubview(completedCanvas)
-    addSubview(pendingCanvas)
     if let p = painter {
       addSubview(p)
     }
   }
 
-  
+
+  func clearStrokes() {
+    clearPendingStrokes()
+    photographer.clearSnapshot()
+  }
+
+
+  /// MARK: PainterViewDelegate methods
+
   func pendingStrokeUpdated(stroke: Stroke) {
     if let p = painter {
       for s in p.pendingStrokes {
-        pendingCanvas.addPendingStroke(s)
+        addPendingStroke(s)
       }
     }
   }
-  
+
+
+  func pendingStrokesCancelled(strokes: [Stroke]) {
+    clearPendingStrokes()
+  }
+
   
   func strokeCompleted(stroke: Stroke) {
     photographer.addStrokeToSnapshot(stroke)
-    completedCanvas.image = photographer.snapshot
   }
-  
+
+
+  /// MARK: UIView method overrides.
+
+  override func drawRect(rect: CGRect) {
+    context = UIGraphicsGetCurrentContext()
+
+    // Draw snapshot on the context, using -drawInRect to ensure that the
+    // image is oriented properly within the context.
+    photographer.snapshot.drawInRect(
+        CGRect(origin: CGPointZero, size: bounds.size))
+
+    if pendingStrokes.strokes.count > 0 {
+        for s in pendingStrokes.strokes {
+          s.paintOn(context)
+        }
+        pendingStrokes = (ids: Set(), strokes: [])
+    }
+
+    context = nil
+  }
+
+
+  /// MARK: Private methods.
+
+  /**
+   Adds the given stroke as pending within the canvas view. Does nothing if the
+   given stroke is already pending within the view.
+
+   :param: stroke
+   */
+  private func addPendingStroke(stroke: Stroke) {
+    if !pendingStrokes.ids.contains(stroke.id) {
+      pendingStrokes.ids.insert(stroke.id)
+      pendingStrokes.strokes.append(stroke)
+
+      setNeedsDisplay()
+    }
+  }
+
+
+  /**
+   Clears the view of pending strokes and redraws the screen.
+   */
+  private func clearPendingStrokes() {
+    pendingStrokes = (ids: [], strokes: [])
+    setNeedsDisplay()
+  }
+
 
   required init(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")

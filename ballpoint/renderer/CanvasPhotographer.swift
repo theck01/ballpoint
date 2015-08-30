@@ -38,6 +38,13 @@ class CanvasPhotographer {
     snapshot = CanvasPhotographer.generateImageWithSize(
         imageSize, fromStrokes: [stroke], previousImage: snapshot)
   }
+
+
+  func clearSnapshot() {
+    strokes = []
+    snapshot = CanvasPhotographer.generateImageWithSize(
+        imageSize, fromStrokes: strokes, previousImage: nil)
+  }
   
   
   private static func generateImageWithSize(
