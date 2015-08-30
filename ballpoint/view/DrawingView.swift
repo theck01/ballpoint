@@ -11,7 +11,7 @@ import UIKit
 
 /// A view that manages displaying a drawing and optionally handling gesture
 /// input that updates the drawing.
-class DrawingView: UIView, PainterViewDelegate {
+class DrawingView: UIView, DrawingDelegate {
   // The default values for the brush and paint color used for editable
   //drawings.
   static let kDefaultBrush = CircularBrush(radius: 2)
@@ -46,7 +46,7 @@ class DrawingView: UIView, PainterViewDelegate {
 
     backgroundColor = UIColor.clearColor()
     
-    painter.delegate = self
+    painter.drawingDelegate = self
     addSubview(painter)
   }
 
@@ -66,7 +66,7 @@ class DrawingView: UIView, PainterViewDelegate {
   }
 
 
-  func pendingStrokesCancelled(strokes: [Stroke]) {
+  func pendingStrokesCancelled() {
     clearPendingStrokes()
   }
 

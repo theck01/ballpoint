@@ -10,40 +10,45 @@ import UIKit
 
 
 
-class DrawingViewController: UIViewController {
-  var drawingView: DrawingView
-  
-  
+class DrawingViewController: UIViewController, ActionHandler {
+  let drawingView: DrawingView
+
   init() {
     drawingView = DrawingView(frame: UIScreen.mainScreen().bounds)
-    
+
     super.init(nibName: nil, bundle: nil)
-    
+
     view.backgroundColor = UIColor.whiteColor()
-    
     view.addSubview(drawingView)
+
+    drawingView.painter.actionHandler = self
   }
   
-  
-  func clearView() {
-    drawingView.removeFromSuperview()
-    drawingView = DrawingView(frame: UIScreen.mainScreen().bounds)
-    view.addSubview(drawingView)
-  }
-  
-  
-  override func canBecomeFirstResponder() -> Bool {
-    return true
+
+  /// MARK: ActionHandler methods
+
+  func handleClearCanvas() {
+    drawingView.clearStrokes()
   }
 
 
-  override func motionBegan(motion: UIEventSubtype, withEvent event: UIEvent) {
-    if motion == UIEventSubtype.MotionShake {
-      clearView()
-    }
+  func handleToolToggle() {
+    println("Tool toggled!")
   }
-  
-  
+
+
+  func handleUndo() {
+    println("Undo!")
+  }
+
+
+  func handleRedo() {
+    println("Redo!")
+  }
+
+
+  /// MARK: UIViewController method overrides.
+
   override func prefersStatusBarHidden() -> Bool {
     return true
   }
@@ -51,11 +56,11 @@ class DrawingViewController: UIViewController {
   
   override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
-    becomeFirstResponder()
+    drawingView.painter.becomeFirstResponder()
   }
   
   override func viewDidDisappear(animated: Bool) {
-    resignFirstResponder()
+    drawingView.painter.resignFirstResponder()
     super.viewDidDisappear(animated)
   }
   
