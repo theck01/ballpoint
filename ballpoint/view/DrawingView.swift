@@ -15,58 +15,39 @@ class DrawingView: UIView, PainterViewDelegate {
   // The default values for the brush and paint color used for editable
   //drawings.
   static let kDefaultBrush = CircularBrush(radius: 2)
-  static let kDefaultPaintColor = UIColor.blackColor()
+  static let kDefaultPaintColor = UIColor.ballpointInkColor()
 
-  /// The map of strokes that require drawing.
+  /// The map of pending strokes that require drawing.
   private var pendingStrokes: (ids: Set<StrokeId>, strokes: [Stroke]) =
-  (ids: Set(), strokes: [])
+      (ids: Set(), strokes: [])
 
   /// The photographer that converts drawings to images.
   private var photographer: CanvasPhotographer
   
-  /// The optional painter view, which if present converts user touches to
-  /// stroke objects.
-  private var painter: PainterView? {
-    didSet {
-      oldValue?.delegate = nil
-      if let ov = oldValue {
-        ov.removeFromSuperview()
-      }
-      
-      painter?.delegate = self
-      if let p = painter {
-        p.frame = bounds
-        addSubview(p)
-      }
-    }
-  }
+  /// The painter view, which converts user touches to stroke objects.
+  let painter: PainterView
 
   /// The current graphics context. Only valid during a -drawRect call, cached
   /// for speed.
   private var context: CGContext!
 
 
-  init(frame: CGRect, editable: Bool = true) {
+  override init(frame: CGRect) {
     let bounds = CGRect(origin: CGPointZero, size: frame.size)
     
     photographer = CanvasPhotographer(imageSize: bounds.size)
     
-    painter = editable ?
-        PainterView(
-            brush: DrawingView.kDefaultBrush,
-            paintColor: DrawingView.kDefaultPaintColor, frame: bounds) :
-        nil
-    painter?.backgroundColor = UIColor.clearColor()
+    painter = PainterView(
+        brush: DrawingView.kDefaultBrush,
+        paintColor: DrawingView.kDefaultPaintColor, frame: bounds)
+    painter.backgroundColor = UIColor.clearColor()
     
     super.init(frame: frame)
 
     backgroundColor = UIColor.clearColor()
     
-    painter?.delegate = self
-    
-    if let p = painter {
-      addSubview(p)
-    }
+    painter.delegate = self
+    addSubview(painter)
   }
 
 
@@ -79,10 +60,8 @@ class DrawingView: UIView, PainterViewDelegate {
   /// MARK: PainterViewDelegate methods
 
   func pendingStrokeUpdated(stroke: Stroke) {
-    if let p = painter {
-      for s in p.pendingStrokes {
-        addPendingStroke(s)
-      }
+    for s in painter.pendingStrokes {
+      addPendingStroke(s)
     }
   }
 
