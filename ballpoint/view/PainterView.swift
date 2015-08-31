@@ -10,31 +10,6 @@ import UIKit
 
 
 
-/// Delegate responsible for handling the addition and removal of strokes.
-protocol DrawingDelegate {
-  /**
-   Process the update of a pending strokes, which may be updated in the future.
-  
-   :param: stroke
-   */
-  func pendingStrokeUpdated(stroke: Stroke)
-
-
-  /**
-   Process the cancellation of all pending strokes.
-   */
-  func pendingStrokesCancelled()
-  
-  /**
-   Process the completion of the given stroke, which will not be updated.
-   
-   :param: stroke
-   */
-  func strokeCompleted(stroke: Stroke)
-}
-
-
-
 /// View that transforms user interaction events into drawing and application
 /// actions.
 class PainterView: UIView {
@@ -44,22 +19,15 @@ class PainterView: UIView {
   /// The color of the strokes to paint.
   var paintColor: UIColor
   
-  var drawingDelegate: DrawingDelegate?
-  var actionHandler: ActionHandler?
-  
+  var drawingInteractionDelegate: DrawingInteractionDelegate?
+
   /// An array of touch locations and pending strokes that last were updated to
   /// that location.
   private var locationPendingStrokePairs:
       [(location: CGPoint, stroke: MutableStroke)] = []
   
-  /// The array of pending strokes in progress.
-  var pendingStrokes: [Stroke] {
-    return locationPendingStrokePairs.map { $0.stroke }
-  }
-
-  // The gesture recognizers that map to all application actions.
-  let twoTouchPanRecognizer: UIPanGestureRecognizer
-  let twoTouchTapRecognizer: UITapGestureRecognizer
+  // The gesture recognizers that map to application actions.
+  private let twoTouchTapRecognizer: UITapGestureRecognizer
 
   
   /**
@@ -72,17 +40,9 @@ class PainterView: UIView {
   init(brush: Brush, paintColor: UIColor, frame: CGRect = CGRectZero) {
     self.brush = brush
     self.paintColor = paintColor
-    twoTouchPanRecognizer = UIPanGestureRecognizer()
     twoTouchTapRecognizer = UITapGestureRecognizer()
+    
     super.init(frame: frame)
-
-    backgroundColor = UIColor.clearColor()
-
-    twoTouchPanRecognizer.cancelsTouchesInView = true
-    twoTouchPanRecognizer.minimumNumberOfTouches = 2
-    twoTouchPanRecognizer.maximumNumberOfTouches = 2
-    twoTouchPanRecognizer.addTarget(self, action: "handleTwoTouchPanGesture:")
-    addGestureRecognizer(twoTouchPanRecognizer)
 
     twoTouchTapRecognizer.cancelsTouchesInView = true
     twoTouchTapRecognizer.numberOfTapsRequired = 1
@@ -99,8 +59,8 @@ class PainterView: UIView {
         let stroke = brush.beginStrokeWithColor(
             self.paintColor, atLocation: location)
         
-        drawingDelegate?.pendingStrokeUpdated(stroke)
         locationPendingStrokePairs.append((location: location, stroke: stroke))
+        drawingInteractionDelegate?.updatePendingStroke(stroke)
       }
     }
   }
@@ -118,7 +78,7 @@ class PainterView: UIView {
           if $0.location == previousLocation {
             self.brush.extendStroke(
                 $0.stroke, fromLocation: previousLocation, toLocation: location)
-            self.drawingDelegate?.pendingStrokeUpdated($0.stroke)
+            self.drawingInteractionDelegate?.updatePendingStroke($0.stroke)
             return (location: location, stroke: $0.stroke)
           } else {
             return $0
@@ -151,10 +111,10 @@ class PainterView: UIView {
           if $0.location == previousLocation && location != previousLocation {
             self.brush.extendStroke(
                 $0.stroke, fromLocation: previousLocation, toLocation: location)
-            self.drawingDelegate?.pendingStrokeUpdated($0.stroke)
+            self.drawingInteractionDelegate?.updatePendingStroke($0.stroke)
           }
           
-          self.drawingDelegate?.strokeCompleted($0.stroke);
+          self.drawingInteractionDelegate?.completeStroke($0.stroke);
           return false
         }
       }
@@ -170,28 +130,22 @@ class PainterView: UIView {
   override func touchesCancelled(
       touches: Set<NSObject>!, withEvent event: UIEvent!) {
     locationPendingStrokePairs = []
-    drawingDelegate?.pendingStrokesCancelled()
+    drawingInteractionDelegate?.cancelPendingStrokes()
   }
 
 
   override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
     if motion == UIEventSubtype.MotionShake {
-      actionHandler?.handleClearCanvas()
+      drawingInteractionDelegate?.clearDrawing()
     }
   }
 
 
   /// MARK: Gesture handlers.
 
-  @objc func handleTwoTouchPanGesture(
-    twoTouchPanRecognizer: UIPanGestureRecognizer) {
-      println("Two touch pan gesture recognized!")
-  }
-
-
   @objc func handleTwoTouchTapGesture(
-    twoTouchTapRecognizer: UITapGestureRecognizer) {
-      actionHandler?.handleToolToggle()
+      twoTouchTapRecognizer: UITapGestureRecognizer) {
+    drawingInteractionDelegate?.toggleTool()
   }
 
 

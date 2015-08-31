@@ -10,40 +10,49 @@ import UIKit
 
 
 
-class DrawingViewController: UIViewController, ActionHandler {
-  let drawingView: DrawingView
+class DrawingViewController: UIViewController, DrawingUpdateListener {
+  // The default values for the brush and paint color.
+  static let kDefaultBrush = CircularBrush(radius: 2)
+  static let kDefaultPaintColor = UIColor.ballpointInkColor()
+
+  /// The image view that displays the rendered drawing.
+  let drawingImageView: UIImageView
+
+  /// The painter view that handles all user interaction.
+  let painterView: PainterView
+
+  var drawingInteractionDelegate: DrawingInteractionDelegate? {
+    get {
+      return painterView.drawingInteractionDelegate
+    }
+    set {
+      painterView.drawingInteractionDelegate = newValue
+    }
+  }
+
 
   init() {
-    drawingView = DrawingView(frame: UIScreen.mainScreen().bounds)
-
+    let screenBounds = UIScreen.mainScreen().bounds
+    drawingImageView = UIImageView(frame: screenBounds)
+    painterView = PainterView(
+        brush: DrawingViewController.kDefaultBrush,
+        paintColor: DrawingViewController.kDefaultPaintColor,
+        frame: screenBounds)
     super.init(nibName: nil, bundle: nil)
 
     view.backgroundColor = UIColor.whiteColor()
-    view.addSubview(drawingView)
+    drawingImageView.backgroundColor = UIColor.clearColor()
+    painterView.backgroundColor = UIColor.clearColor()
 
-    drawingView.painter.actionHandler = self
-  }
-  
-
-  /// MARK: ActionHandler methods
-
-  func handleClearCanvas() {
-    drawingView.clearStrokes()
+    view.addSubview(drawingImageView)
+    view.addSubview(painterView)
   }
 
 
-  func handleToolToggle() {
-    println("Tool toggled!")
-  }
+  /// MARK: DrawingUpdateListener methods
 
-
-  func handleUndo() {
-    println("Undo!")
-  }
-
-
-  func handleRedo() {
-    println("Redo!")
+  func drawingSnapshotUpdated(snapshot: UIImage) {
+    drawingImageView.image = snapshot
   }
 
 
@@ -56,11 +65,11 @@ class DrawingViewController: UIViewController, ActionHandler {
   
   override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
-    drawingView.painter.becomeFirstResponder()
+    painterView.becomeFirstResponder()
   }
   
   override func viewDidDisappear(animated: Bool) {
-    drawingView.painter.resignFirstResponder()
+    painterView.resignFirstResponder()
     super.viewDidDisappear(animated)
   }
   

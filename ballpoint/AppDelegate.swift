@@ -13,29 +13,32 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
-  
-  var drawingVC: DrawingViewController?
 
-  
   func application(
       application: UIApplication,
       didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) ->
           Bool {
-    window = UIWindow(frame: UIScreen.mainScreen().bounds)
-    window?.backgroundColor = UIColor.whiteColor()
-            
-    drawingVC = DrawingViewController()
-    window?.rootViewController = drawingVC
-    window?.rootViewController?.view.backgroundColor =
-          UIColor.launchScreenBackgroundColor()
-            
-    window?.makeKeyAndVisible()
+    let window = UIWindow(frame: UIScreen.mainScreen().bounds)
+    self.window = window
+    window.backgroundColor = UIColor.whiteColor()
+
+    let model = DrawingModel()
+
+    let controller = DrawingController(model: model)
+
+    let drawingVC = DrawingViewController()
+    drawingVC.drawingInteractionDelegate = controller
+    drawingVC.view.backgroundColor = UIColor.launchScreenBackgroundColor()
+
+    controller.registerDrawingUpdateListener(drawingVC)
+
+    window.rootViewController = drawingVC
+    window.makeKeyAndVisible()
             
     UIView.animateWithDuration(Constants.kAppLaunchedAnimationDuration) {
-      self.window?.rootViewController?.view.backgroundColor =
-          UIColor.whiteColor()
-      return
+      drawingVC.view.backgroundColor = UIColor.whiteColor()
     }
+
     return true
   }
 }
