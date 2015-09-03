@@ -11,22 +11,20 @@ import UIKit
 
 
 /// An in-memory model of the current drawing.
-class DrawingModel {
+class DrawingModel: DrawingUpdater {
   private var edits: [DrawingEdit] = []
-  private(set) var modelSnapshot: UIImage = DrawingRenderer.renderStrokes(
-      [], withinSize: Constants.kDrawingSize, onImage: nil)
 
 
   func addStroke(stroke: Stroke) {
     edits.append(DrawingEdit(type: .AddStroke, stroke: stroke))
-    modelSnapshot = DrawingRenderer.renderStrokes(
-        [stroke], withinSize: Constants.kDrawingSize, onImage: modelSnapshot)
+    drawingSnapshot = DrawingRenderer.renderStrokes(
+        [stroke], withinSize: Constants.kDrawingSize, onImage: drawingSnapshot)
   }
 
   
   func clearStrokes() {
     edits.append(DrawingEdit(type: .Clear, stroke: nil))
-    modelSnapshot = DrawingRenderer.renderStrokes(
+    drawingSnapshot = DrawingRenderer.renderStrokes(
         [], withinSize: Constants.kDrawingSize, onImage: nil)
   }
 }

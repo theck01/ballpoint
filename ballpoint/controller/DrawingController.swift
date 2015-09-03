@@ -10,52 +10,33 @@ import UIKit
 
 
 
-/// A protocol for an listener that should be notified each time that the
-/// drawing snapshot changes.
-protocol DrawingUpdateListener {
-  /**
-   Informs the listener that a new snapshot has been made available.
-   
-   :param: The new snapshot of the drawing.
-   */
-  func drawingSnapshotUpdated(snapshot: UIImage)
-}
-
-
-
 /// A controller responsible for transforming interactions into model edits and
 /// notifying listeners when the drawing updates.
-class DrawingController: DrawingInteractionDelegate {
+class DrawingController: DrawingUpdater, DrawingUpdateListener,
+    DrawingInteractionDelegate {
   let model: DrawingModel
 
-  private var drawingUpdateListeners: [DrawingUpdateListener] = []
-
   private var pendingStrokeIdMap: [StrokeId: Stroke] = [:]
-
-  private var drawingSnapshot: UIImage = DrawingRenderer.renderStrokes(
-      [], withinSize: Constants.kDrawingSize, onImage: nil) {
-    didSet {
-      for listener in drawingUpdateListeners {
-        listener.drawingSnapshotUpdated(drawingSnapshot)
-      }
-    }
-  }
 
 
   init(model: DrawingModel) {
     self.model = model
+    super.init()
+    
+    model.registerDrawingUpdateListener(self)
   }
 
 
-  /**
-   Registers a new listener for drawing updates and immediately supplies the
-   listener with the current drawing representation.
+  /// MARK: DrawingUpdateListener methods.
 
-   :param: listener
-   */
-  func registerDrawingUpdateListener(listener: DrawingUpdateListener) {
-    drawingUpdateListeners.append(listener)
-    listener.drawingSnapshotUpdated(drawingSnapshot)
+  func drawingSnapshotUpdated(snapshot: UIImage) {
+    if pendingStrokeIdMap.isEmpty {
+      drawingSnapshot =  snapshot
+    } else {
+      drawingSnapshot = DrawingRenderer.renderStrokes(
+          [Stroke](pendingStrokeIdMap.values),
+          withinSize: Constants.kDrawingSize, onImage: snapshot)
+    }
   }
 
 
@@ -63,13 +44,15 @@ class DrawingController: DrawingInteractionDelegate {
 
   func updatePendingStroke(stroke: Stroke) {
     pendingStrokeIdMap[stroke.id] = stroke
-    updateDrawingSnapshot()
+    drawingSnapshot = DrawingRenderer.renderStrokes(
+        [Stroke](pendingStrokeIdMap.values),
+        withinSize: Constants.kDrawingSize, onImage: model.drawingSnapshot)
   }
 
 
   func cancelPendingStrokes() {
     pendingStrokeIdMap = [:]
-    updateDrawingSnapshot()
+    drawingSnapshot = model.drawingSnapshot
   }
 
 
@@ -79,30 +62,15 @@ class DrawingController: DrawingInteractionDelegate {
         "Cannot complete a stroke that was never pending.")
     model.addStroke(stroke)
     pendingStrokeIdMap[stroke.id] = nil
-    updateDrawingSnapshot()
   }
 
 
   func clearDrawing() {
     model.clearStrokes()
-    updateDrawingSnapshot()
   }
 
 
   func toggleTool() {
     println("Tool toggled!")
-  }
-
-
-  /// MARK: Private methods
-
-  func updateDrawingSnapshot() {
-    if pendingStrokeIdMap.isEmpty {
-      drawingSnapshot =  model.modelSnapshot
-    } else {
-      drawingSnapshot = DrawingRenderer.renderStrokes(
-          [Stroke](pendingStrokeIdMap.values),
-          withinSize: Constants.kDrawingSize, onImage: model.modelSnapshot)
-    }
   }
 }
