@@ -38,4 +38,14 @@ protocol DrawingInteractionDelegate {
    Toggle the current tool used to update the drawing, between pen and eraser.
    */
   func toggleTool()
+
+  /**
+   Undo the last edit to the drawing.
+   */
+  func undo()
+
+  /**
+   Redo the last undone edit to the drawing.
+   */
+  func redo()
 }

@@ -73,4 +73,14 @@ class DrawingController: DrawingUpdater, DrawingUpdateListener,
   func toggleTool() {
     println("Tool toggled!")
   }
+
+
+  func undo() {
+    model.undo()
+  }
+
+
+  func redo() {
+    model.redo()
+  }
 }
