@@ -22,8 +22,8 @@ class DrawingController: DrawingInteractionDelegate {
 
   /// MARK: DrawingInteractionDelegate methods.
 
-  func completeStroke(stroke: Stroke) {
-    model.addStroke(stroke)
+  func completeStrokes(strokes: [Stroke]) {
+    model.addStrokes(strokes)
   }
 
 

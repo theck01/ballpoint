@@ -12,19 +12,19 @@ import UIKit
 
 protocol PendingStrokeDelegate {
   /**
-   Informs the delegate that a pending stroke has been updated.
+   Informs the delegate that pending strokes have been updated.
 
-   :param: stroke The pending stroke that has been updated.
+   :param: strokes The pending strokes that have been updated.
    */
-  func updatePendingStroke(stroke: MutableStroke)
+  func updatePendingStrokes(stroke: [MutableStroke])
 
   /**
-   Informs the delegate that the given stroke has been completed and is no
+   Informs the delegate that the given strokes have been completed and are no
    longer pending.
   
    :param: stroke The stroke that has been completed.
    */
-  func completePendingStroke(stroke: Stroke)
+  func completePendingStrokes(strokes: [Stroke])
 
   /**
    Informs the delegate that all pending strokes have been cancelled.
@@ -37,6 +37,23 @@ protocol PendingStrokeDelegate {
 /// View that transforms user interaction events into drawing and application
 /// actions.
 class PainterView: UIView {
+
+
+  /// A tuple containing all information required to process pending strokes.
+  private struct PendingStrokeTuple {
+    /// The last touch location associated with the pending stroke.
+    var location: CGPoint
+
+    /// Whether the pending stroke has been cancelled and is just being kept
+    /// around for bookkeeping.
+    var isCancelled: Bool
+
+    /// The underlying stroke object.
+    let stroke: MutableStroke
+  }
+
+  private static let kMinimumUndoVelocityThreshold: CGFloat = 40
+
   /// The brush used to create strokes on the canvas.
   var brush: Brush
   
@@ -51,8 +68,17 @@ class PainterView: UIView {
 
   /// An array of touch locations and pending strokes that last were updated to
   /// that location.
-  private var locationPendingStrokePairs:
-      [(location: CGPoint, stroke: MutableStroke)] = []
+  private var pendingStrokeTuples: [PendingStrokeTuple] = []
+
+  private var pendingStrokes: [MutableStroke] {
+    return pendingStrokeTuples.map { $0.stroke }
+  }
+
+  /// Whether the pending strokes updates should be forwarded to the delegate.
+  private var displayPendingStrokes: Bool {
+    return pendingStrokeTuples.count < 2 &&
+        (!(pendingStrokeTuples.first?.isCancelled ?? false))
+  }
   
   // The gesture recognizers that map to application actions.
   private let twoTouchPanRecognizer: UIPanGestureRecognizer
@@ -77,6 +103,8 @@ class PainterView: UIView {
     undoDirectionController = DirectedActionController(
         primaryAction: { self.drawingInteractionDelegate?.undo() },
         secondaryAction: { self.drawingInteractionDelegate?.redo() })
+
+    multipleTouchEnabled = true
 
     twoTouchPanRecognizer.cancelsTouchesInView = true
     twoTouchPanRecognizer.delaysTouchesBegan = false
@@ -105,10 +133,15 @@ class PainterView: UIView {
         let location = t.locationInView(self)
         let stroke = brush.beginStrokeWithColor(
             self.paintColor, atLocation: location)
-        
-        locationPendingStrokePairs.append((location: location, stroke: stroke))
-        pendingStrokeDelegate?.updatePendingStroke(stroke)
+        pendingStrokeTuples.append(PendingStrokeTuple(
+            location: location, isCancelled: false, stroke: stroke))
       }
+    }
+
+    if displayPendingStrokes {
+      self.pendingStrokeDelegate?.updatePendingStrokes(pendingStrokes)
+    } else {
+      cancelPendingStrokes()
     }
   }
   
@@ -121,23 +154,29 @@ class PainterView: UIView {
         
         // Update the location-stroke pairs, updating the pair associated with
         // the given touch and extending the stroke to the new touch location.
-        locationPendingStrokePairs = locationPendingStrokePairs.map {
+        pendingStrokeTuples = pendingStrokeTuples.map {
           if $0.location == previousLocation {
             self.brush.extendStroke(
                 $0.stroke, fromLocation: previousLocation, toLocation: location)
-            self.pendingStrokeDelegate?.updatePendingStroke($0.stroke)
-            return (location: location, stroke: $0.stroke)
+            return PendingStrokeTuple(
+                location: location, isCancelled: $0.isCancelled,
+                stroke: $0.stroke)
           } else {
             return $0
           }
         }
       }
     }
+
+    if displayPendingStrokes {
+      self.pendingStrokeDelegate?.updatePendingStrokes(pendingStrokes)
+    }
   }
   
   
   override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
-    let pairsCountPriorToTouchEnd = locationPendingStrokePairs.count
+    let tupleCountPriorToTouchEnd = pendingStrokeTuples.count
+    var completedStrokes: [Stroke] = []
     
     for touch in touches {
       if let t = touch as? UITouch {
@@ -146,7 +185,7 @@ class PainterView: UIView {
         
         // Update the location stroke pairs, droping pairs associated with the
         // touch that has ended.
-        locationPendingStrokePairs = locationPendingStrokePairs.filter {
+        pendingStrokeTuples = pendingStrokeTuples.filter {
           // If the pending stroke is not associated with the end location then
           // do not end the stroke.
           if ($0.location != location && $0.location != previousLocation) {
@@ -158,11 +197,11 @@ class PainterView: UIView {
           if $0.location == previousLocation && location != previousLocation {
             self.brush.extendStroke(
                 $0.stroke, fromLocation: previousLocation, toLocation: location)
-            self.pendingStrokeDelegate?.updatePendingStroke($0.stroke)
           }
-          
-          self.drawingInteractionDelegate?.completeStroke($0.stroke);
-          self.pendingStrokeDelegate?.completePendingStroke($0.stroke);
+
+          if !$0.isCancelled {
+            completedStrokes.append($0.stroke)
+          }
 
           /// Once a stroke is completed the undo action direction should be
           /// cleared.
@@ -172,17 +211,23 @@ class PainterView: UIView {
         }
       }
     }
-    
+
+    if displayPendingStrokes {
+      self.pendingStrokeDelegate?.updatePendingStrokes(pendingStrokes)
+      self.pendingStrokeDelegate?.completePendingStrokes(completedStrokes)
+      self.drawingInteractionDelegate?.completeStrokes(completedStrokes)
+    }
+
     assert(
-        pairsCountPriorToTouchEnd - touches.count ==
-            locationPendingStrokePairs.count,
+        tupleCountPriorToTouchEnd - touches.count ==
+            pendingStrokeTuples.count,
         "A different number of strokes were ended than touches")
   }
   
   
   override func touchesCancelled(
       touches: Set<NSObject>!, withEvent event: UIEvent!) {
-    locationPendingStrokePairs = []
+    pendingStrokeTuples = []
     pendingStrokeDelegate?.cancelPendingStrokes()
   }
 
@@ -202,8 +247,12 @@ class PainterView: UIView {
       twoTouchPanRecognizer: UIPanGestureRecognizer) {
     if twoTouchPanRecognizer.state == UIGestureRecognizerState.Ended {
       let velocity = twoTouchPanRecognizer.velocityInView(self)
-      let direction = CGVector(dx: velocity.x, dy: velocity.y)
-      undoDirectionController.triggerActionForDirection(direction)
+      if velocity.x * velocity.x + velocity.y * velocity.y >=
+          PainterView.kMinimumUndoVelocityThreshold *
+          PainterView.kMinimumUndoVelocityThreshold {
+        let direction = CGVector(dx: velocity.x, dy: velocity.y)
+        undoDirectionController.triggerActionForDirection(direction)
+      }
     }
   }
 
@@ -211,6 +260,16 @@ class PainterView: UIView {
   @objc func handleTwoTouchTapGesture(
       twoTouchTapRecognizer: UITapGestureRecognizer) {
     drawingInteractionDelegate?.toggleTool()
+  }
+
+
+  /// MARK: Helper methods.
+
+  func cancelPendingStrokes() {
+    pendingStrokeTuples = pendingStrokeTuples.map {
+      return PendingStrokeTuple(
+          location: $0.location, isCancelled: true, stroke: $0.stroke)
+    }
   }
 
 

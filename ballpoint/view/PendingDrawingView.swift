@@ -19,24 +19,32 @@ class PendingDrawingView: UIView, PendingStrokeDelegate {
   }
 
 
-  func updatePendingStroke(stroke: MutableStroke) {
-    pendingStrokeIdMap[stroke.id] = stroke
+  func updatePendingStrokes(strokes: [MutableStroke]) {
+    for s in strokes {
+      pendingStrokeIdMap[s.id] = s
+    }
     setNeedsDisplayInRect(pendingBoundingBox)
   }
 
 
-  func completePendingStroke(stroke: Stroke) {
-    assert(
-        pendingStrokeIdMap[stroke.id] != nil,
-        "Cannot complete a stroke that was never pending.")
-    setNeedsDisplayInRect(stroke.boundingRect)
-    pendingStrokeIdMap[stroke.id] = nil
+  func completePendingStrokes(strokes: [Stroke]) {
+    var boundingRect: CGRect = CGRectNull
+    for s in strokes {
+      assert(
+          pendingStrokeIdMap[s.id] != nil,
+          "Cannot complete a stroke that was never pending.")
+      pendingStrokeIdMap[s.id] = nil
+      boundingRect = CGRectUnion(s.boundingRect, boundingRect)
+    }
+    setNeedsDisplayInRect(boundingRect)
   }
 
 
   func cancelPendingStrokes() {
-    pendingStrokeIdMap = [:]
-    setNeedsDisplay()
+    if !pendingStrokeIdMap.isEmpty {
+      pendingStrokeIdMap = [:]
+      setNeedsDisplay()
+    }
   }
 
 

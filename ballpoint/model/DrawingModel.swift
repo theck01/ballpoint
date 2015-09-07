@@ -24,8 +24,8 @@ class DrawingModel: DrawingUpdater {
   }
   
 
-  func addStroke(stroke: Stroke) {
-    let addEdit = DrawingEdit(type: .AddStroke, stroke: stroke)
+  func addStrokes(strokes: [Stroke]) {
+    let addEdit = DrawingEdit(type: .AddStrokes, strokes: strokes)
     edits.append(addEdit)
     redoStack = []
     applyEdits([addEdit], toSnapshot: drawingSnapshot)
@@ -33,7 +33,7 @@ class DrawingModel: DrawingUpdater {
 
   
   func clearStrokes() {
-    let clearEdit = DrawingEdit(type: .Clear, stroke: nil)
+    let clearEdit = DrawingEdit(type: .Clear, strokes: [])
     edits.append(clearEdit)
     redoStack = []
     applyEdits([clearEdit], toSnapshot: drawingSnapshot)
@@ -45,6 +45,7 @@ class DrawingModel: DrawingUpdater {
       return
     }
 
+    renderer.incrementRevision()
     redoStack.append(edits.removeLast())
     applyEdits(edits, toSnapshot: nil)
   }
@@ -70,8 +71,8 @@ class DrawingModel: DrawingUpdater {
 
     for e in edits {
       switch e.type {
-      case .AddStroke:
-        strokesToRender.append(e.stroke!)
+      case .AddStrokes:
+        strokesToRender += e.strokes
       case .Clear:
         strokesToRender = []
         baseSnapshotForRender = nil
@@ -86,10 +87,10 @@ class DrawingModel: DrawingUpdater {
 
 private struct DrawingEdit {
   private enum Type {
-    case AddStroke
+    case AddStrokes
     case Clear
   }
 
   let type: Type
-  let stroke: Stroke?
+  let strokes: [Stroke]
 }
