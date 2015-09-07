@@ -53,6 +53,7 @@ class PainterView: UIView {
       [(location: CGPoint, stroke: MutableStroke)] = []
   
   // The gesture recognizers that map to application actions.
+  private let twoTouchPanRecognizer: UIPanGestureRecognizer
   private let twoTouchTapRecognizer: UITapGestureRecognizer
 
   
@@ -66,11 +67,22 @@ class PainterView: UIView {
   init(brush: Brush, paintColor: UIColor, frame: CGRect = CGRectZero) {
     self.brush = brush
     self.paintColor = paintColor
+    twoTouchPanRecognizer = UIPanGestureRecognizer()
     twoTouchTapRecognizer = UITapGestureRecognizer()
     
     super.init(frame: frame)
 
+    twoTouchPanRecognizer.cancelsTouchesInView = true
+    twoTouchPanRecognizer.delaysTouchesBegan = false
+    twoTouchPanRecognizer.delaysTouchesEnded = false
+    twoTouchPanRecognizer.minimumNumberOfTouches = 2
+    twoTouchPanRecognizer.maximumNumberOfTouches = 2
+    twoTouchPanRecognizer.addTarget(self, action: "handleTwoTouchPanGesture:")
+    addGestureRecognizer(twoTouchPanRecognizer)
+
     twoTouchTapRecognizer.cancelsTouchesInView = true
+    twoTouchTapRecognizer.delaysTouchesBegan = false
+    twoTouchTapRecognizer.delaysTouchesEnded = false
     twoTouchTapRecognizer.numberOfTapsRequired = 1
     twoTouchTapRecognizer.numberOfTouchesRequired = 2
     twoTouchTapRecognizer.addTarget(self, action: "handleTwoTouchTapGesture:")
@@ -170,6 +182,18 @@ class PainterView: UIView {
 
 
   /// MARK: Gesture handlers.
+
+  @objc func handleTwoTouchPanGesture(
+      twoTouchTapRecognizer: UITapGestureRecognizer) {
+    if twoTouchPanRecognizer.state == UIGestureRecognizerState.Ended {
+      if twoTouchPanRecognizer.velocityInView(self).x < 0 {
+        drawingInteractionDelegate?.undo()
+      } else {
+        drawingInteractionDelegate?.redo()
+      }
+    }
+  }
+
 
   @objc func handleTwoTouchTapGesture(
       twoTouchTapRecognizer: UITapGestureRecognizer) {
