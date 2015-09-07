@@ -25,9 +25,9 @@ protocol DrawingUpdateListener {
 class DrawingUpdater {
   private var drawingUpdateListeners: [DrawingUpdateListener] = []
 
+  
   /// The snapshot of the updater's drawing.
-  var drawingSnapshot: UIImage = DrawingRenderer.renderStrokes(
-      [], withinSize: Constants.kDrawingSize, onImage: nil) {
+  var drawingSnapshot: UIImage = DrawingRenderer.kEmptyRenderedDrawing {
     didSet {
       for listener in drawingUpdateListeners {
         listener.drawingSnapshotUpdated(drawingSnapshot)

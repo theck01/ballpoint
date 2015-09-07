@@ -12,56 +12,18 @@ import UIKit
 
 /// A controller responsible for transforming interactions into model edits and
 /// notifying listeners when the drawing updates.
-class DrawingController: DrawingUpdater, DrawingUpdateListener,
-    DrawingInteractionDelegate {
-  let model: DrawingModel
-
-  private var pendingStrokeIdMap: [StrokeId: Stroke] = [:]
-
+class DrawingController: DrawingInteractionDelegate {
+  private let model: DrawingModel
 
   init(model: DrawingModel) {
     self.model = model
-    super.init()
-    
-    model.registerDrawingUpdateListener(self)
-  }
-
-
-  /// MARK: DrawingUpdateListener methods.
-
-  func drawingSnapshotUpdated(snapshot: UIImage) {
-    if pendingStrokeIdMap.isEmpty {
-      drawingSnapshot =  snapshot
-    } else {
-      drawingSnapshot = DrawingRenderer.renderStrokes(
-          [Stroke](pendingStrokeIdMap.values),
-          withinSize: Constants.kDrawingSize, onImage: snapshot)
-    }
   }
 
 
   /// MARK: DrawingInteractionDelegate methods.
 
-  func updatePendingStroke(stroke: Stroke) {
-    pendingStrokeIdMap[stroke.id] = stroke
-    drawingSnapshot = DrawingRenderer.renderStrokes(
-        [Stroke](pendingStrokeIdMap.values),
-        withinSize: Constants.kDrawingSize, onImage: model.drawingSnapshot)
-  }
-
-
-  func cancelPendingStrokes() {
-    pendingStrokeIdMap = [:]
-    drawingSnapshot = model.drawingSnapshot
-  }
-
-
   func completeStroke(stroke: Stroke) {
-    assert(
-        pendingStrokeIdMap[stroke.id] != nil,
-        "Cannot complete a stroke that was never pending.")
     model.addStroke(stroke)
-    pendingStrokeIdMap[stroke.id] = nil
   }
 
 

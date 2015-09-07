@@ -22,7 +22,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     self.window = window
     window.backgroundColor = UIColor.whiteColor()
 
-    let model = DrawingModel()
+    let renderer = DrawingRenderer()
+
+    let model = DrawingModel(renderer: renderer)
 
     let controller = DrawingController(model: model)
 
@@ -30,7 +32,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     drawingVC.drawingInteractionDelegate = controller
     drawingVC.view.backgroundColor = UIColor.launchScreenBackgroundColor()
 
-    controller.registerDrawingUpdateListener(drawingVC)
+    model.registerDrawingUpdateListener(drawingVC)
 
     window.rootViewController = drawingVC
     window.makeKeyAndVisible()

@@ -11,18 +11,6 @@
 /// Protocol for handling the results of user interactions.
 protocol DrawingInteractionDelegate {
   /**
-   Process the update of a pending strokes, which may be updated in the future.
-
-   :param: stroke
-  */
-  func updatePendingStroke(stroke: Stroke)
-
-  /**
-   Process the cancellation of all pending strokes.
-   */
-  func cancelPendingStrokes()
-
-  /**
    Process the completion of the given stroke, which will no longer be updated.
    
    :param: stroke

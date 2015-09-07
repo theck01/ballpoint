@@ -10,6 +10,30 @@ import UIKit
 
 
 
+protocol PendingStrokeDelegate {
+  /**
+   Informs the delegate that a pending stroke has been updated.
+
+   :param: stroke The pending stroke that has been updated.
+   */
+  func updatePendingStroke(stroke: MutableStroke)
+
+  /**
+   Informs the delegate that the given stroke has been completed and is no
+   longer pending.
+  
+   :param: stroke The stroke that has been completed.
+   */
+  func completePendingStroke(stroke: Stroke)
+
+  /**
+   Informs the delegate that all pending strokes have been cancelled.
+   */
+  func cancelPendingStrokes()
+}
+
+
+
 /// View that transforms user interaction events into drawing and application
 /// actions.
 class PainterView: UIView {
@@ -20,6 +44,8 @@ class PainterView: UIView {
   var paintColor: UIColor
   
   var drawingInteractionDelegate: DrawingInteractionDelegate?
+
+  var pendingStrokeDelegate: PendingStrokeDelegate?
 
   /// An array of touch locations and pending strokes that last were updated to
   /// that location.
@@ -60,7 +86,7 @@ class PainterView: UIView {
             self.paintColor, atLocation: location)
         
         locationPendingStrokePairs.append((location: location, stroke: stroke))
-        drawingInteractionDelegate?.updatePendingStroke(stroke)
+        pendingStrokeDelegate?.updatePendingStroke(stroke)
       }
     }
   }
@@ -78,7 +104,7 @@ class PainterView: UIView {
           if $0.location == previousLocation {
             self.brush.extendStroke(
                 $0.stroke, fromLocation: previousLocation, toLocation: location)
-            self.drawingInteractionDelegate?.updatePendingStroke($0.stroke)
+            self.pendingStrokeDelegate?.updatePendingStroke($0.stroke)
             return (location: location, stroke: $0.stroke)
           } else {
             return $0
@@ -111,10 +137,12 @@ class PainterView: UIView {
           if $0.location == previousLocation && location != previousLocation {
             self.brush.extendStroke(
                 $0.stroke, fromLocation: previousLocation, toLocation: location)
-            self.drawingInteractionDelegate?.updatePendingStroke($0.stroke)
+            self.pendingStrokeDelegate?.updatePendingStroke($0.stroke)
           }
           
           self.drawingInteractionDelegate?.completeStroke($0.stroke);
+          self.pendingStrokeDelegate?.completePendingStroke($0.stroke);
+          
           return false
         }
       }
@@ -130,7 +158,7 @@ class PainterView: UIView {
   override func touchesCancelled(
       touches: Set<NSObject>!, withEvent event: UIEvent!) {
     locationPendingStrokePairs = []
-    drawingInteractionDelegate?.cancelPendingStrokes()
+    pendingStrokeDelegate?.cancelPendingStrokes()
   }
 
 

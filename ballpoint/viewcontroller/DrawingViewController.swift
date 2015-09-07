@@ -18,6 +18,9 @@ class DrawingViewController: UIViewController, DrawingUpdateListener {
   /// The image view that displays the rendered drawing.
   let drawingImageView: UIImageView
 
+  /// The view that displays pending drawing strokes.
+  let pendingDrawingView: PendingDrawingView
+
   /// The painter view that handles all user interaction.
   let painterView: PainterView
 
@@ -34,6 +37,7 @@ class DrawingViewController: UIViewController, DrawingUpdateListener {
   init() {
     let screenBounds = UIScreen.mainScreen().bounds
     drawingImageView = UIImageView(frame: screenBounds)
+    pendingDrawingView = PendingDrawingView(frame: screenBounds)
     painterView = PainterView(
         brush: DrawingViewController.kDefaultBrush,
         paintColor: DrawingViewController.kDefaultPaintColor,
@@ -42,10 +46,14 @@ class DrawingViewController: UIViewController, DrawingUpdateListener {
 
     view.backgroundColor = UIColor.whiteColor()
     drawingImageView.backgroundColor = UIColor.clearColor()
+    pendingDrawingView.backgroundColor = UIColor.clearColor()
     painterView.backgroundColor = UIColor.clearColor()
 
     view.addSubview(drawingImageView)
+    view.addSubview(pendingDrawingView)
     view.addSubview(painterView)
+
+    painterView.pendingStrokeDelegate = pendingDrawingView
   }
 
 

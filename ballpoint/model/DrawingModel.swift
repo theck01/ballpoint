@@ -12,9 +12,17 @@ import UIKit
 
 /// An in-memory model of the current drawing.
 class DrawingModel: DrawingUpdater {
+  private let renderer: DrawingRenderer
+
   private var edits: [DrawingEdit] = []
   private var redoStack: [DrawingEdit] = []
 
+
+  init (renderer: DrawingRenderer) {
+    self.renderer = renderer
+    super.init()
+  }
+  
 
   func addStroke(stroke: Stroke) {
     let addEdit = DrawingEdit(type: .AddStroke, stroke: stroke)
@@ -70,9 +78,8 @@ class DrawingModel: DrawingUpdater {
       }
     }
 
-    drawingSnapshot = DrawingRenderer.renderStrokes(
-        strokesToRender, withinSize: Constants.kDrawingSize,
-        onImage: baseSnapshotForRender)
+    drawingSnapshot = renderer.renderStrokes(
+        strokesToRender, onImage: baseSnapshotForRender)
   }
 }
 
