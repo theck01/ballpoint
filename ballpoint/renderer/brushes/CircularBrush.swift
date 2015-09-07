@@ -25,7 +25,9 @@ class CircularBrush: Brush {
   init(radius: CGFloat) {
     var path = CGPathCreateMutable()
     CGPathMoveToPoint(path, nil, radius, 0)
-    CGPathAddArc(path, nil, 0, 0, radius, 0, CGFloat(M_2_PI), true)
+    CGPathAddArc(path, nil, 0, 0, radius, 0, CGFloat(M_PI), true)
+    CGPathAddArc(
+        path, nil, 0, 0, radius, CGFloat(M_PI), CGFloat(2 * M_PI), true)
     CGPathCloseSubpath(path)
     circlePath = path
     self.radius = radius
