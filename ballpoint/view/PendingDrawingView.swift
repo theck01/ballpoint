@@ -42,8 +42,12 @@ class PendingDrawingView: UIView, PendingStrokeDelegate {
 
   func cancelPendingStrokes() {
     if !pendingStrokeIdMap.isEmpty {
+      let boundingRect = [MutableStroke](pendingStrokeIdMap.values).reduce(
+          CGRectNull) {
+        return CGRectUnion($0, $1.boundingRect)
+      }
       pendingStrokeIdMap = [:]
-      setNeedsDisplay()
+      setNeedsDisplayInRect(boundingRect)
     }
   }
 

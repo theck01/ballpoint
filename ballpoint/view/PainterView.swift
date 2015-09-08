@@ -207,8 +207,7 @@ class PainterView: UIView {
   
   override func touchesCancelled(
       touches: Set<NSObject>!, withEvent event: UIEvent!) {
-    pendingStrokeTuples = []
-    pendingStrokeDelegate?.cancelPendingStrokes()
+    cancelPendingStrokes()
   }
 
 
@@ -236,6 +235,7 @@ class PainterView: UIView {
       return PendingStrokeTuple(
           location: $0.location, isCancelled: true, stroke: $0.stroke)
     }
+    pendingStrokeDelegate?.cancelPendingStrokes()
   }
 
 
