@@ -205,7 +205,7 @@ class PainterView: UIView {
 
           /// Once a stroke is completed the undo action direction should be
           /// cleared.
-          self.undoDirectionController.primaryActionDirection = nil
+          self.undoDirectionController.clearDirectionAssociations()
           
           return false
         }

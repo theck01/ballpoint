@@ -24,7 +24,7 @@ class DirectedActionController {
   /// primary action. If a direction is not set when an action is requested to
   /// be triggered then the primary action is fired and the direction that
   /// was provided with the trigger will be associated with the primary action.
-  var primaryActionDirection: CGVector?
+  private var primaryActionDirection: CGVector?
 
 
   init(
@@ -34,12 +34,22 @@ class DirectedActionController {
   }
 
 
+  func clearDirectionAssociations() {
+    primaryActionDirection = nil
+  }
+
+
   func triggerActionForDirection(direction: CGVector) {
     if let primaryDirection = primaryActionDirection {
-      if primaryDirection.angleBetweenVector(direction) < 90 {
+      let angleDifference = primaryDirection.angleBetweenVector(direction)
+      
+      if angleDifference < 45 {
         primaryAction()
-      } else {
+      } else if abs(angleDifference - 180) < 45 {
         secondaryAction()
+      } else {
+        primaryActionDirection = direction
+        primaryAction()
       }
     } else {
       primaryActionDirection = direction
