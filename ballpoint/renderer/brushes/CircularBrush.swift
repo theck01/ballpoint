@@ -37,7 +37,7 @@ class CircularBrush: Brush {
   /// MARK: Brush method implementations.
   
   func beginStrokeWithColor(
-      color: UIColor, atLocation location: CGPoint) -> MutableStroke {
+      color: RendererColor, atLocation location: CGPoint) -> MutableStroke {
     let stroke = MutableStroke(color: color)
     stroke.appendPath(circularPathAtLocation(location))
     return stroke
@@ -61,7 +61,7 @@ class CircularBrush: Brush {
 
    :returns: The circular path centered at the given location.
    */
-  func circularPathAtLocation(location: CGPoint) -> CGPath {
+  private func circularPathAtLocation(location: CGPoint) -> CGPath {
     var translation = CGAffineTransformMakeTranslation(
         location.x, location.y)
     return CGPathCreateCopyByTransformingPath(circlePath, &translation)
@@ -78,7 +78,8 @@ class CircularBrush: Brush {
        to the line between the two points, with length equal to twice the radius
        and centered on each of the points.
    */
-  func connectorPathFromLocation(a: CGPoint, toLocation b: CGPoint) -> CGPath {
+  private func connectorPathFromLocation(
+      a: CGPoint, toLocation b: CGPoint) -> CGPath {
     var path = CGPathCreateMutable()
     
     // Special case when a.y == b.y, because then the perpendicular slope will

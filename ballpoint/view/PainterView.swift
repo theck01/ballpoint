@@ -38,7 +38,6 @@ protocol PendingStrokeDelegate {
 /// actions.
 class PainterView: UIView {
 
-
   /// A tuple containing all information required to process pending strokes.
   private struct PendingStrokeTuple {
     /// The last touch location associated with the pending stroke.
@@ -58,7 +57,7 @@ class PainterView: UIView {
   var brush: Brush
   
   /// The color of the strokes to paint.
-  var paintColor: UIColor
+  var paintColor: RendererColor
   
   var drawingInteractionDelegate: DrawingInteractionDelegate?
 
@@ -89,7 +88,7 @@ class PainterView: UIView {
    :param: brush The initial brush used to create strokes.
    :param: paintColor The initial color of strokes to generate.
    */
-  init(brush: Brush, paintColor: UIColor, frame: CGRect = CGRectZero) {
+  init(brush: Brush, paintColor: RendererColor, frame: CGRect = CGRectZero) {
     self.brush = brush
     self.paintColor = paintColor
     twoTouchTapRecognizer = UITapGestureRecognizer()
@@ -207,7 +206,9 @@ class PainterView: UIView {
   
   override func touchesCancelled(
       touches: Set<NSObject>!, withEvent event: UIEvent!) {
-    cancelPendingStrokes()
+    /// Clear the strokes cancelled due to touch cancellation rather than just
+    /// cancelling, as these strokes will never be ended by -touchesEnded.
+    pendingStrokeTuples = []
   }
 
 

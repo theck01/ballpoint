@@ -18,6 +18,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       application: UIApplication,
       didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) ->
           Bool {
+    registerRendererColors()
+
     let window = UIWindow(frame: UIScreen.mainScreen().bounds)
     self.window = window
     window.backgroundColor = UIColor.whiteColor()
@@ -25,10 +27,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let renderer = DrawingRenderer()
 
     let model = DrawingModel(renderer: renderer)
-
-    let controller = DrawingController(model: model)
-
     let drawingVC = DrawingViewController()
+    let controller = DrawingController(model: model, viewController: drawingVC)
     drawingVC.drawingInteractionDelegate = controller
     drawingVC.view.backgroundColor = UIColor.launchScreenBackgroundColor()
 
@@ -42,6 +42,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     return true
+  }
+
+
+  private func registerRendererColors() {
+    RendererColorPalette.defaultPalette.registerPalette([
+      Constants.kBallpointInkColorId: UIColor.ballpointInkColor(),
+      Constants.kBallpointSurfaceColorId: UIColor.ballpointSurfaceColor(),
+    ])
   }
 }
 

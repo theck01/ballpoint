@@ -13,10 +13,51 @@ import UIKit
 /// A controller responsible for transforming interactions into model edits and
 /// notifying listeners when the drawing updates.
 class DrawingController: DrawingInteractionDelegate {
-  private let model: DrawingModel
+  private enum EditingTool {
+    case Pen
+    case Eraser
 
-  init(model: DrawingModel) {
+    func toggle() -> EditingTool {
+      return self == .Pen ? .Eraser : .Pen
+    }
+  }
+
+  private let model: DrawingModel
+  private let viewController: DrawingViewController
+
+  /// The current tool being used within the application.
+  private var currentTool: EditingTool = .Pen {
+    didSet {
+      switch (currentTool) {
+      case .Pen:
+        viewController.painterView.brush = CircularBrush(
+            radius: Constants.kPenBrushSize)
+        viewController.painterView.paintColor =
+            RendererColorPalette.defaultPalette[Constants.kBallpointInkColorId]
+
+        RendererColorPalette.defaultPalette.updatePalette([
+          Constants.kBallpointInkColorId: UIColor.ballpointInkColor(),
+          Constants.kBallpointSurfaceColorId: UIColor.ballpointSurfaceColor()
+        ])
+
+      case .Eraser:
+        viewController.painterView.brush = CircularBrush(
+            radius: Constants.kEraserBrushSize)
+        viewController.painterView.paintColor =
+            RendererColorPalette.defaultPalette[
+                Constants.kBallpointSurfaceColorId]
+
+        RendererColorPalette.defaultPalette.updatePalette([
+          Constants.kBallpointInkColorId: UIColor.ballpointSurfaceColor(),
+          Constants.kBallpointSurfaceColorId: UIColor.ballpointInkColor()
+        ])
+      }
+    }
+  }
+
+  init(model: DrawingModel, viewController: DrawingViewController) {
     self.model = model
+    self.viewController = viewController
   }
 
 
@@ -33,7 +74,7 @@ class DrawingController: DrawingInteractionDelegate {
 
 
   func toggleTool() {
-    println("Tool toggled!")
+    currentTool = currentTool.toggle()
   }
 
 

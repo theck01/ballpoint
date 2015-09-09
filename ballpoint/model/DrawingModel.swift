@@ -11,7 +11,7 @@ import UIKit
 
 
 /// An in-memory model of the current drawing.
-class DrawingModel: DrawingUpdater {
+class DrawingModel: DrawingUpdater, RendererColorPaletteUpdateListener {
   private let renderer: DrawingRenderer
 
   private var edits: [DrawingEdit] = []
@@ -21,6 +21,8 @@ class DrawingModel: DrawingUpdater {
   init (renderer: DrawingRenderer) {
     self.renderer = renderer
     super.init()
+
+    RendererColorPalette.defaultPalette.registerColorPaletteUpdateListener(self)
   }
   
 
@@ -61,6 +63,15 @@ class DrawingModel: DrawingUpdater {
     applyEdits([redoEdit], toSnapshot: drawingSnapshot)
   }
 
+
+  /// MARK: RendererColorPaletteUpdateListener methods
+
+  func didUpdateRenderColorPalette(palette: RendererColorPalette) {
+    applyEdits(edits, toSnapshot: nil)
+  }
+
+
+  /// MARK: Helper methods.
 
   /**
    :param: edits The edits to apply to the snapshot.

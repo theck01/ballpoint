@@ -10,11 +10,8 @@ import UIKit
 
 
 
-class DrawingViewController: UIViewController, DrawingUpdateListener {
-  // The default values for the brush and paint color.
-  static let kDefaultBrush = CircularBrush(radius: 2)
-  static let kDefaultPaintColor = UIColor.ballpointInkColor()
-
+class DrawingViewController: UIViewController, DrawingUpdateListener,
+    RendererColorPaletteUpdateListener {
   /// The image view that displays the rendered drawing.
   let drawingImageView: UIImageView
 
@@ -39,8 +36,9 @@ class DrawingViewController: UIViewController, DrawingUpdateListener {
     drawingImageView = UIImageView(frame: screenBounds)
     pendingDrawingView = PendingDrawingView(frame: screenBounds)
     painterView = PainterView(
-        brush: DrawingViewController.kDefaultBrush,
-        paintColor: DrawingViewController.kDefaultPaintColor,
+        brush: CircularBrush(radius: Constants.kPenBrushSize),
+        paintColor: RendererColorPalette.defaultPalette[
+            Constants.kBallpointInkColorId],
         frame: screenBounds)
     super.init(nibName: nil, bundle: nil)
 
@@ -54,6 +52,9 @@ class DrawingViewController: UIViewController, DrawingUpdateListener {
     view.addSubview(painterView)
 
     painterView.pendingStrokeDelegate = pendingDrawingView
+
+    RendererColorPalette.defaultPalette.registerColorPaletteUpdateListener(
+        self)
   }
 
 
@@ -61,6 +62,15 @@ class DrawingViewController: UIViewController, DrawingUpdateListener {
 
   func drawingSnapshotUpdated(snapshot: UIImage) {
     drawingImageView.image = snapshot
+  }
+
+
+  /// MARK: RendererColorPaletteUpdateListener methods
+
+  func didUpdateRenderColorPalette(palette: RendererColorPalette) {
+    pendingDrawingView.setNeedsDisplay()
+    view.backgroundColor =
+        palette[Constants.kBallpointSurfaceColorId].backingColor
   }
 
 

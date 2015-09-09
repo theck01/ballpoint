@@ -21,12 +21,9 @@ class Stroke {
   /// The array of paths that compose the stroke.
   private var paths: [CGPath]
   
-  /// The color components of the stroke.
-  private let red: CGFloat
-  private let green: CGFloat
-  private let blue: CGFloat
-  private let alpha: CGFloat
-  
+  /// The color of the stroke.
+  private let color: RendererColor
+
   /// The identifier of the stroke.
   let id: StrokeId
   
@@ -41,20 +38,9 @@ class Stroke {
   private(set) var boundingRect: CGRect = CGRectNull
   
   
-  init(paths: [CGPath], color: UIColor) {
+  init(paths: [CGPath], color: RendererColor) {
     self.paths = paths
-    
-    var r: CGFloat = 0
-    var g: CGFloat = 0
-    var b: CGFloat = 0
-    var a: CGFloat = 0
-    color.getRed(&r, green: &g, blue: &b, alpha: &a)
-    
-    red = r
-    green = g
-    blue = b
-    alpha = a
-    
+    self.color = color
     id = Stroke.strokeIdCounter++
   }
 
@@ -91,7 +77,8 @@ class Stroke {
 
   private func paintCGPath(path: CGPath, onContext context: CGContext) {
     CGContextAddPath(context, path)
-    CGContextSetRGBFillColor(context, red, green, blue, alpha)
+    CGContextSetRGBFillColor(
+        context, color.red, color.green, color.blue, color.alpha)
     CGContextFillPath(context)
   }
 }
@@ -107,7 +94,7 @@ class MutableStroke: Stroke {
   private(set) var dirtyBoundingRect: CGRect = CGRectNull
 
 
-  init(color: UIColor) {
+  init(color: RendererColor) {
     super.init(paths: [], color: color)
   }
 

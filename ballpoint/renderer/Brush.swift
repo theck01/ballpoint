@@ -17,7 +17,7 @@ protocol Brush {
    :param: location The location at which to begin the stroke.
    */
   func beginStrokeWithColor(
-      color: UIColor, atLocation location: CGPoint) -> MutableStroke
+      color: RendererColor, atLocation location: CGPoint) -> MutableStroke
   
   
   /**

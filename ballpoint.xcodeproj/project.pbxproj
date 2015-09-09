@@ -25,6 +25,7 @@
 		42BA87511B9DEB0300AC842E /* CGVector+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BA87501B9DEB0300AC842E /* CGVector+ballpoint.swift */; };
 		42E0FE8C1B990F3200E2A0A1 /* DrawingUpdater.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0FE8B1B990F3200E2A0A1 /* DrawingUpdater.swift */; };
 		42E0FE8E1B99120300E2A0A1 /* DrawingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0FE8D1B99120300E2A0A1 /* DrawingController.swift */; };
+		42E750131B9FC922003180C9 /* RendererColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E750121B9FC922003180C9 /* RendererColorPalette.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,6 +61,7 @@
 		42BA87501B9DEB0300AC842E /* CGVector+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CGVector+ballpoint.swift"; path = "extensions/CGVector+ballpoint.swift"; sourceTree = "<group>"; };
 		42E0FE8B1B990F3200E2A0A1 /* DrawingUpdater.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DrawingUpdater.swift; path = controller/DrawingUpdater.swift; sourceTree = "<group>"; };
 		42E0FE8D1B99120300E2A0A1 /* DrawingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DrawingController.swift; path = controller/DrawingController.swift; sourceTree = "<group>"; };
+		42E750121B9FC922003180C9 /* RendererColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RendererColorPalette.swift; path = renderer/RendererColorPalette.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -165,6 +167,7 @@
 				42A112C61B8EB52E00503D9F /* brushes */,
 				426539FC1B93D78E001345CB /* DrawingRenderer.swift */,
 				42A112C21B8EB50A00503D9F /* Stroke.swift */,
+				42E750121B9FC922003180C9 /* RendererColorPalette.swift */,
 			);
 			name = renderer;
 			sourceTree = "<group>";
@@ -315,6 +318,7 @@
 				42A6DEB71B935C0A00CC09C2 /* UIColor+ballpoint.swift in Sources */,
 				42A112C81B8EB54600503D9F /* CircularBrush.swift in Sources */,
 				426539F71B93CD14001345CB /* DrawingModel.swift in Sources */,
+				42E750131B9FC922003180C9 /* RendererColorPalette.swift in Sources */,
 				42E0FE8C1B990F3200E2A0A1 /* DrawingUpdater.swift in Sources */,
 				42A112C51B8EB50A00503D9F /* Stroke.swift in Sources */,
 				426539FD1B93D78E001345CB /* DrawingRenderer.swift in Sources */,
