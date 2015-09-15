@@ -23,7 +23,7 @@ extension UIColor {
 
   static func launchScreenBackgroundColor() -> UIColor {
     if _launchScreenBackgroundColor == nil {
-      _launchScreenBackgroundColor = UIColor(white: 0.733, alpha: 1)
+      _launchScreenBackgroundColor = UIColor(white: 0.938, alpha: 1)
     }
     return _launchScreenBackgroundColor!
   }

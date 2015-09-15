@@ -30,17 +30,12 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let drawingVC = DrawingViewController()
     let controller = DrawingController(model: model, viewController: drawingVC)
     drawingVC.drawingInteractionDelegate = controller
-    drawingVC.view.backgroundColor = UIColor.launchScreenBackgroundColor()
 
     model.registerDrawingUpdateListener(drawingVC)
 
     window.rootViewController = drawingVC
     window.makeKeyAndVisible()
             
-    UIView.animateWithDuration(Constants.kAppLaunchedAnimationDuration) {
-      drawingVC.view.backgroundColor = UIColor.whiteColor()
-    }
-
     return true
   }
 

@@ -11,11 +11,22 @@ import UIKit
 
 
 class Constants {
-  /// The size of the drawing, in points.
-  static let kDrawingSize: CGSize = UIScreen.mainScreen().bounds.size
+  /// The size of the buttons within the UI.
+  static let kButtonSize: CGFloat = 44
 
-  /// The duration of the fade in animation on app launch.
-  static let kAppLaunchedAnimationDuration: NSTimeInterval = 0.1
+  /// The minimum separation between the canvas and the screen edge.
+  static let kMinimumCanvasScreenSeparation: CGFloat = 8
+
+  /// The size of the drawing, in points.
+  static let kDrawingSize = CGSize(
+      width: UIScreen.mainScreen().bounds.size.width -
+          2 * Constants.kMinimumCanvasScreenSeparation,
+      height: UIScreen.mainScreen().bounds.size.height -
+          2 * Constants.kMinimumCanvasScreenSeparation -
+          Constants.kButtonSize)
+
+  /// The default duration of animations.
+  static let kDefaultAnimationDuration: NSTimeInterval = 0.3
 
   /// The size of the pen brush.
   static let kPenBrushSize: CGFloat = 2.0
