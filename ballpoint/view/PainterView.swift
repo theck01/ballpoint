@@ -214,7 +214,7 @@ class PainterView: UIView {
 
   /// MARK: Motion event handlers.
 
-  override func motionBegan(motion: UIEventSubtype, withEvent event: UIEvent) {
+  override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
     if motion == UIEventSubtype.MotionShake {
       drawingInteractionDelegate?.clearDrawing()
     }
