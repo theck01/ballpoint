@@ -26,7 +26,7 @@ class Constants {
           Constants.kButtonSize)
 
   /// The default duration of animations.
-  static let kDefaultAnimationDuration: NSTimeInterval = 0.3
+  static let kViewControllerAppearDuration: NSTimeInterval = 1
 
   /// The size of the pen brush.
   static let kPenBrushSize: CGFloat = 2.0

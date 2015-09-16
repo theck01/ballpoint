@@ -11,11 +11,17 @@ import UIKit
 
 
 class DrawingViewController: UIViewController, DrawingUpdateListener,
-    RendererColorPaletteUpdateListener {
+    PainterTouchDelegate, RendererColorPaletteUpdateListener {
   // The constants describing the shadow behind the canvas backing.
-  static let kCanvasShadowOpacity: CGFloat = 0.5
-  static let kCanvasShadowRadius: CGFloat = 4
-  static let kCanvasShadowYOffset: CGFloat = 4
+  static let kCanvasAbsentTouchShadowOpacity: CGFloat = 0.5
+  static let kCanvasAbsentTouchShadowRadius: CGFloat = 4
+  static let kCanvasAbsentTouchShadowYOffset: CGFloat = 4
+  static let kCanvasActiveTouchShadowOpacity: CGFloat = 0.2
+  static let kCanvasActiveTouchShadowRadius: CGFloat = 2
+  static let kCanvasActiveTouchShadowYOffset: CGFloat = 2
+
+  /// The duration of the shadow animation when painter touches are active.
+  static let kPainterTouchesActiveAnimationDuration: NSTimeInterval = 0.2
 
   /// The backing view of the canvas.
   let canvasBackingView: UIView
@@ -68,7 +74,6 @@ class DrawingViewController: UIViewController, DrawingUpdateListener,
     canvasBackingView.alpha = 0
     drawingImageView.alpha = 0
     pendingDrawingView.alpha = 0
-    painterView.alpha = 0
 
     view.addSubview(canvasBackingView)
     view.addSubview(drawingImageView)
@@ -76,9 +81,30 @@ class DrawingViewController: UIViewController, DrawingUpdateListener,
     view.addSubview(painterView)
 
     painterView.pendingStrokeDelegate = pendingDrawingView
+    painterView.painterTouchDelegate = self
 
     RendererColorPalette.defaultPalette.registerColorPaletteUpdateListener(
         self)
+  }
+
+
+  /// MARK: PainterTouchDelegate methods
+
+  func painterTouchesActive() {
+    animateShadowAppearanceWithDuration(
+        DrawingViewController.kPainterTouchesActiveAnimationDuration,
+        shadowOpacity: DrawingViewController.kCanvasActiveTouchShadowOpacity,
+        shadowRadius: DrawingViewController.kCanvasActiveTouchShadowRadius,
+        shadowYOffset: DrawingViewController.kCanvasActiveTouchShadowYOffset)
+  }
+
+
+  func painterTouchesAbsent() {
+    animateShadowAppearanceWithDuration(
+        DrawingViewController.kPainterTouchesActiveAnimationDuration,
+        shadowOpacity: DrawingViewController.kCanvasAbsentTouchShadowOpacity,
+        shadowRadius: DrawingViewController.kCanvasAbsentTouchShadowRadius,
+        shadowYOffset: DrawingViewController.kCanvasAbsentTouchShadowYOffset)
   }
 
 
@@ -108,40 +134,13 @@ class DrawingViewController: UIViewController, DrawingUpdateListener,
   override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
 
-    let shadowOpacityAnimation = CABasicAnimation(keyPath: "shadowOpacity")
-    shadowOpacityAnimation.fromValue = NSNumber(double: 0)
-    shadowOpacityAnimation.toValue =
-        NSNumber(double: Double(DrawingViewController.kCanvasShadowOpacity))
-    shadowOpacityAnimation.duration = 2 * Constants.kDefaultAnimationDuration
-    shadowOpacityAnimation.fillMode = kCAFillModeForwards
-    canvasBackingView.layer.addAnimation(
-        shadowOpacityAnimation, forKey: "shadowOpacity")
-    canvasBackingView.layer.shadowOpacity =
-        Float(DrawingViewController.kCanvasShadowOpacity)
+    animateShadowAppearanceWithDuration(
+        Constants.kViewControllerAppearDuration,
+        shadowOpacity: DrawingViewController.kCanvasAbsentTouchShadowOpacity,
+        shadowRadius: DrawingViewController.kCanvasAbsentTouchShadowRadius,
+        shadowYOffset: DrawingViewController.kCanvasAbsentTouchShadowYOffset)
 
-    let shadowRadiusAnimation = CABasicAnimation(keyPath: "shadowRadius")
-    shadowRadiusAnimation.fromValue = NSNumber(double: 0)
-    shadowRadiusAnimation.toValue =
-        NSNumber(double: Double(DrawingViewController.kCanvasShadowRadius))
-    shadowRadiusAnimation.duration = 2 * Constants.kDefaultAnimationDuration
-    shadowRadiusAnimation.fillMode = kCAFillModeForwards
-    canvasBackingView.layer.addAnimation(
-        shadowRadiusAnimation, forKey: "shadowRadius")
-    canvasBackingView.layer.shadowRadius =
-        DrawingViewController.kCanvasShadowRadius
-
-    let endShadowOffset =
-        CGSize(width: 0, height: DrawingViewController.kCanvasShadowYOffset)
-    let shadowOffsetAnimation = CABasicAnimation(keyPath: "shadowOffset")
-    shadowOffsetAnimation.fromValue = NSValue(CGSize: CGSizeZero)
-    shadowOffsetAnimation.toValue = NSValue(CGSize: endShadowOffset)
-    shadowOffsetAnimation.duration = 2 * Constants.kDefaultAnimationDuration
-    shadowOffsetAnimation.fillMode = kCAFillModeForwards
-    canvasBackingView.layer.addAnimation(
-        shadowOffsetAnimation, forKey: "shadowOffset")
-    canvasBackingView.layer.shadowOffset = endShadowOffset
-
-    UIView.animateWithDuration(Constants.kDefaultAnimationDuration) {
+    UIView.animateWithDuration(Constants.kViewControllerAppearDuration) {
       self.canvasBackingView.alpha = 1
       self.drawingImageView.alpha = 1
       self.pendingDrawingView.alpha = 1
@@ -155,12 +154,70 @@ class DrawingViewController: UIViewController, DrawingUpdateListener,
   override func viewDidDisappear(animated: Bool) {
     painterView.resignFirstResponder()
     
-    canvasBackingView.alpha = 1
-    drawingImageView.alpha = 1
-    pendingDrawingView.alpha = 1
-    painterView.alpha = 1
+    canvasBackingView.alpha = 0
+    canvasBackingView.layer.shadowOpacity = 0
+    canvasBackingView.layer.shadowRadius = 0
+    canvasBackingView.layer.shadowOffset = CGSizeZero
+
+    drawingImageView.alpha = 0
+    pendingDrawingView.alpha = 0
 
     super.viewDidDisappear(animated)
+  }
+
+
+  /// MARK: Private methods
+
+  /**
+   Animate the canvas's shadow appearance to the given opacity, radius, and
+   offset.
+
+   :param: shadowOpacity
+   :param: shadowRadius
+   :param: shadowYOffset
+   */
+  func animateShadowAppearanceWithDuration(
+      duration: NSTimeInterval, shadowOpacity: CGFloat, shadowRadius: CGFloat,
+      shadowYOffset: CGFloat) {
+    let shadowOpacityAnimation = CABasicAnimation(keyPath: "shadowOpacity")
+    shadowOpacityAnimation.fromValue = NSNumber(
+        double: Double(canvasBackingView.layer.shadowOpacity))
+    shadowOpacityAnimation.toValue = NSNumber(double: Double(shadowOpacity))
+    shadowOpacityAnimation.duration = duration
+    shadowOpacityAnimation.fillMode =
+        Float(shadowOpacity) > canvasBackingView.layer.shadowOpacity ?
+            kCAFillModeForwards :
+            kCAFillModeBackwards
+    canvasBackingView.layer.addAnimation(
+        shadowOpacityAnimation, forKey: "shadowOpacity")
+    canvasBackingView.layer.shadowOpacity = Float(shadowOpacity)
+
+    let shadowRadiusAnimation = CABasicAnimation(keyPath: "shadowRadius")
+    shadowRadiusAnimation.fromValue = NSNumber(
+        double: Double(canvasBackingView.layer.shadowRadius))
+    shadowRadiusAnimation.toValue = NSNumber(double: Double(shadowRadius))
+    shadowRadiusAnimation.duration = duration
+    shadowRadiusAnimation.fillMode =
+        shadowRadius > canvasBackingView.layer.shadowRadius ?
+            kCAFillModeForwards :
+            kCAFillModeBackwards
+    canvasBackingView.layer.addAnimation(
+        shadowRadiusAnimation, forKey: "shadowRadius")
+    canvasBackingView.layer.shadowRadius = shadowRadius
+
+    let endShadowOffset = CGSize(width: 0, height: shadowYOffset)
+    let shadowOffsetAnimation = CABasicAnimation(keyPath: "shadowOffset")
+    shadowOffsetAnimation.fromValue = NSValue(
+        CGSize: canvasBackingView.layer.shadowOffset)
+    shadowOffsetAnimation.toValue = NSValue(CGSize: endShadowOffset)
+    shadowOffsetAnimation.duration = duration
+    shadowRadiusAnimation.fillMode =
+        shadowYOffset > canvasBackingView.layer.shadowOffset.height ?
+            kCAFillModeForwards :
+            kCAFillModeBackwards
+    canvasBackingView.layer.addAnimation(
+        shadowOffsetAnimation, forKey: "shadowOffset")
+    canvasBackingView.layer.shadowOffset = endShadowOffset
   }
   
   

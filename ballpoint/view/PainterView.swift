@@ -34,6 +34,20 @@ protocol PendingStrokeDelegate {
 
 
 
+protocol PainterTouchDelegate {
+  /**
+   Informs the delegate that touches are actively painting.
+   */
+  func painterTouchesActive()
+
+  /**
+   Informs the delegate that no touches are actively painting.
+   */
+  func painterTouchesAbsent()
+}
+
+
+
 /// View that transforms user interaction events into drawing and application
 /// actions.
 class PainterView: UIView {
@@ -63,9 +77,19 @@ class PainterView: UIView {
 
   var pendingStrokeDelegate: PendingStrokeDelegate?
 
+  var painterTouchDelegate: PainterTouchDelegate?
+
   /// An array of touch locations and pending strokes that last were updated to
   /// that location.
-  private var pendingStrokeTuples: [PendingStrokeTuple] = []
+  private var pendingStrokeTuples: [PendingStrokeTuple] = [] {
+    didSet {
+      if pendingStrokeTuples.count > 0 && oldValue.count == 0 {
+        painterTouchDelegate?.painterTouchesActive()
+      } else if pendingStrokeTuples.count == 0 && oldValue.count > 0 {
+        painterTouchDelegate?.painterTouchesAbsent()
+      }
+    }
+  }
 
   private var pendingStrokes: [MutableStroke] {
     return pendingStrokeTuples.map { $0.stroke }
