@@ -48,7 +48,7 @@ class Stroke {
   /**
    Paints self onto the given graphics context.
 
-   :param: context The graphics context on which to paint.
+   - parameter context: The graphics context on which to paint.
    */
   func paintOn(context: CGContext) {
     for p in paths {
@@ -61,8 +61,8 @@ class Stroke {
    Paints self onto the given graphics context, skipping painting if the stroke
    has already been painted at the given revision.
   
-   :param: context The graphics context on which to paint.
-   :param: renderRevisionId
+   - parameter context: The graphics context on which to paint.
+   - parameter renderRevisionId:
    */
   func paintOn(
       context: CGContext,
@@ -103,7 +103,7 @@ class MutableStroke: Stroke {
   /**
    Appends the path to the end of the stroke.
 
-   :param: path The CGPath to append to the end of the stroke.
+   - parameter path: The CGPath to append to the end of the stroke.
   */
   func appendPath(path: CGPath) {
     paths.append(path)

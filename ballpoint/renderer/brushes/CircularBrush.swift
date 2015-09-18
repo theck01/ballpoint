@@ -20,10 +20,10 @@ class CircularBrush: Brush {
   
   
   /**
-   :param: radius The radius of the brush.
+   - parameter radius: The radius of the brush.
    */
   init(radius: CGFloat) {
-    var path = CGPathCreateMutable()
+    let path = CGPathCreateMutable()
     CGPathMoveToPoint(path, nil, radius, 0)
     CGPathAddArc(path, nil, 0, 0, radius, 0, CGFloat(M_PI), true)
     CGPathAddArc(
@@ -39,7 +39,9 @@ class CircularBrush: Brush {
   func beginStrokeWithColor(
       color: RendererColor, atLocation location: CGPoint) -> MutableStroke {
     let stroke = MutableStroke(color: color)
-    stroke.appendPath(circularPathAtLocation(location))
+    if let path = circularPathAtLocation(location) {
+      stroke.appendPath(path)
+    }
     return stroke
   }
   
@@ -48,20 +50,22 @@ class CircularBrush: Brush {
       stroke: MutableStroke, fromLocation: CGPoint, toLocation: CGPoint) {
     assert(
         fromLocation != toLocation, "Cannot extend stroke between equal points")
-    stroke.appendPath(circularPathAtLocation(toLocation))
-    stroke.appendPath(
-        connectorPathFromLocation(fromLocation, toLocation: toLocation))
+    if let path = circularPathAtLocation(toLocation) {
+      stroke.appendPath(path)
+      stroke.appendPath(
+          connectorPathFromLocation(fromLocation, toLocation: toLocation))
+    }
   }
   
   
   /// MARK: Helper methods.
   
   /**
-   :param: location
+   - parameter location:
 
-   :returns: The circular path centered at the given location.
+   - returns: The circular path centered at the given location.
    */
-  private func circularPathAtLocation(location: CGPoint) -> CGPath {
+  private func circularPathAtLocation(location: CGPoint) -> CGPath? {
     var translation = CGAffineTransformMakeTranslation(
         location.x, location.y)
     return CGPathCreateCopyByTransformingPath(circlePath, &translation)
@@ -69,10 +73,10 @@ class CircularBrush: Brush {
   
   
   /**
-   :param: a
-   :param: b Method assumes that b != a.
+   - parameter a:
+   - parameter b: Method assumes that b != a.
 
-   :returns: The rectangular path from point A to B. One pair of sides runs
+   - returns: The rectangular path from point A to B. One pair of sides runs
        parallel to the line between the two points (with equivalent length to
        the line between the points). The other pair of sides runs perpendicular
        to the line between the two points, with length equal to twice the radius
@@ -80,7 +84,7 @@ class CircularBrush: Brush {
    */
   private func connectorPathFromLocation(
       a: CGPoint, toLocation b: CGPoint) -> CGPath {
-    var path = CGPathCreateMutable()
+    let path = CGPathCreateMutable()
     
     // Special case when a.y == b.y, because then the perpendicular slope will
     // be infinite.

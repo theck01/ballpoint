@@ -14,7 +14,7 @@ protocol PendingStrokeDelegate {
   /**
    Informs the delegate that pending strokes have been updated.
 
-   :param: strokes The pending strokes that have been updated.
+   - parameter strokes: The pending strokes that have been updated.
    */
   func updatePendingStrokes(stroke: [MutableStroke])
 
@@ -22,7 +22,7 @@ protocol PendingStrokeDelegate {
    Informs the delegate that the given strokes have been completed and are no
    longer pending.
   
-   :param: stroke The stroke that has been completed.
+   - parameter stroke: The stroke that has been completed.
    */
   func completePendingStrokes(strokes: [Stroke])
 
@@ -109,8 +109,8 @@ class PainterView: UIView {
    Initializes the painter with the given brush, canvas, and paint color. The
    frame of the painter is set to the frame of the canvas.
 
-   :param: brush The initial brush used to create strokes.
-   :param: paintColor The initial color of strokes to generate.
+   - parameter brush: The initial brush used to create strokes.
+   - parameter paintColor: The initial color of strokes to generate.
    */
   init(brush: Brush, paintColor: RendererColor, frame: CGRect = CGRectZero) {
     self.brush = brush
@@ -134,15 +134,13 @@ class PainterView: UIView {
   /// MARK: Touch event handlers.
   
   
-  override func touchesBegan(touches: Set<NSObject>, withEvent event: UIEvent) {
+  override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
     for touch in touches {
-      if let t = touch as? UITouch {
-        let location = t.locationInView(self)
-        let stroke = brush.beginStrokeWithColor(
-            self.paintColor, atLocation: location)
-        pendingStrokeTuples.append(PendingStrokeTuple(
-            location: location, isCancelled: false, stroke: stroke))
-      }
+      let location = touch.locationInView(self)
+      let stroke = brush.beginStrokeWithColor(
+          self.paintColor, atLocation: location)
+      pendingStrokeTuples.append(PendingStrokeTuple(
+          location: location, isCancelled: false, stroke: stroke))
     }
 
     if displayPendingStrokes {
@@ -153,24 +151,22 @@ class PainterView: UIView {
   }
   
   
-  override func touchesMoved(touches: Set<NSObject>, withEvent event: UIEvent) {
+  override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
     for touch in touches {
-      if let t = touch as? UITouch {
-        let location = t.locationInView(self)
-        let previousLocation = t.previousLocationInView(self)
-        
-        // Update the location-stroke pairs, updating the pair associated with
-        // the given touch and extending the stroke to the new touch location.
-        pendingStrokeTuples = pendingStrokeTuples.map {
-          if $0.location == previousLocation {
-            self.brush.extendStroke(
-                $0.stroke, fromLocation: previousLocation, toLocation: location)
-            return PendingStrokeTuple(
-                location: location, isCancelled: $0.isCancelled,
-                stroke: $0.stroke)
-          } else {
-            return $0
-          }
+      let location = touch.locationInView(self)
+      let previousLocation = touch.previousLocationInView(self)
+      
+      // Update the location-stroke pairs, updating the pair associated with
+      // the given touch and extending the stroke to the new touch location.
+      pendingStrokeTuples = pendingStrokeTuples.map {
+        if $0.location == previousLocation {
+          self.brush.extendStroke(
+              $0.stroke, fromLocation: previousLocation, toLocation: location)
+          return PendingStrokeTuple(
+              location: location, isCancelled: $0.isCancelled,
+              stroke: $0.stroke)
+        } else {
+          return $0
         }
       }
     }
@@ -181,37 +177,35 @@ class PainterView: UIView {
   }
   
   
-  override func touchesEnded(touches: Set<NSObject>, withEvent event: UIEvent) {
+  override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
     let tupleCountPriorToTouchEnd = pendingStrokeTuples.count
     var completedStrokes: [Stroke] = []
     
     for touch in touches {
-      if let t = touch as? UITouch {
-        let location = t.locationInView(self)
-        let previousLocation = t.previousLocationInView(self)
-        
-        // Update the location stroke pairs, droping pairs associated with the
-        // touch that has ended.
-        pendingStrokeTuples = pendingStrokeTuples.filter {
-          // If the pending stroke is not associated with the end location then
-          // do not end the stroke.
-          if ($0.location != location && $0.location != previousLocation) {
-            return true
-          }
-          
-          // If the end position of the touch has not yet been appended to the
-          // stroke during a -touchesMoved call then extend the stroke.
-          if $0.location == previousLocation && location != previousLocation {
-            self.brush.extendStroke(
-                $0.stroke, fromLocation: previousLocation, toLocation: location)
-          }
-
-          if !$0.isCancelled {
-            completedStrokes.append($0.stroke)
-          }
-
-          return false
+      let location = touch.locationInView(self)
+      let previousLocation = touch.previousLocationInView(self)
+      
+      // Update the location stroke pairs, droping pairs associated with the
+      // touch that has ended.
+      pendingStrokeTuples = pendingStrokeTuples.filter {
+        // If the pending stroke is not associated with the end location then
+        // do not end the stroke.
+        if ($0.location != location && $0.location != previousLocation) {
+          return true
         }
+        
+        // If the end position of the touch has not yet been appended to the
+        // stroke during a -touchesMoved call then extend the stroke.
+        if $0.location == previousLocation && location != previousLocation {
+          self.brush.extendStroke(
+              $0.stroke, fromLocation: previousLocation, toLocation: location)
+        }
+
+        if !$0.isCancelled {
+          completedStrokes.append($0.stroke)
+        }
+
+        return false
       }
     }
 
@@ -229,7 +223,7 @@ class PainterView: UIView {
   
   
   override func touchesCancelled(
-      touches: Set<NSObject>!, withEvent event: UIEvent!) {
+      touches: Set<UITouch>?, withEvent event: UIEvent?) {
     /// Clear the strokes cancelled due to touch cancellation rather than just
     /// cancelling, as these strokes will never be ended by -touchesEnded.
     pendingStrokeTuples = []
@@ -238,7 +232,7 @@ class PainterView: UIView {
 
   /// MARK: Motion event handlers.
 
-  override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent) {
+  override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent?) {
     if motion == UIEventSubtype.MotionShake {
       drawingInteractionDelegate?.clearDrawing()
     }
@@ -271,7 +265,7 @@ class PainterView: UIView {
   }
 
   
-  required init(coder aDecoder: NSCoder) {
+  required init?(coder aDecoder: NSCoder) {
       fatalError("init(coder:) has not been implemented")
   }
 }

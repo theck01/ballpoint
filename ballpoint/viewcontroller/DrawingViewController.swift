@@ -172,9 +172,9 @@ class DrawingViewController: UIViewController, DrawingUpdateListener,
    Animate the canvas's shadow appearance to the given opacity, radius, and
    offset.
 
-   :param: shadowOpacity
-   :param: shadowRadius
-   :param: shadowYOffset
+   - parameter shadowOpacity:
+   - parameter shadowRadius:
+   - parameter shadowYOffset:
    */
   func animateShadowAppearanceWithDuration(
       duration: NSTimeInterval, shadowOpacity: CGFloat, shadowRadius: CGFloat,
@@ -221,7 +221,7 @@ class DrawingViewController: UIViewController, DrawingUpdateListener,
   }
   
   
-  required init(coder aDecoder: NSCoder) {
+  required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
   }
 }

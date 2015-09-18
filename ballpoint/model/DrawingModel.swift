@@ -74,7 +74,7 @@ class DrawingModel: DrawingUpdater, RendererColorPaletteUpdateListener {
   /// MARK: Helper methods.
 
   /**
-   :param: edits The edits to apply to the snapshot.
+   - parameter edits: The edits to apply to the snapshot.
    */
   private func applyEdits(edits: [DrawingEdit], toSnapshot snapshot: UIImage?) {
     var baseSnapshotForRender: UIImage? = snapshot

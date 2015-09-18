@@ -49,9 +49,10 @@ class DrawingRenderer {
     image?.drawInRect(CGRect(origin: CGPointZero, size: Constants.kDrawingSize))
 
     // Draw remaining strokes directly on the bitmap context.
-    let bmpContext: CGContextRef = UIGraphicsGetCurrentContext()
-    for s in strokes {
-      s.paintOn(bmpContext, renderRevisionId: currentRevisionId)
+    if let bmpContext = UIGraphicsGetCurrentContext() {
+      for s in strokes {
+        s.paintOn(bmpContext, renderRevisionId: currentRevisionId)
+      }
     }
 
     let snapshot = UIGraphicsGetImageFromCurrentImageContext()

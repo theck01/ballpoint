@@ -16,7 +16,7 @@ protocol DrawingUpdateListener {
   /**
   Informs the listener that a new snapshot has been made available.
 
-  :param: The new snapshot of the drawing.
+  - parameter The: new snapshot of the drawing.
   */
   func drawingSnapshotUpdated(snapshot: UIImage)
 }
@@ -40,7 +40,7 @@ class DrawingUpdater {
    Registers a new listener for drawing updates and immediately supplies the
    listener with the current drawing representation.
 
-   :param: listener
+   - parameter listener:
    */
   func registerDrawingUpdateListener(listener: DrawingUpdateListener) {
     drawingUpdateListeners.append(listener)

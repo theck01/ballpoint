@@ -33,7 +33,7 @@ protocol RendererColorPaletteUpdateListener {
   /**
    Called when the render color is updated to a new value.
 
-   :param: color The color that updated its value.
+   - parameter color: The color that updated its value.
    */
   func didUpdateRenderColorPalette(palette: RendererColorPalette)
 }
@@ -60,7 +60,7 @@ class RendererColorPalette {
 
 
   /**
-   :param: id The id of the renderer color to retrieve. Presence of the ID
+   - parameter id: The id of the renderer color to retrieve. Presence of the ID
        within the palette is asserted.
 
    :return: The renderer color with the given ID.
@@ -74,7 +74,7 @@ class RendererColorPalette {
   /**
    Registers new color with initial backing colors within palette.
 
-   :param: colors A map between renderer color IDs to update and initial
+   - parameter colors: A map between renderer color IDs to update and initial
        backing colors.
    */
   func registerPalette(colors: [RendererColorId: UIColor]) {
@@ -90,7 +90,7 @@ class RendererColorPalette {
   /**
    Registers the given listener for future palette updates.
 
-   :param: listener
+   - parameter listener:
    */
   func registerColorPaletteUpdateListener(
       l: RendererColorPaletteUpdateListener) {
@@ -102,7 +102,7 @@ class RendererColorPalette {
    Updates the backing colors of each RendererColor associated with the given
    IDs.
 
-   :param: colorChanges A map between renderer color IDs to update and new
+   - parameter colorChanges: A map between renderer color IDs to update and new
        backing colors.
    */
   func updatePalette(colorChanges: [RendererColorId: UIColor]) {

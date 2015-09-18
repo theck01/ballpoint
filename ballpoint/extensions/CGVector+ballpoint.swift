@@ -39,9 +39,9 @@ extension CGVector {
 
 
   /**
-   :param: vector
+   - parameter vector:
 
-   :returns: The minimum angle between the two vectors in degrees,
+   - returns: The minimum angle between the two vectors in degrees,
         counter-clockwise or clockwise.
    */
   func angleBetweenVector(vector: CGVector) -> CGFloat {

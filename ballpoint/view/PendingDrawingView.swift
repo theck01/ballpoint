@@ -53,11 +53,11 @@ class PendingDrawingView: UIView, PendingStrokeDelegate {
 
 
   override func drawRect(rect: CGRect) {
-    let context = UIGraphicsGetCurrentContext()
-
-    for s in [MutableStroke](pendingStrokeIdMap.values) {
-      if CGRectIntersectsRect(rect, s.boundingRect) {
-        s.paintOn(context)
+    if let context = UIGraphicsGetCurrentContext() {
+      for s in [MutableStroke](pendingStrokeIdMap.values) {
+        if CGRectIntersectsRect(rect, s.boundingRect) {
+          s.paintOn(context)
+        }
       }
     }
   }

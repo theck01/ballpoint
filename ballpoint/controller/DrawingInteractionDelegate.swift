@@ -13,7 +13,7 @@ protocol DrawingInteractionDelegate {
   /**
    Process the completion of the given stroke, which will no longer be updated.
    
-   :param: stroke
+   - parameter stroke:
    */
   func completeStrokes(strokes: [Stroke])
 

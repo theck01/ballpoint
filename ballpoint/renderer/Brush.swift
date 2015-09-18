@@ -14,7 +14,7 @@ protocol Brush {
   /**
    Begins a new mutable stroke at the given location.
 
-   :param: location The location at which to begin the stroke.
+   - parameter location: The location at which to begin the stroke.
    */
   func beginStrokeWithColor(
       color: RendererColor, atLocation location: CGPoint) -> MutableStroke
@@ -23,9 +23,9 @@ protocol Brush {
   /**
    Extends the stroke between the given locations.
 
-   :param: stroke The stroke to extend.
-   :param: fromLocation The location where the brush begins.
-   :param: toLocation The location to extend the stroke to.
+   - parameter stroke: The stroke to extend.
+   - parameter fromLocation: The location where the brush begins.
+   - parameter toLocation: The location to extend the stroke to.
    */
   func extendStroke(
       stroke: MutableStroke, fromLocation: CGPoint, toLocation: CGPoint)
