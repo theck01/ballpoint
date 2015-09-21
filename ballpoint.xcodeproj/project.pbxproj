@@ -7,6 +7,10 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		423859C01BB0746600063165 /* redo_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 423859BC1BB0746600063165 /* redo_icon@2x.png */; settings = {ASSET_TAGS = (); }; };
+		423859C11BB0746600063165 /* redo_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 423859BD1BB0746600063165 /* redo_icon@3x.png */; settings = {ASSET_TAGS = (); }; };
+		423859C21BB0746600063165 /* undo_icon@2x.png in Resources */ = {isa = PBXBuildFile; fileRef = 423859BE1BB0746600063165 /* undo_icon@2x.png */; settings = {ASSET_TAGS = (); }; };
+		423859C31BB0746600063165 /* undo_icon@3x.png in Resources */ = {isa = PBXBuildFile; fileRef = 423859BF1BB0746600063165 /* undo_icon@3x.png */; settings = {ASSET_TAGS = (); }; };
 		426539F71B93CD14001345CB /* DrawingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426539F61B93CD14001345CB /* DrawingModel.swift */; };
 		426539F91B93CFF9001345CB /* DrawingInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426539F81B93CFF9001345CB /* DrawingInteractionDelegate.swift */; };
 		426539FD1B93D78E001345CB /* DrawingRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426539FC1B93D78E001345CB /* DrawingRenderer.swift */; };
@@ -39,6 +43,10 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		423859BC1BB0746600063165 /* redo_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "redo_icon@2x.png"; path = "resources/images/ui-icons/redo_icon@2x.png"; sourceTree = "<group>"; };
+		423859BD1BB0746600063165 /* redo_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "redo_icon@3x.png"; path = "resources/images/ui-icons/redo_icon@3x.png"; sourceTree = "<group>"; };
+		423859BE1BB0746600063165 /* undo_icon@2x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "undo_icon@2x.png"; path = "resources/images/ui-icons/undo_icon@2x.png"; sourceTree = "<group>"; };
+		423859BF1BB0746600063165 /* undo_icon@3x.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; name = "undo_icon@3x.png"; path = "resources/images/ui-icons/undo_icon@3x.png"; sourceTree = "<group>"; };
 		426539F61B93CD14001345CB /* DrawingModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DrawingModel.swift; path = model/DrawingModel.swift; sourceTree = "<group>"; };
 		426539F81B93CFF9001345CB /* DrawingInteractionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DrawingInteractionDelegate.swift; path = controller/DrawingInteractionDelegate.swift; sourceTree = "<group>"; };
 		426539FC1B93D78E001345CB /* DrawingRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DrawingRenderer.swift; path = renderer/DrawingRenderer.swift; sourceTree = "<group>"; };
@@ -82,6 +90,33 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		423859B91BB0741900063165 /* resources */ = {
+			isa = PBXGroup;
+			children = (
+				423859BA1BB0742100063165 /* images */,
+			);
+			name = resources;
+			sourceTree = "<group>";
+		};
+		423859BA1BB0742100063165 /* images */ = {
+			isa = PBXGroup;
+			children = (
+				423859BB1BB0742800063165 /* ui-icons */,
+			);
+			name = images;
+			sourceTree = "<group>";
+		};
+		423859BB1BB0742800063165 /* ui-icons */ = {
+			isa = PBXGroup;
+			children = (
+				423859BC1BB0746600063165 /* redo_icon@2x.png */,
+				423859BD1BB0746600063165 /* redo_icon@3x.png */,
+				423859BE1BB0746600063165 /* undo_icon@2x.png */,
+				423859BF1BB0746600063165 /* undo_icon@3x.png */,
+			);
+			name = "ui-icons";
+			sourceTree = "<group>";
+		};
 		426539F51B93CB9E001345CB /* model */ = {
 			isa = PBXGroup;
 			children = (
@@ -111,6 +146,7 @@
 		42A1128F1B8EB1D000503D9F /* ballpoint */ = {
 			isa = PBXGroup;
 			children = (
+				423859B91BB0741900063165 /* resources */,
 				42A112921B8EB1D000503D9F /* AppDelegate.swift */,
 				42A112C91B8EB66300503D9F /* Constants.swift */,
 				42A6DEB81B935D8E00CC09C2 /* controller */,
@@ -290,6 +326,10 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				423859C31BB0746600063165 /* undo_icon@3x.png in Resources */,
+				423859C11BB0746600063165 /* redo_icon@3x.png in Resources */,
+				423859C01BB0746600063165 /* redo_icon@2x.png in Resources */,
+				423859C21BB0746600063165 /* undo_icon@2x.png in Resources */,
 				42A1129D1B8EB1D000503D9F /* LaunchScreen.xib in Resources */,
 				42A1129A1B8EB1D000503D9F /* Images.xcassets in Resources */,
 			);
