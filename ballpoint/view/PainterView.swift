@@ -51,7 +51,7 @@ class PainterView: UIView {
   
   var drawingInteractionDelegate: DrawingInteractionDelegate?
 
-  var pendingStrokeRenderer: StrokeRendererView?
+  var pendingStrokeRenderer: StrokeRenderer?
 
   var painterTouchDelegate: PainterTouchDelegate?
 

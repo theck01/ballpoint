@@ -8,7 +8,7 @@
 
 import UIKit
 
-class StrokeRendererView: UIView {
+class StrokeRendererView: UIView, StrokeRenderer {
   private var renderingStrokeIdMap: [StrokeId: MutableStroke] = [:]
 
   private var renderingBoundingBox: CGRect {
