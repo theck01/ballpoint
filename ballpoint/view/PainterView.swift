@@ -10,30 +10,6 @@ import UIKit
 
 
 
-protocol PendingStrokeDelegate {
-  /**
-   Informs the delegate that pending strokes have been updated.
-
-   - parameter strokes: The pending strokes that have been updated.
-   */
-  func updatePendingStrokes(stroke: [MutableStroke])
-
-  /**
-   Informs the delegate that the given strokes have been completed and are no
-   longer pending.
-  
-   - parameter stroke: The stroke that has been completed.
-   */
-  func completePendingStrokes(strokes: [Stroke])
-
-  /**
-   Informs the delegate that all pending strokes have been cancelled.
-   */
-  func cancelPendingStrokes()
-}
-
-
-
 protocol PainterTouchDelegate {
   /**
    Informs the delegate that touches are actively painting.
@@ -53,7 +29,7 @@ protocol PainterTouchDelegate {
 class PainterView: UIView {
 
   /// A tuple containing all information required to process pending strokes.
-  private struct PendingStrokeTuple {
+  private struct RenderingStrokeTuple {
     /// The last touch location associated with the pending stroke.
     var location: CGPoint
 
@@ -75,13 +51,13 @@ class PainterView: UIView {
   
   var drawingInteractionDelegate: DrawingInteractionDelegate?
 
-  var pendingStrokeDelegate: PendingStrokeDelegate?
+  var pendingStrokeRenderer: StrokeRendererView?
 
   var painterTouchDelegate: PainterTouchDelegate?
 
   /// An array of touch locations and pending strokes that last were updated to
   /// that location.
-  private var pendingStrokeTuples: [PendingStrokeTuple] = [] {
+  private var pendingStrokeTuples: [RenderingStrokeTuple] = [] {
     didSet {
       if pendingStrokeTuples.count > 0 && oldValue.count == 0 {
         painterTouchDelegate?.painterTouchesActive()
@@ -96,7 +72,7 @@ class PainterView: UIView {
   }
 
   /// Whether the pending strokes updates should be forwarded to the delegate.
-  private var displayPendingStrokes: Bool {
+  private var displayRenderingStrokes: Bool {
     return pendingStrokeTuples.count < 2 &&
         (!(pendingStrokeTuples.first?.isCancelled ?? false))
   }
@@ -139,14 +115,14 @@ class PainterView: UIView {
       let location = touch.locationInView(self)
       let stroke = brush.beginStrokeWithColor(
           self.paintColor, atLocation: location)
-      pendingStrokeTuples.append(PendingStrokeTuple(
+      pendingStrokeTuples.append(RenderingStrokeTuple(
           location: location, isCancelled: false, stroke: stroke))
     }
 
-    if displayPendingStrokes {
-      self.pendingStrokeDelegate?.updatePendingStrokes(pendingStrokes)
+    if displayRenderingStrokes {
+      self.pendingStrokeRenderer?.updateRenderingStrokes(pendingStrokes)
     } else {
-      cancelPendingStrokes()
+      cancelRenderingStrokes()
     }
   }
   
@@ -162,7 +138,7 @@ class PainterView: UIView {
         if $0.location == previousLocation {
           self.brush.extendStroke(
               $0.stroke, fromLocation: previousLocation, toLocation: location)
-          return PendingStrokeTuple(
+          return RenderingStrokeTuple(
               location: location, isCancelled: $0.isCancelled,
               stroke: $0.stroke)
         } else {
@@ -171,8 +147,8 @@ class PainterView: UIView {
       }
     }
 
-    if displayPendingStrokes {
-      self.pendingStrokeDelegate?.updatePendingStrokes(pendingStrokes)
+    if displayRenderingStrokes {
+      self.pendingStrokeRenderer?.updateRenderingStrokes(pendingStrokes)
     }
   }
   
@@ -209,9 +185,9 @@ class PainterView: UIView {
       }
     }
 
-    if displayPendingStrokes {
-      self.pendingStrokeDelegate?.updatePendingStrokes(pendingStrokes)
-      self.pendingStrokeDelegate?.completePendingStrokes(completedStrokes)
+    if displayRenderingStrokes {
+      self.pendingStrokeRenderer?.updateRenderingStrokes(pendingStrokes)
+      self.pendingStrokeRenderer?.completeRenderingStrokes(completedStrokes)
       self.drawingInteractionDelegate?.completeStrokes(completedStrokes)
     }
 
@@ -249,12 +225,12 @@ class PainterView: UIView {
 
   /// MARK: Helper methods.
 
-  func cancelPendingStrokes() {
+  func cancelRenderingStrokes() {
     pendingStrokeTuples = pendingStrokeTuples.map {
-      return PendingStrokeTuple(
+      return RenderingStrokeTuple(
           location: $0.location, isCancelled: true, stroke: $0.stroke)
     }
-    pendingStrokeDelegate?.cancelPendingStrokes()
+    pendingStrokeRenderer?.cancelRenderingStrokes()
   }
 
 

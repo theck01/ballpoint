@@ -1,5 +1,5 @@
 //
-//  PendingDrawingView.swift
+//  StrokeRenderer.swift
 //  ballpoint
 //
 //  Created by Tyler Heck on 9/7/15.
@@ -8,45 +8,45 @@
 
 import UIKit
 
-class PendingDrawingView: UIView, PendingStrokeDelegate {
-  private var pendingStrokeIdMap: [StrokeId: MutableStroke] = [:]
+class StrokeRendererView: UIView {
+  private var renderingStrokeIdMap: [StrokeId: MutableStroke] = [:]
 
-  private var pendingBoundingBox: CGRect {
-    return [MutableStroke](pendingStrokeIdMap.values).reduce(CGRectNull) {
+  private var renderingBoundingBox: CGRect {
+    return [MutableStroke](renderingStrokeIdMap.values).reduce(CGRectNull) {
         (boundingRect: CGRect, stroke: MutableStroke) in
       return CGRectUnion(boundingRect, stroke.dirtyBoundingRect)
     }
   }
 
 
-  func updatePendingStrokes(strokes: [MutableStroke]) {
+  func updateRenderingStrokes(strokes: [MutableStroke]) {
     for s in strokes {
-      pendingStrokeIdMap[s.id] = s
+      renderingStrokeIdMap[s.id] = s
     }
-    setNeedsDisplayInRect(pendingBoundingBox)
+    setNeedsDisplayInRect(renderingBoundingBox)
   }
 
 
-  func completePendingStrokes(strokes: [Stroke]) {
+  func completeRenderingStrokes(strokes: [Stroke]) {
     var boundingRect: CGRect = CGRectNull
     for s in strokes {
       assert(
-          pendingStrokeIdMap[s.id] != nil,
+          renderingStrokeIdMap[s.id] != nil,
           "Cannot complete a stroke that was never pending.")
-      pendingStrokeIdMap[s.id] = nil
+      renderingStrokeIdMap[s.id] = nil
       boundingRect = CGRectUnion(s.boundingRect, boundingRect)
     }
     setNeedsDisplayInRect(boundingRect)
   }
 
 
-  func cancelPendingStrokes() {
-    if !pendingStrokeIdMap.isEmpty {
-      let boundingRect = [MutableStroke](pendingStrokeIdMap.values).reduce(
+  func cancelRenderingStrokes() {
+    if !renderingStrokeIdMap.isEmpty {
+      let boundingRect = [MutableStroke](renderingStrokeIdMap.values).reduce(
           CGRectNull) {
         return CGRectUnion($0, $1.boundingRect)
       }
-      pendingStrokeIdMap = [:]
+      renderingStrokeIdMap = [:]
       setNeedsDisplayInRect(boundingRect)
     }
   }
@@ -54,7 +54,7 @@ class PendingDrawingView: UIView, PendingStrokeDelegate {
 
   override func drawRect(rect: CGRect) {
     if let context = UIGraphicsGetCurrentContext() {
-      for s in [MutableStroke](pendingStrokeIdMap.values) {
+      for s in [MutableStroke](renderingStrokeIdMap.values) {
         if CGRectIntersectsRect(rect, s.boundingRect) {
           s.paintOn(context)
         }

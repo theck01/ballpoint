@@ -15,15 +15,14 @@ class Constants {
   static let kButtonSize: CGFloat = 44
 
   /// The minimum separation between the canvas and the screen edge.
-  static let kMinimumCanvasScreenSeparation: CGFloat = 8
+  static let kMinimumCanvasScreenSeparation: CGFloat = 12
 
   /// The size of the drawing, in points.
   static let kDrawingSize = CGSize(
       width: UIScreen.mainScreen().bounds.size.width -
           2 * Constants.kMinimumCanvasScreenSeparation,
       height: UIScreen.mainScreen().bounds.size.height -
-          2 * Constants.kMinimumCanvasScreenSeparation -
-          Constants.kButtonSize)
+          2 * Constants.kMinimumCanvasScreenSeparation)
 
   /// The default duration of animations.
   static let kViewControllerAppearDuration: NSTimeInterval = 1

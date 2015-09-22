@@ -30,7 +30,7 @@ class DrawingViewController: UIViewController, DrawingUpdateListener,
   let drawingImageView: UIImageView
 
   /// The view that displays pending drawing strokes.
-  let pendingDrawingView: PendingDrawingView
+  let pendingStrokeRenderer: StrokeRendererView
 
   /// The painter view that handles all user interaction.
   let painterView: PainterView
@@ -49,13 +49,12 @@ class DrawingViewController: UIViewController, DrawingUpdateListener,
     let canvasFrame = CGRect(
         origin: CGPoint(
             x: Constants.kMinimumCanvasScreenSeparation,
-            y: Constants.kMinimumCanvasScreenSeparation +
-                Constants.kButtonSize),
+            y: Constants.kMinimumCanvasScreenSeparation),
         size: Constants.kDrawingSize)
 
     canvasBackingView = UIView(frame: canvasFrame)
     drawingImageView = UIImageView(frame: canvasFrame)
-    pendingDrawingView = PendingDrawingView(frame: canvasFrame)
+    pendingStrokeRenderer = StrokeRendererView(frame: canvasFrame)
     painterView = PainterView(
         brush: CircularBrush(radius: Constants.kPenBrushSize),
         paintColor: RendererColorPalette.defaultPalette[
@@ -68,19 +67,19 @@ class DrawingViewController: UIViewController, DrawingUpdateListener,
     canvasBackingView.backgroundColor = RendererColorPalette.defaultPalette[
         Constants.kBallpointSurfaceColorId].backingColor
     drawingImageView.backgroundColor = UIColor.clearColor()
-    pendingDrawingView.backgroundColor = UIColor.clearColor()
+    pendingStrokeRenderer.backgroundColor = UIColor.clearColor()
     painterView.backgroundColor = UIColor.clearColor()
 
     canvasBackingView.alpha = 0
     drawingImageView.alpha = 0
-    pendingDrawingView.alpha = 0
+    pendingStrokeRenderer.alpha = 0
 
     view.addSubview(canvasBackingView)
     view.addSubview(drawingImageView)
-    view.addSubview(pendingDrawingView)
+    view.addSubview(pendingStrokeRenderer)
     view.addSubview(painterView)
 
-    painterView.pendingStrokeDelegate = pendingDrawingView
+    painterView.pendingStrokeRenderer = pendingStrokeRenderer
     painterView.painterTouchDelegate = self
 
     RendererColorPalette.defaultPalette.registerColorPaletteUpdateListener(
@@ -118,7 +117,7 @@ class DrawingViewController: UIViewController, DrawingUpdateListener,
   /// MARK: RendererColorPaletteUpdateListener methods
 
   func didUpdateRenderColorPalette(palette: RendererColorPalette) {
-    pendingDrawingView.setNeedsDisplay()
+    pendingStrokeRenderer.setNeedsDisplay()
     canvasBackingView.backgroundColor =
         palette[Constants.kBallpointSurfaceColorId].backingColor
   }
@@ -143,7 +142,7 @@ class DrawingViewController: UIViewController, DrawingUpdateListener,
     UIView.animateWithDuration(Constants.kViewControllerAppearDuration) {
       self.canvasBackingView.alpha = 1
       self.drawingImageView.alpha = 1
-      self.pendingDrawingView.alpha = 1
+      self.pendingStrokeRenderer.alpha = 1
       self.painterView.alpha = 1
     }
 
@@ -160,7 +159,7 @@ class DrawingViewController: UIViewController, DrawingUpdateListener,
     canvasBackingView.layer.shadowOffset = CGSizeZero
 
     drawingImageView.alpha = 0
-    pendingDrawingView.alpha = 0
+    pendingStrokeRenderer.alpha = 0
 
     super.viewDidDisappear(animated)
   }
