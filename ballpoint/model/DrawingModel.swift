@@ -56,7 +56,12 @@ class DrawingModel: RendererColorPaletteUpdateListener {
 
    - returns: The change in strokes included in the drawing snapshot.
    */
-  func applyEdit(edit: DrawingModelEdit) -> DrawingModelSnapshotDiff {
+  func applyEdit(edit: DrawingModelEdit) -> DrawingModelSnapshotDiff? {
+    // Do not apply multiple clear edits in a row.
+    if edit.type == .Clear && edits.last?.type == .Clear {
+      return nil
+    }
+
     edits.append(edit)
     redoStack = []
     let addedStrokes = applyEdits([edit], toSnapshot: drawingSnapshot)
