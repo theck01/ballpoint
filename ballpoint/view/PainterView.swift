@@ -58,6 +58,10 @@ class PainterView: UIView {
 
   var painterTouchDelegate: PainterTouchDelegate?
 
+  /// The direction of the most recent undo/redo swipe.
+  private(set) var mostRecentSwipeDirection: CGVector =
+      CGVector(dx: 0, dy: 0)
+
   /// An array of touch locations and pending strokes that last were updated to
   /// that location.
   private var pendingStrokeTuples: [RenderingStrokeTuple] = [] {
@@ -79,7 +83,7 @@ class PainterView: UIView {
     return pendingStrokeTuples.count < 2 &&
         (!(pendingStrokeTuples.first?.isCancelled ?? false))
   }
-  
+
   // The gesture recognizers that map to application actions.
   private let twoTouchTapRecognizer: UITapGestureRecognizer
   private let twoTouchPanRecognizer: UIPanGestureRecognizer
@@ -246,10 +250,11 @@ class PainterView: UIView {
       if twoTouchPanRecognizer.state == UIGestureRecognizerState.Ended {
         let velocity = twoTouchPanRecognizer.velocityInView(self)
         if velocity.x * velocity.x + velocity.y * velocity.y >=
-          PainterView.kMinimumUndoVelocityThreshold *
-          PainterView.kMinimumUndoVelocityThreshold {
-            let direction = CGVector(dx: velocity.x, dy: velocity.y)
-            undoDirectionController.triggerActionForDirection(direction)
+            PainterView.kMinimumUndoVelocityThreshold *
+            PainterView.kMinimumUndoVelocityThreshold {
+          let direction = CGVector(dx: velocity.x, dy: velocity.y)
+          mostRecentSwipeDirection = direction
+          undoDirectionController.triggerActionForDirection(direction)
         }
       }
   }

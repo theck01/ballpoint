@@ -21,7 +21,7 @@ class Constants {
       height: UIScreen.mainScreen().bounds.size.height -
           2 * Constants.kCanvasScreenSeparation)
 
-  /// The default duration of animations.
+  /// The duration of the view controller appearance animation.
   static let kViewControllerAppearDuration: NSTimeInterval = 0.6
 
   /// The size of the pen brush.

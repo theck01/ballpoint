@@ -12,7 +12,7 @@ import CoreGraphics
 
 extension CGVector {
   /// The angle of the vector in degrees, clockwise from the x axis.
-  var angle: CGFloat {
+  var angleInRadians: CGFloat {
     if dx == 0 {
       if dy > 0 {
         return 90
@@ -23,18 +23,19 @@ extension CGVector {
       fatalError("Cannot get the angle of a zero vector.")
     }
 
-    var angleInRadians: Double
     if dx > 0 && dy > 0 {
-      angleInRadians = Double(atan(dy / dx))
+      return atan(dy / dx)
     } else if dx < 0 && dy > 0 {
-      angleInRadians = M_PI - Double(atan(dy / -dx))
+      return CGFloat(M_PI - Double(atan(dy / -dx)))
     } else if dx < 0 && dy < 0 {
-      angleInRadians = M_PI + Double(atan(dy / dx))
+      return CGFloat(M_PI + Double(atan(dy / dx)))
     } else {
-      angleInRadians = 2 * M_PI - Double(atan(-dy / dx))
+      return CGFloat(2 * M_PI - Double(atan(-dy / dx)))
     }
+  }
 
-    return CGFloat(angleInRadians * (180 / M_PI))
+  var angleInDegrees: CGFloat {
+    return angleInRadians * CGFloat(180 / M_PI)
   }
 
 
@@ -45,8 +46,8 @@ extension CGVector {
         counter-clockwise or clockwise.
    */
   func angleBetweenVector(vector: CGVector) -> CGFloat {
-    let selfAngle = angle
-    let otherAngle = vector.angle
+    let selfAngle = angleInDegrees
+    let otherAngle = vector.angleInDegrees
 
     if selfAngle < otherAngle {
       return otherAngle - selfAngle < 180 ?
@@ -57,5 +58,18 @@ extension CGVector {
           selfAngle - otherAngle :
           otherAngle + (360 - selfAngle)
     }
+  }
+
+
+  /**
+   - parameter magnitude:
+
+   - returns: A vector in the same direction as this vector, but with the given
+        magnitude.
+   */
+  func vectorWithMagnitude(magnitude: CGFloat) -> CGVector {
+    let selfAngle = angleInRadians
+    return CGVector(
+        dx: cos(selfAngle) * magnitude, dy: sin(selfAngle) * magnitude)
   }
 }

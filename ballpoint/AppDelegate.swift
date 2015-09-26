@@ -31,8 +31,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     let controller = DrawingController(model: model, viewController: drawingVC)
     drawingVC.drawingInteractionDelegate = controller
 
-    model.registerDrawingUpdateListener(drawingVC)
-
     window.rootViewController = drawingVC
     window.makeKeyAndVisible()
             

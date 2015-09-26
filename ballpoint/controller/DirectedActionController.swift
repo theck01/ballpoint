@@ -39,6 +39,13 @@ class DirectedActionController {
   }
 
 
+  /**
+   Triggers the action associated with the given direction.
+
+   - parameter direction:
+
+   - returns: Whether either primary or secondary actions were called.
+   */
   func triggerActionForDirection(direction: CGVector) {
     if let primaryDirection = primaryActionDirection {
       let angleDifference = primaryDirection.angleBetweenVector(direction)

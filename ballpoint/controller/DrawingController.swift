@@ -64,12 +64,18 @@ class DrawingController: DrawingInteractionDelegate {
   /// MARK: DrawingInteractionDelegate methods.
 
   func completeStrokes(strokes: [Stroke]) {
-    model.addStrokes(strokes)
+    let edit = DrawingModelEdit(
+        type: DrawingModelEdit.EditType.AddStrokes, strokes: strokes)
+    model.applyEdit(edit)
+    viewController.updateDrawingSnapshot(model.drawingSnapshot)
   }
 
 
   func clearDrawing() {
-    model.clearStrokes()
+    let edit = DrawingModelEdit(
+        type: DrawingModelEdit.EditType.Clear, strokes: [])
+    model.applyEdit(edit)
+    viewController.updateDrawingSnapshot(model.drawingSnapshot)
   }
 
 
@@ -79,11 +85,29 @@ class DrawingController: DrawingInteractionDelegate {
 
 
   func undo() {
-    model.undo()
+    if let diff = model.undo() {
+      updateViewControllerWithModelDiff(diff)
+    }
   }
 
 
   func redo() {
-    model.redo()
+    if let diff = model.redo() {
+      updateViewControllerWithModelDiff(diff)
+    }
+  }
+
+
+  /// MARK: Helper methods.
+
+  func updateViewControllerWithModelDiff(diff: DrawingModelSnapshotDiff) {
+    switch diff.type {
+    case DrawingModelSnapshotDiff.DiffType.AddedStrokes:
+      viewController.updateDrawingSnapshot(
+          model.drawingSnapshot, addedStrokes: diff.strokes)
+    case DrawingModelSnapshotDiff.DiffType.RemovedStrokes:
+      viewController.updateDrawingSnapshot(
+          model.drawingSnapshot, removedStrokes: diff.strokes)
+    }
   }
 }
