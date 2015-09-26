@@ -8,24 +8,14 @@
 
 import UIKit
 
+
+/// Interface for a stroke renderer that only renders the specified strokes. The
+/// renderer will not persist renderings between calls.
 protocol StrokeRenderer {
   /**
-   Updates the rendering of the given strokes.
+   Renders the given strokes.
 
    - parameter strokes: The strokes with renderings to be updated.
    */
-  func updateRenderingStrokes(strokes: [MutableStroke])
-
-  /**
-   Completes the rendering of the given strokes without affecting the rendering
-   of remaining strokes.
-
-   - parameter strokes: The strokes with renderings to be updated.
-   */
-  func completeRenderingStrokes(strokes: [Stroke])
-
-  /**
-   Cancels the rendering of all displayed strokes.
-   */
-  func cancelRenderingStrokes()
+  func renderStrokes(strokes: [Stroke])
 }

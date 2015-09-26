@@ -9,56 +9,21 @@
 import UIKit
 
 class StrokeRendererView: UIView, StrokeRenderer {
-  private var renderingStrokeIdMap: [StrokeId: MutableStroke] = [:]
-
-  private var renderingBoundingBox: CGRect {
-    return [MutableStroke](renderingStrokeIdMap.values).reduce(CGRectNull) {
-        (boundingRect: CGRect, stroke: MutableStroke) in
-      return CGRectUnion(boundingRect, stroke.dirtyBoundingRect)
-    }
-  }
+  private var strokesToRender: [Stroke] = []
 
 
-  func updateRenderingStrokes(strokes: [MutableStroke]) {
-    for s in strokes {
-      renderingStrokeIdMap[s.id] = s
-    }
-    setNeedsDisplayInRect(renderingBoundingBox)
-  }
-
-
-  func completeRenderingStrokes(strokes: [Stroke]) {
-    var boundingRect: CGRect = CGRectNull
-    for s in strokes {
-      assert(
-          renderingStrokeIdMap[s.id] != nil,
-          "Cannot complete a stroke that was never pending.")
-      renderingStrokeIdMap[s.id] = nil
-      boundingRect = CGRectUnion(s.boundingRect, boundingRect)
-    }
-    setNeedsDisplayInRect(boundingRect)
-  }
-
-
-  func cancelRenderingStrokes() {
-    if !renderingStrokeIdMap.isEmpty {
-      let boundingRect = [MutableStroke](renderingStrokeIdMap.values).reduce(
-          CGRectNull) {
-        return CGRectUnion($0, $1.boundingRect)
-      }
-      renderingStrokeIdMap = [:]
-      setNeedsDisplayInRect(boundingRect)
-    }
+  func renderStrokes(strokes: [Stroke]) {
+    strokesToRender = strokes
+    setNeedsDisplay()
   }
 
 
   override func drawRect(rect: CGRect) {
     if let context = UIGraphicsGetCurrentContext() {
-      for s in [MutableStroke](renderingStrokeIdMap.values) {
-        if CGRectIntersectsRect(rect, s.boundingRect) {
-          s.paintOn(context)
-        }
+      for stroke in strokesToRender {
+        stroke.paintOn(context)
       }
+      strokesToRender = []
     }
   }
 }

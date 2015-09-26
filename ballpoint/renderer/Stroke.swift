@@ -10,12 +10,6 @@ import UIKit
 
 
 
-/// An identifier for a given stroke. Used to ensure that strokes are painted
-/// only when necessary.
-typealias StrokeId = UInt
-
-
-
 /// An aggregation of CGPath objects making up one drawing stroke.
 class Stroke {
   /// The array of paths that compose the stroke.
@@ -23,12 +17,6 @@ class Stroke {
   
   /// The color of the stroke.
   private let color: RendererColor
-
-  /// The identifier of the stroke.
-  let id: StrokeId
-  
-  /// The global counter of stroke IDs.
-  private static var strokeIdCounter: StrokeId = 0
 
   /// The revision that the stroke has been drawing on, or nil if the stroke has
   /// yet to be painted.
@@ -41,7 +29,6 @@ class Stroke {
   init(paths: [CGPath], color: RendererColor) {
     self.paths = paths
     self.color = color
-    id = Stroke.strokeIdCounter++
   }
 
 

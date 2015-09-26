@@ -71,8 +71,8 @@ class PainterView: UIView {
     return pendingStrokeTuples.map { $0.stroke }
   }
 
-  /// Whether the pending strokes updates should be forwarded to the delegate.
-  private var displayRenderingStrokes: Bool {
+  /// Whether the pending strokes should be rendered.
+  private var shouldRenderPendingStrokes: Bool {
     return pendingStrokeTuples.count < 2 &&
         (!(pendingStrokeTuples.first?.isCancelled ?? false))
   }
@@ -119,8 +119,8 @@ class PainterView: UIView {
           location: location, isCancelled: false, stroke: stroke))
     }
 
-    if displayRenderingStrokes {
-      self.pendingStrokeRenderer?.updateRenderingStrokes(pendingStrokes)
+    if shouldRenderPendingStrokes {
+      self.pendingStrokeRenderer?.renderStrokes(pendingStrokes)
     } else {
       cancelRenderingStrokes()
     }
@@ -147,8 +147,8 @@ class PainterView: UIView {
       }
     }
 
-    if displayRenderingStrokes {
-      self.pendingStrokeRenderer?.updateRenderingStrokes(pendingStrokes)
+    if shouldRenderPendingStrokes {
+      self.pendingStrokeRenderer?.renderStrokes(pendingStrokes)
     }
   }
   
@@ -185,9 +185,8 @@ class PainterView: UIView {
       }
     }
 
-    if displayRenderingStrokes {
-      self.pendingStrokeRenderer?.updateRenderingStrokes(pendingStrokes)
-      self.pendingStrokeRenderer?.completeRenderingStrokes(completedStrokes)
+    if shouldRenderPendingStrokes {
+      self.pendingStrokeRenderer?.renderStrokes(pendingStrokes)
       self.drawingInteractionDelegate?.completeStrokes(completedStrokes)
     }
 
@@ -230,7 +229,7 @@ class PainterView: UIView {
       return RenderingStrokeTuple(
           location: $0.location, isCancelled: true, stroke: $0.stroke)
     }
-    pendingStrokeRenderer?.cancelRenderingStrokes()
+    pendingStrokeRenderer?.renderStrokes([])
   }
 
 
