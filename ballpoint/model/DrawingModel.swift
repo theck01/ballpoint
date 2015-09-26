@@ -46,8 +46,6 @@ class DrawingModel: DrawingUpdater, RendererColorPaletteUpdateListener {
     if edits.isEmpty {
       return
     }
-
-    renderer.incrementRevision()
     redoStack.append(edits.removeLast())
     applyEdits(edits, toSnapshot: nil)
   }

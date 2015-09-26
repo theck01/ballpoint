@@ -10,11 +10,8 @@ import UIKit
 
 
 
-/// The object responsible for rendering strokes on a bitmap. One renderer
-/// should be used per revision.
+/// The object responsible for rendering strokes on a bitmap.
 class DrawingRenderer {
-  typealias RenderRevisionId = Int
-
   private static var defaultEmptyRenderedDrawingInstance_: UIImage?
 
   static var kEmptyRenderedDrawing: UIImage {
@@ -26,17 +23,6 @@ class DrawingRenderer {
     }
 
     return defaultEmptyRenderedDrawingInstance_!
-  }
-
-  /// The global counter of revision IDs, such that no two IDs are duplicates.
-  private static var nextRevisionId: RenderRevisionId = 0
-
-  /// The current renderer's revision number.
-  var currentRevisionId: RenderRevisionId
-
-
-  init() {
-    currentRevisionId = DrawingRenderer.nextRevisionId++
   }
 
 
@@ -51,7 +37,7 @@ class DrawingRenderer {
     // Draw remaining strokes directly on the bitmap context.
     if let bmpContext = UIGraphicsGetCurrentContext() {
       for s in strokes {
-        s.paintOn(bmpContext, renderRevisionId: currentRevisionId)
+        s.paintOn(bmpContext)
       }
     }
 
@@ -59,10 +45,5 @@ class DrawingRenderer {
     UIGraphicsEndImageContext()
 
     return snapshot
-  }
-
-
-  func incrementRevision() {
-    currentRevisionId = DrawingRenderer.nextRevisionId++
   }
 }

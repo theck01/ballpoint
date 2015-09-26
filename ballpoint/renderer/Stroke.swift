@@ -18,10 +18,6 @@ class Stroke {
   /// The color of the stroke.
   private let color: RendererColor
 
-  /// The revision that the stroke has been drawing on, or nil if the stroke has
-  /// yet to be painted.
-  private var paintedRevision: DrawingRenderer.RenderRevisionId?
-
   /// The bounding rect completely containing the stroke.
   private(set) var boundingRect: CGRect = CGRectNull
   
@@ -44,24 +40,6 @@ class Stroke {
   }
 
 
-  /**
-   Paints self onto the given graphics context, skipping painting if the stroke
-   has already been painted at the given revision.
-  
-   - parameter context: The graphics context on which to paint.
-   - parameter renderRevisionId:
-   */
-  func paintOn(
-      context: CGContext,
-      renderRevisionId: DrawingRenderer.RenderRevisionId) {
-    if paintedRevision == renderRevisionId {
-      return
-    }
-
-    paintOn(context)
-  }
-
-
   private func paintCGPath(path: CGPath, onContext context: CGContext) {
     CGContextAddPath(context, path)
     CGContextSetRGBFillColor(
@@ -73,20 +51,11 @@ class Stroke {
 
 
 class MutableStroke: Stroke {
-  /// The paths of the stroke that still have not been painted on the canvas
-  /// with the given ID.
-  var dirtyPaths: [CGPath] = []
-
-  /// The bounding rectangle around the dirty paths.
-  private(set) var dirtyBoundingRect: CGRect = CGRectNull
-
-
   init(color: RendererColor) {
     super.init(paths: [], color: color)
   }
 
 
-  
   /**
    Appends the path to the end of the stroke.
 
@@ -94,33 +63,7 @@ class MutableStroke: Stroke {
   */
   func appendPath(path: CGPath) {
     paths.append(path)
-    dirtyPaths.append(path)
-
-    let pathRect = CGPathGetBoundingBox(path)
-
-    dirtyBoundingRect = CGRectUnion(dirtyBoundingRect, pathRect)
-    boundingRect = CGRectUnion(boundingRect, pathRect)
-  }
-
-
-  override func paintOn(context: CGContext) {
-    super.paintOn(context)
-    dirtyPaths = []
-    dirtyBoundingRect = CGRectNull
-  }
-
-
-  override func paintOn(
-      context: CGContext, renderRevisionId: DrawingRenderer.RenderRevisionId) {
-    if paintedRevision == renderRevisionId {
-      for p in dirtyPaths {
-        paintCGPath(p, onContext: context)
-      }
-    } else {
-      super.paintOn(context, renderRevisionId: renderRevisionId)
-    }
-        
-    dirtyPaths = []
-    dirtyBoundingRect = CGRectNull
+    boundingRect = CGRectUnion(
+        boundingRect, CGPathGetBoundingBox(path))
   }
 }
