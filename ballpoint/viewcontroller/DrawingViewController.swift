@@ -13,13 +13,16 @@ import UIKit
 class DrawingViewController: UIViewController, DrawingUpdateListener,
     PainterTouchDelegate, RendererColorPaletteUpdateListener {
   // The constants describing the shadow behind the canvas backing.
-  static let kCanvasAbsentTouchShadowOpacity: CGFloat = 0.5
-  static let kCanvasAbsentTouchShadowRadius: CGFloat = 4
-  static let kCanvasAbsentTouchShadowYOffset: CGFloat = 4
-  static let kCanvasActiveTouchShadowOpacity: CGFloat = 0.2
-  static let kCanvasActiveTouchShadowRadius: CGFloat = 2
-  static let kCanvasActiveTouchShadowYOffset: CGFloat = 2
-
+  static let kCanvasAbsentTouchShadowOpacity: CGFloat = 0.4
+  static let kCanvasAbsentTouchShadowRadius: CGFloat =
+      Constants.kCanvasScreenSeparation / 2
+  static let kCanvasAbsentTouchShadowYOffset: CGFloat = 0
+  static let kCanvasActiveTouchShadowOpacity: CGFloat =
+      DrawingViewController.kCanvasAbsentTouchShadowOpacity / 2
+  static let kCanvasActiveTouchShadowRadius: CGFloat =
+      DrawingViewController.kCanvasAbsentTouchShadowRadius / 2
+  static let kCanvasActiveTouchShadowYOffset: CGFloat = 0
+  
   /// The duration of the shadow animation when painter touches are active.
   static let kPainterTouchesActiveAnimationDuration: NSTimeInterval = 0.2
 
@@ -48,8 +51,8 @@ class DrawingViewController: UIViewController, DrawingUpdateListener,
   init() {
     let canvasFrame = CGRect(
         origin: CGPoint(
-            x: Constants.kMinimumCanvasScreenSeparation,
-            y: Constants.kMinimumCanvasScreenSeparation),
+            x: Constants.kCanvasScreenSeparation,
+            y: Constants.kCanvasScreenSeparation),
         size: Constants.kDrawingSize)
 
     canvasBackingView = UIView(frame: canvasFrame)
