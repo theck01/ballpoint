@@ -43,6 +43,9 @@ class PainterView: UIView {
 
   private static let kMinimumUndoVelocityThreshold: CGFloat = 40
 
+  /// The controller managing undo actions for swipe directions.
+  private var undoDirectionController: DirectedActionController!
+
   /// The brush used to create strokes on the canvas.
   var brush: Brush
   
@@ -79,6 +82,7 @@ class PainterView: UIView {
   
   // The gesture recognizers that map to application actions.
   private let twoTouchTapRecognizer: UITapGestureRecognizer
+  private let twoTouchPanRecognizer: UIPanGestureRecognizer
 
   
   /**
@@ -92,8 +96,13 @@ class PainterView: UIView {
     self.brush = brush
     self.paintColor = paintColor
     twoTouchTapRecognizer = UITapGestureRecognizer()
+    twoTouchPanRecognizer = UIPanGestureRecognizer()
 
     super.init(frame: frame)
+
+    undoDirectionController = DirectedActionController(
+        primaryAction: { self.drawingInteractionDelegate?.undo() },
+        secondaryAction: { self.drawingInteractionDelegate?.redo() })
 
     multipleTouchEnabled = true
 
@@ -104,6 +113,14 @@ class PainterView: UIView {
     twoTouchTapRecognizer.numberOfTouchesRequired = 2
     twoTouchTapRecognizer.addTarget(self, action: "handleTwoTouchTapGesture:")
     addGestureRecognizer(twoTouchTapRecognizer)
+
+    twoTouchPanRecognizer.cancelsTouchesInView = true
+    twoTouchPanRecognizer.delaysTouchesBegan = false
+    twoTouchPanRecognizer.delaysTouchesEnded = false
+    twoTouchPanRecognizer.minimumNumberOfTouches = 2
+    twoTouchPanRecognizer.maximumNumberOfTouches = 2
+    twoTouchPanRecognizer.addTarget(self, action: "handleTwoTouchPanGesture:")
+    addGestureRecognizer(twoTouchPanRecognizer)
   }
 
 
@@ -186,8 +203,9 @@ class PainterView: UIView {
     }
 
     if shouldRenderPendingStrokes {
-      self.pendingStrokeRenderer?.renderStrokes(pendingStrokes)
-      self.drawingInteractionDelegate?.completeStrokes(completedStrokes)
+      pendingStrokeRenderer?.renderStrokes(pendingStrokes)
+      drawingInteractionDelegate?.completeStrokes(completedStrokes)
+      undoDirectionController.clearDirectionAssociations()
     }
 
     assert(
@@ -202,6 +220,7 @@ class PainterView: UIView {
     /// Clear the strokes cancelled due to touch cancellation rather than just
     /// cancelling, as these strokes will never be ended by -touchesEnded.
     pendingStrokeTuples = []
+    pendingStrokeRenderer?.renderStrokes(pendingStrokes)
   }
 
 
@@ -219,6 +238,20 @@ class PainterView: UIView {
   @objc func handleTwoTouchTapGesture(
       twoTouchTapRecognizer: UITapGestureRecognizer) {
     drawingInteractionDelegate?.toggleTool()
+  }
+
+
+  @objc func handleTwoTouchPanGesture(
+    twoTouchPanRecognizer: UIPanGestureRecognizer) {
+      if twoTouchPanRecognizer.state == UIGestureRecognizerState.Ended {
+        let velocity = twoTouchPanRecognizer.velocityInView(self)
+        if velocity.x * velocity.x + velocity.y * velocity.y >=
+          PainterView.kMinimumUndoVelocityThreshold *
+          PainterView.kMinimumUndoVelocityThreshold {
+            let direction = CGVector(dx: velocity.x, dy: velocity.y)
+            undoDirectionController.triggerActionForDirection(direction)
+        }
+      }
   }
 
 
