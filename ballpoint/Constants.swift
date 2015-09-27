@@ -25,10 +25,10 @@ class Constants {
   static let kViewControllerAppearDuration: NSTimeInterval = 0.6
 
   /// The size of the pen brush.
-  static let kPenBrushSize: CGFloat = 2.0
+  static let kPenBrush = FountainBrush(minRadius: 0, maxRadius: 2)
 
   /// The size of the eraser brush.
-  static let kEraserBrushSize: CGFloat = 10.0
+  static let kEraserBrush = FountainBrush(minRadius: 10, maxRadius: 10)
 
   // The color ids for renderer colors uses in the application.
   static let kBallpointInkColorId: RendererColorId =

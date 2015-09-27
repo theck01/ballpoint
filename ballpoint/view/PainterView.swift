@@ -1,6 +1,6 @@
 //
 //  PainterOverlayView.swift
-//  inkwell
+//  ballpoint
 //
 //  Created by Tyler Heck on 8/4/15.
 //  Copyright (c) 2015 Tyler Heck. All rights reserved.

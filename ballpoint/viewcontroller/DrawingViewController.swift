@@ -1,6 +1,6 @@
 //
 //  ViewController.swift
-//  inkwell
+//  ballpoint
 //
 //  Created by Tyler Heck on 8/2/15.
 //  Copyright (c) 2015 Tyler Heck. All rights reserved.
@@ -65,7 +65,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     drawingImageView = UIImageView(frame: canvasFrame)
     pendingStrokeRenderer = StrokeRendererView(frame: canvasFrame)
     painterView = PainterView(
-        brush: CircularBrush(radius: Constants.kPenBrushSize),
+        brush: Constants.kPenBrush,
         paintColor: RendererColorPalette.defaultPalette[
             Constants.kBallpointInkColorId],
         frame: canvasFrame)
