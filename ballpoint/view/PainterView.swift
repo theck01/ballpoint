@@ -134,8 +134,8 @@ class PainterView: UIView {
   override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
     for touch in touches {
       let location = touch.locationInView(self)
-      let stroke = brush.beginStrokeWithColor(
-          self.paintColor, atLocation: location)
+      let stroke = MutableStroke(color: paintColor, brush: brush)
+      stroke.appendPoint(location)
       pendingStrokeTuples.append(RenderingStrokeTuple(
           location: location, isCancelled: false, stroke: stroke))
     }
@@ -157,8 +157,7 @@ class PainterView: UIView {
       // the given touch and extending the stroke to the new touch location.
       pendingStrokeTuples = pendingStrokeTuples.map {
         if $0.location == previousLocation {
-          self.brush.extendStroke(
-              $0.stroke, fromLocation: previousLocation, toLocation: location)
+          $0.stroke.appendPoint(location)
           return RenderingStrokeTuple(
               location: location, isCancelled: $0.isCancelled,
               stroke: $0.stroke)
@@ -194,8 +193,7 @@ class PainterView: UIView {
         // If the end position of the touch has not yet been appended to the
         // stroke during a -touchesMoved call then extend the stroke.
         if $0.location == previousLocation && location != previousLocation {
-          self.brush.extendStroke(
-              $0.stroke, fromLocation: previousLocation, toLocation: location)
+          $0.stroke.appendPoint(location)
         }
 
         if !$0.isCancelled {

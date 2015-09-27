@@ -37,7 +37,9 @@ class DrawingRenderer {
     // Draw remaining strokes directly on the bitmap context.
     if let bmpContext = UIGraphicsGetCurrentContext() {
       for s in strokes {
-        s.paintOn(bmpContext)
+        if let renderedStroke = s.brush.render(s) {
+          renderedStroke.paintOn(bmpContext)
+        }
       }
     }
 

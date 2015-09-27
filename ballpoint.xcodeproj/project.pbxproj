@@ -23,12 +23,13 @@
 		42A112B91B8EB4D800503D9F /* DrawingViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112B81B8EB4D800503D9F /* DrawingViewController.swift */; };
 		42A112BE1B8EB4E700503D9F /* PainterView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112BB1B8EB4E700503D9F /* PainterView.swift */; };
 		42A112C31B8EB50A00503D9F /* Brush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112C01B8EB50A00503D9F /* Brush.swift */; };
-		42A112C51B8EB50A00503D9F /* Stroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112C21B8EB50A00503D9F /* Stroke.swift */; };
+		42A112C51B8EB50A00503D9F /* RendererStroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112C21B8EB50A00503D9F /* RendererStroke.swift */; };
 		42A112C81B8EB54600503D9F /* CircularBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112C71B8EB54600503D9F /* CircularBrush.swift */; };
 		42A112CA1B8EB66300503D9F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112C91B8EB66300503D9F /* Constants.swift */; };
 		42A6DEB71B935C0A00CC09C2 /* UIColor+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A6DEB61B935C0A00CC09C2 /* UIColor+ballpoint.swift */; };
 		42BA874B1B9DDA9000AC842E /* StrokeRendererView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BA874A1B9DDA9000AC842E /* StrokeRendererView.swift */; };
 		42BA87511B9DEB0300AC842E /* CGVector+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BA87501B9DEB0300AC842E /* CGVector+ballpoint.swift */; };
+		42C8498B1BB87A2F0054F65A /* Stroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C8498A1BB87A2F0054F65A /* Stroke.swift */; settings = {ASSET_TAGS = (); }; };
 		42E0FE8E1B99120300E2A0A1 /* DrawingController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E0FE8D1B99120300E2A0A1 /* DrawingController.swift */; };
 		42E750131B9FC922003180C9 /* RendererColorPalette.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42E750121B9FC922003180C9 /* RendererColorPalette.swift */; };
 /* End PBXBuildFile section */
@@ -64,12 +65,13 @@
 		42A112B81B8EB4D800503D9F /* DrawingViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DrawingViewController.swift; path = viewcontroller/DrawingViewController.swift; sourceTree = "<group>"; };
 		42A112BB1B8EB4E700503D9F /* PainterView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PainterView.swift; path = view/PainterView.swift; sourceTree = "<group>"; };
 		42A112C01B8EB50A00503D9F /* Brush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Brush.swift; path = renderer/Brush.swift; sourceTree = "<group>"; };
-		42A112C21B8EB50A00503D9F /* Stroke.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Stroke.swift; path = renderer/Stroke.swift; sourceTree = "<group>"; };
+		42A112C21B8EB50A00503D9F /* RendererStroke.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RendererStroke.swift; path = renderer/RendererStroke.swift; sourceTree = "<group>"; };
 		42A112C71B8EB54600503D9F /* CircularBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = CircularBrush.swift; path = renderer/brushes/CircularBrush.swift; sourceTree = "<group>"; };
 		42A112C91B8EB66300503D9F /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		42A6DEB61B935C0A00CC09C2 /* UIColor+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIColor+ballpoint.swift"; path = "extensions/UIColor+ballpoint.swift"; sourceTree = "<group>"; };
 		42BA874A1B9DDA9000AC842E /* StrokeRendererView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StrokeRendererView.swift; path = view/StrokeRendererView.swift; sourceTree = "<group>"; };
 		42BA87501B9DEB0300AC842E /* CGVector+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CGVector+ballpoint.swift"; path = "extensions/CGVector+ballpoint.swift"; sourceTree = "<group>"; };
+		42C8498A1BB87A2F0054F65A /* Stroke.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Stroke.swift; path = model/Stroke.swift; sourceTree = "<group>"; };
 		42E0FE8D1B99120300E2A0A1 /* DrawingController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DrawingController.swift; path = controller/DrawingController.swift; sourceTree = "<group>"; };
 		42E750121B9FC922003180C9 /* RendererColorPalette.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RendererColorPalette.swift; path = renderer/RendererColorPalette.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -123,6 +125,7 @@
 			isa = PBXGroup;
 			children = (
 				426539F61B93CD14001345CB /* DrawingModel.swift */,
+				42C8498A1BB87A2F0054F65A /* Stroke.swift */,
 			);
 			name = model;
 			sourceTree = "<group>";
@@ -221,7 +224,7 @@
 				42A112C01B8EB50A00503D9F /* Brush.swift */,
 				42A112C61B8EB52E00503D9F /* brushes */,
 				426539FC1B93D78E001345CB /* DrawingRenderer.swift */,
-				42A112C21B8EB50A00503D9F /* Stroke.swift */,
+				42A112C21B8EB50A00503D9F /* RendererStroke.swift */,
 				42E750121B9FC922003180C9 /* RendererColorPalette.swift */,
 			);
 			name = renderer;
@@ -378,11 +381,12 @@
 				42BA874B1B9DDA9000AC842E /* StrokeRendererView.swift in Sources */,
 				4270F90E1BB0F98000940AAE /* StrokeRenderer.swift in Sources */,
 				42A112B91B8EB4D800503D9F /* DrawingViewController.swift in Sources */,
+				42C8498B1BB87A2F0054F65A /* Stroke.swift in Sources */,
 				42A6DEB71B935C0A00CC09C2 /* UIColor+ballpoint.swift in Sources */,
 				42A112C81B8EB54600503D9F /* CircularBrush.swift in Sources */,
 				426539F71B93CD14001345CB /* DrawingModel.swift in Sources */,
 				42E750131B9FC922003180C9 /* RendererColorPalette.swift in Sources */,
-				42A112C51B8EB50A00503D9F /* Stroke.swift in Sources */,
+				42A112C51B8EB50A00503D9F /* RendererStroke.swift in Sources */,
 				426539FD1B93D78E001345CB /* DrawingRenderer.swift in Sources */,
 				427DBC501BB7268A00122848 /* UIView+ballpoint.swift in Sources */,
 				4270F90C1BB0F95C00940AAE /* DrawingInteractionDelegate.swift in Sources */,

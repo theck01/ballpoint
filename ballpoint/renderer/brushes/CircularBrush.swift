@@ -35,28 +35,27 @@ class CircularBrush: Brush {
   
   
   /// MARK: Brush method implementations.
-  
-  func beginStrokeWithColor(
-      color: RendererColor, atLocation location: CGPoint) -> MutableStroke {
-    let stroke = MutableStroke(color: color)
-    if let path = circularPathAtLocation(location) {
-      stroke.appendPath(path)
+
+  func render(stroke: Stroke) -> RendererStroke? {
+    if stroke.points.isEmpty {
+      return nil
     }
-    return stroke
-  }
-  
-  
-  func extendStroke(
-      stroke: MutableStroke, fromLocation: CGPoint, toLocation: CGPoint) {
-    assert(
-        fromLocation != toLocation, "Cannot extend stroke between equal points")
-    if let path = circularPathAtLocation(toLocation) {
-      stroke.appendPath(path)
-      stroke.appendPath(
-          connectorPathFromLocation(fromLocation, toLocation: toLocation))
+
+    var paths: [CGPath] = []
+
+    paths.append(circularPathAtLocation(stroke.points.first!))
+    
+    if stroke.points.count > 1 {
+      for i in 1..<stroke.points.count {
+        paths.append(connectorPathFromLocation(
+            stroke.points[i - 1], toLocation: stroke.points[i]))
+        paths.append(circularPathAtLocation(stroke.points[i]))
+      }
     }
+
+    return RendererStroke(paths: paths, color: stroke.color)
   }
-  
+
   
   /// MARK: Helper methods.
   
@@ -65,10 +64,13 @@ class CircularBrush: Brush {
 
    - returns: The circular path centered at the given location.
    */
-  private func circularPathAtLocation(location: CGPoint) -> CGPath? {
+  private func circularPathAtLocation(location: CGPoint) -> CGPath {
     var translation = CGAffineTransformMakeTranslation(
         location.x, location.y)
-    return CGPathCreateCopyByTransformingPath(circlePath, &translation)
+    let translatedPath = CGPathCreateCopyByTransformingPath(
+        circlePath, &translation)
+    assert(translatedPath != nil, "Could not translate circular brush path.")
+    return translatedPath!
   }
   
   

@@ -10,21 +10,24 @@ import UIKit
 
 
 
-/// An aggregation of CGPath objects making up one drawing stroke.
-class Stroke {
+/// An aggregation of CGPath objects making up one rendered drawing stroke.
+struct RendererStroke {
   /// The array of paths that compose the stroke.
-  private var paths: [CGPath]
+  private let paths: [CGPath]
   
   /// The color of the stroke.
   private let color: RendererColor
 
   /// The bounding rect completely containing the stroke.
-  private(set) var boundingRect: CGRect = CGRectNull
+  let boundingRect: CGRect
   
   
   init(paths: [CGPath], color: RendererColor) {
     self.paths = paths
     self.color = color
+    boundingRect = paths.reduce(CGRectNull) { (rect: CGRect, p: CGPath) in
+      return CGRectUnion(rect, CGPathGetBoundingBox(p))
+    }
   }
 
 
@@ -45,25 +48,5 @@ class Stroke {
     CGContextSetRGBFillColor(
         context, color.red, color.green, color.blue, color.alpha)
     CGContextFillPath(context)
-  }
-}
-
-
-
-class MutableStroke: Stroke {
-  init(color: RendererColor) {
-    super.init(paths: [], color: color)
-  }
-
-
-  /**
-   Appends the path to the end of the stroke.
-
-   - parameter path: The CGPath to append to the end of the stroke.
-  */
-  func appendPath(path: CGPath) {
-    paths.append(path)
-    boundingRect = CGRectUnion(
-        boundingRect, CGPathGetBoundingBox(path))
   }
 }

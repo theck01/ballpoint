@@ -30,8 +30,7 @@ class DrawingController: DrawingInteractionDelegate {
     didSet {
       switch (currentTool) {
       case .Pen:
-        viewController.painterView.brush = CircularBrush(
-            radius: Constants.kPenBrushSize)
+        viewController.painterView.brush = penBrush
         viewController.painterView.paintColor =
             RendererColorPalette.defaultPalette[Constants.kBallpointInkColorId]
 
@@ -41,8 +40,7 @@ class DrawingController: DrawingInteractionDelegate {
         ])
 
       case .Eraser:
-        viewController.painterView.brush = CircularBrush(
-            radius: Constants.kEraserBrushSize)
+        viewController.painterView.brush = eraserBrush
         viewController.painterView.paintColor =
             RendererColorPalette.defaultPalette[
                 Constants.kBallpointSurfaceColorId]
@@ -54,6 +52,10 @@ class DrawingController: DrawingInteractionDelegate {
       }
     }
   }
+
+  /// Cache of brushes used within the application.
+  private let penBrush = CircularBrush(radius: Constants.kPenBrushSize)
+  private let eraserBrush = CircularBrush(radius: Constants.kEraserBrushSize)
 
 
   init(model: DrawingModel, viewController: DrawingViewController) {

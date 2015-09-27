@@ -12,21 +12,9 @@ import UIKit
 
 protocol Brush {
   /**
-   Begins a new mutable stroke at the given location.
+   - parameter stroke:
 
-   - parameter location: The location at which to begin the stroke.
+   - returns: The rendered stroke, if the stroke could be rendered.
    */
-  func beginStrokeWithColor(
-      color: RendererColor, atLocation location: CGPoint) -> MutableStroke
-  
-  
-  /**
-   Extends the stroke between the given locations.
-
-   - parameter stroke: The stroke to extend.
-   - parameter fromLocation: The location where the brush begins.
-   - parameter toLocation: The location to extend the stroke to.
-   */
-  func extendStroke(
-      stroke: MutableStroke, fromLocation: CGPoint, toLocation: CGPoint)
+  func render(stroke: Stroke) -> RendererStroke?
 }

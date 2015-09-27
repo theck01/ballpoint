@@ -21,7 +21,9 @@ class StrokeRendererView: UIView, StrokeRenderer {
   override func drawRect(rect: CGRect) {
     if let context = UIGraphicsGetCurrentContext() {
       for stroke in strokesToRender {
-        stroke.paintOn(context)
+        if let renderedStroke = stroke.brush.render(stroke) {
+          renderedStroke.paintOn(context)
+        }
       }
       strokesToRender = []
     }
