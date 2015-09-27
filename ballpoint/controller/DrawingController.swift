@@ -55,6 +55,7 @@ class DrawingController: DrawingInteractionDelegate {
     }
   }
 
+
   init(model: DrawingModel, viewController: DrawingViewController) {
     self.model = model
     self.viewController = viewController
@@ -81,6 +82,11 @@ class DrawingController: DrawingInteractionDelegate {
 
   func toggleTool() {
     currentTool = currentTool.toggle()
+
+    // Update the view controller's drawing snapshot after updating the current
+    // tool, ensuring that the view controller gets a snapshot with the
+    // appropriate color scheme.
+    viewController.updateDrawingSnapshot(model.drawingSnapshot)
   }
 
 
