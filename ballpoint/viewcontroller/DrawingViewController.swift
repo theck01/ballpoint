@@ -11,7 +11,7 @@ import UIKit
 
 
 class DrawingViewController: UIViewController, PainterTouchDelegate,
-    RendererColorPaletteUpdateListener {
+    RendererColorPaletteUpdateListener, UIScrollViewDelegate {
   // The constants describing the shadow behind the canvas backing.
   static let kCanvasAbsentTouchShadowOpacity: CGFloat = 0.4
   static let kCanvasAbsentTouchShadowRadius: CGFloat =
@@ -25,6 +25,16 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   
   /// The duration of the shadow animation when painter touches are active.
   static let kPainterTouchesActiveAnimationDuration: NSTimeInterval = 0.2
+
+  // The minimum and maximum values for the zoom level of the root UIScrollView.
+  static let kMaximumZoomLevel: CGFloat = 3
+  static let kMinimumZoomLevel: CGFloat = 1
+
+  /// The root scroll view of the view hierarchy.
+  let rootScrollView: UIScrollView
+
+  /// The content container view of the view heirarchy.
+  let contentContainerView: UIView
   
   /// The backing view of the canvas.
   let canvasBackingView: UIView
@@ -55,6 +65,8 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
             y: Constants.kCanvasScreenSeparation),
         size: Constants.kDrawingSize)
 
+    rootScrollView = UIScrollView(frame: UIScreen.mainScreen().bounds)
+    contentContainerView = UIView(frame: UIScreen.mainScreen().bounds)
     canvasBackingView = UIView(frame: canvasFrame)
     drawingImageView = UIImageView(frame: canvasFrame)
     pendingStrokeRenderer = StrokeRendererView(frame: canvasFrame)
@@ -66,7 +78,10 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
     super.init(nibName: nil, bundle: nil)
 
-    view.backgroundColor = UIColor.launchScreenBackgroundColor()
+    self.view = rootScrollView
+
+    rootScrollView.backgroundColor = UIColor.launchScreenBackgroundColor()
+    contentContainerView.backgroundColor = UIColor.launchScreenBackgroundColor()
     canvasBackingView.backgroundColor = RendererColorPalette.defaultPalette[
         Constants.kBallpointSurfaceColorId].backingColor
     drawingImageView.backgroundColor = UIColor.clearColor()
@@ -77,10 +92,26 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     drawingImageView.alpha = 0
     pendingStrokeRenderer.alpha = 0
 
-    view.addSubview(canvasBackingView)
-    view.addSubview(drawingImageView)
-    view.addSubview(pendingStrokeRenderer)
-    view.addSubview(painterView)
+    rootScrollView.addSubview(contentContainerView)
+    contentContainerView.addSubview(canvasBackingView)
+    contentContainerView.addSubview(drawingImageView)
+    contentContainerView.addSubview(pendingStrokeRenderer)
+    contentContainerView.addSubview(painterView)
+
+    rootScrollView.bounces = false
+    rootScrollView.delegate = self
+    rootScrollView.maximumZoomScale = DrawingViewController.kMaximumZoomLevel
+    rootScrollView.minimumZoomScale = DrawingViewController.kMinimumZoomLevel
+    rootScrollView.panGestureRecognizer.cancelsTouchesInView = false
+    rootScrollView.panGestureRecognizer.delaysTouchesEnded = true
+    rootScrollView.panGestureRecognizer.delaysTouchesEnded = false
+    rootScrollView.panGestureRecognizer.maximumNumberOfTouches = 2
+    rootScrollView.panGestureRecognizer.minimumNumberOfTouches = 2
+    if let scrollViewPinchRecognizer = rootScrollView.pinchGestureRecognizer {
+      scrollViewPinchRecognizer.cancelsTouchesInView = false
+      scrollViewPinchRecognizer.delaysTouchesBegan = false
+      scrollViewPinchRecognizer.delaysTouchesEnded = false
+    }
 
     painterView.pendingStrokeRenderer = pendingStrokeRenderer
     painterView.painterTouchDelegate = self
@@ -126,6 +157,32 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     pendingStrokeRenderer.setNeedsDisplay()
     canvasBackingView.backgroundColor =
         palette[Constants.kBallpointSurfaceColorId].backingColor
+  }
+
+
+  /// MARK: UIScrollViewDelegate methods
+
+  func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+    return contentContainerView
+  }
+
+
+  func scrollViewDidZoom(scrollView: UIScrollView) {
+    let horizontalInset: CGFloat = fmax(
+        (scrollView.bounds.size.width - scrollView.contentSize.width) / 2,
+        0)
+    let verticalInset: CGFloat = fmax(
+        (scrollView.bounds.size.height - scrollView.contentSize.height) / 2,
+        0)
+
+    // Center the content using insets if the content is smaller than the view
+    // bounds.
+    if horizontalInset != scrollView.contentInset.left ||
+        verticalInset != scrollView.contentInset.top {
+      scrollView.contentInset = UIEdgeInsets(
+          top: verticalInset, left: horizontalInset, bottom: verticalInset,
+          right: horizontalInset)
+    }
   }
 
 
