@@ -89,29 +89,13 @@ class DrawingController: DrawingInteractionDelegate {
 
 
   func undo() {
-    if let diff = model.undo() {
-      updateViewControllerWithModelDiff(diff)
-    }
+    model.undo()
+    viewController.updateDrawingSnapshot(model.drawingSnapshot)
   }
 
 
   func redo() {
-    if let diff = model.redo() {
-      updateViewControllerWithModelDiff(diff)
-    }
-  }
-
-
-  /// MARK: Helper methods.
-
-  func updateViewControllerWithModelDiff(diff: DrawingModelSnapshotDiff) {
-    switch diff.type {
-    case DrawingModelSnapshotDiff.DiffType.AddedStrokes:
-      viewController.updateDrawingSnapshot(
-          model.drawingSnapshot, addedStrokes: diff.strokes)
-    case DrawingModelSnapshotDiff.DiffType.RemovedStrokes:
-      viewController.updateDrawingSnapshot(
-          model.drawingSnapshot, removedStrokes: diff.strokes)
-    }
+    model.redo();
+    viewController.updateDrawingSnapshot(model.drawingSnapshot)
   }
 }

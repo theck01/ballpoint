@@ -41,11 +41,6 @@ class PainterView: UIView {
     let stroke: MutableStroke
   }
 
-  private static let kMinimumUndoVelocityThreshold: CGFloat = 40
-
-  /// The controller managing undo actions for swipe directions.
-  private var undoDirectionController: DirectedActionController!
-
   /// The brush used to create strokes on the canvas.
   var brush: Brush
   
@@ -57,10 +52,6 @@ class PainterView: UIView {
   var pendingStrokeRenderer: StrokeRenderer?
 
   var painterTouchDelegate: PainterTouchDelegate?
-
-  /// The direction of the most recent undo/redo swipe.
-  private(set) var mostRecentSwipeDirection: CGVector =
-      CGVector(dx: 0, dy: 0)
 
   /// An array of touch locations and pending strokes that last were updated to
   /// that location.
@@ -86,7 +77,6 @@ class PainterView: UIView {
 
   // The gesture recognizers that map to application actions.
   private let twoTouchTapRecognizer: UITapGestureRecognizer
-  private let twoTouchPanRecognizer: UIPanGestureRecognizer
 
   
   /**
@@ -100,13 +90,8 @@ class PainterView: UIView {
     self.brush = brush
     self.paintColor = paintColor
     twoTouchTapRecognizer = UITapGestureRecognizer()
-    twoTouchPanRecognizer = UIPanGestureRecognizer()
 
     super.init(frame: frame)
-
-    undoDirectionController = DirectedActionController(
-        primaryAction: { self.drawingInteractionDelegate?.undo() },
-        secondaryAction: { self.drawingInteractionDelegate?.redo() })
 
     multipleTouchEnabled = true
 
@@ -117,14 +102,6 @@ class PainterView: UIView {
     twoTouchTapRecognizer.numberOfTouchesRequired = 2
     twoTouchTapRecognizer.addTarget(self, action: "handleTwoTouchTapGesture:")
     addGestureRecognizer(twoTouchTapRecognizer)
-
-    twoTouchPanRecognizer.cancelsTouchesInView = true
-    twoTouchPanRecognizer.delaysTouchesBegan = false
-    twoTouchPanRecognizer.delaysTouchesEnded = false
-    twoTouchPanRecognizer.minimumNumberOfTouches = 2
-    twoTouchPanRecognizer.maximumNumberOfTouches = 2
-    twoTouchPanRecognizer.addTarget(self, action: "handleTwoTouchPanGesture:")
-    addGestureRecognizer(twoTouchPanRecognizer)
   }
 
 
@@ -207,7 +184,6 @@ class PainterView: UIView {
     if shouldRenderPendingStrokes {
       pendingStrokeRenderer?.renderStrokes(pendingStrokes)
       drawingInteractionDelegate?.completeStrokes(completedStrokes)
-      undoDirectionController.clearDirectionAssociations()
     }
 
     assert(
@@ -240,21 +216,6 @@ class PainterView: UIView {
   @objc func handleTwoTouchTapGesture(
       twoTouchTapRecognizer: UITapGestureRecognizer) {
     drawingInteractionDelegate?.toggleTool()
-  }
-
-
-  @objc func handleTwoTouchPanGesture(
-    twoTouchPanRecognizer: UIPanGestureRecognizer) {
-      if twoTouchPanRecognizer.state == UIGestureRecognizerState.Ended {
-        let velocity = twoTouchPanRecognizer.velocityInView(self)
-        if velocity.x * velocity.x + velocity.y * velocity.y >=
-            PainterView.kMinimumUndoVelocityThreshold *
-            PainterView.kMinimumUndoVelocityThreshold {
-          let direction = CGVector(dx: velocity.x, dy: velocity.y)
-          mostRecentSwipeDirection = direction
-          undoDirectionController.triggerActionForDirection(direction)
-        }
-      }
   }
 
 
