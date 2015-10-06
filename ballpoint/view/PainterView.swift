@@ -95,7 +95,7 @@ class PainterView: UIView {
 
     multipleTouchEnabled = true
 
-    twoTouchTapRecognizer.cancelsTouchesInView = true
+    twoTouchTapRecognizer.cancelsTouchesInView = false
     twoTouchTapRecognizer.delaysTouchesBegan = false
     twoTouchTapRecognizer.delaysTouchesEnded = false
     twoTouchTapRecognizer.numberOfTapsRequired = 1
