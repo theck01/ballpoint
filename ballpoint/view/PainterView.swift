@@ -30,12 +30,12 @@ class PainterView: UIView {
 
   /// A tuple containing all information required to process pending strokes.
   private struct RenderingStrokeTuple {
-    /// The last touch location associated with the pending stroke.
-    var location: CGPoint
+    /// The raw address of the UITouch object used to generate the stroke.
+    let touchPointerId: UnsafePointer<Void>
 
     /// Whether the pending stroke has been cancelled and is just being kept
     /// around for bookkeeping.
-    var isCancelled: Bool
+    let isCancelled: Bool
 
     /// The underlying stroke object.
     let stroke: MutableStroke
@@ -110,11 +110,11 @@ class PainterView: UIView {
   
   override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
     for touch in touches {
-      let location = touch.locationInView(self)
       let stroke = MutableStroke(color: paintColor, brush: brush)
-      stroke.appendPoint(location)
+      stroke.appendPoint(touch.locationInView(self))
       pendingStrokeTuples.append(RenderingStrokeTuple(
-          location: location, isCancelled: false, stroke: stroke))
+          touchPointerId: unsafeAddressOf(touch), isCancelled: false,
+          stroke: stroke))
     }
 
     if shouldRenderPendingStrokes {
@@ -128,18 +128,13 @@ class PainterView: UIView {
   override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
     for touch in touches {
       let location = touch.locationInView(self)
-      let previousLocation = touch.previousLocationInView(self)
-      
+      let touchPointerId = unsafeAddressOf(touch)
+
       // Update the location-stroke pairs, updating the pair associated with
       // the given touch and extending the stroke to the new touch location.
-      pendingStrokeTuples = pendingStrokeTuples.map {
-        if $0.location == previousLocation {
-          $0.stroke.appendPoint(location)
-          return RenderingStrokeTuple(
-              location: location, isCancelled: $0.isCancelled,
-              stroke: $0.stroke)
-        } else {
-          return $0
+      for t in pendingStrokeTuples {
+        if t.touchPointerId == touchPointerId {
+          t.stroke.appendPoint(location)
         }
       }
     }
@@ -156,23 +151,18 @@ class PainterView: UIView {
     
     for touch in touches {
       let location = touch.locationInView(self)
-      let previousLocation = touch.previousLocationInView(self)
-      
+      let touchPointerId = unsafeAddressOf(touch)
+
       // Update the location stroke pairs, droping pairs associated with the
       // touch that has ended.
       pendingStrokeTuples = pendingStrokeTuples.filter {
         // If the pending stroke is not associated with the end location then
         // do not end the stroke.
-        if ($0.location != location && $0.location != previousLocation) {
+        if ($0.touchPointerId != touchPointerId) {
           return true
         }
         
-        // If the end position of the touch has not yet been appended to the
-        // stroke during a -touchesMoved call then extend the stroke.
-        if $0.location == previousLocation && location != previousLocation {
-          $0.stroke.appendPoint(location)
-        }
-
+        $0.stroke.appendPoint(location)
         if !$0.isCancelled {
           completedStrokes.append($0.stroke)
         }
@@ -224,7 +214,8 @@ class PainterView: UIView {
   func cancelRenderingStrokes() {
     pendingStrokeTuples = pendingStrokeTuples.map {
       return RenderingStrokeTuple(
-          location: $0.location, isCancelled: true, stroke: $0.stroke)
+          touchPointerId: $0.touchPointerId, isCancelled: true,
+          stroke: $0.stroke)
     }
     pendingStrokeRenderer?.renderStrokes([])
   }
