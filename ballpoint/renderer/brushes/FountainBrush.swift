@@ -26,14 +26,20 @@ class FountainBrush: Brush {
   /**
    - parameter maxRadius: The maximum radius of the brush.
    */
-  init(minRadius: CGFloat, maxRadius: CGFloat) {
+  init(
+      minRadius: CGFloat, maxRadius: CGFloat,
+      transitionPointsFromMinToMaxSize: Int? = nil) {
     assert(
         minRadius <= maxRadius,
         "Cannot create a fountain brush with a minimum radius that is larger " +
         "than its maximum radius.")
     self.minRadius = minRadius
     self.maxRadius = maxRadius
-    transitionPointCount = Int(ceil((self.maxRadius - self.minRadius) * 2))
+    if let transitionPoints = transitionPointsFromMinToMaxSize {
+      transitionPointCount = transitionPoints
+    } else {
+      transitionPointCount = Int(ceil((self.maxRadius - self.minRadius) * 2))
+    }
   }
   
   
