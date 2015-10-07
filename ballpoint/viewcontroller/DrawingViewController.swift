@@ -98,7 +98,8 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     contentContainerView.addSubview(pendingStrokeRenderer)
     contentContainerView.addSubview(painterView)
 
-    rootScrollView.bounces = false
+    rootScrollView.alwaysBounceHorizontal = true
+    rootScrollView.alwaysBounceVertical = true
     rootScrollView.contentSize = rootScrollView.bounds.size
     rootScrollView.delegate = self
     rootScrollView.maximumZoomScale = DrawingViewController.kMaximumZoomLevel
