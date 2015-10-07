@@ -13,7 +13,7 @@ import UIKit
 class DrawingViewController: UIViewController, PainterTouchDelegate,
     RendererColorPaletteUpdateListener, UIScrollViewDelegate {
   // The constants describing the shadow behind the canvas backing.
-  static let kCanvasAbsentTouchShadowOpacity: CGFloat = 0.4
+  static let kCanvasAbsentTouchShadowOpacity: CGFloat = 0.6
   static let kCanvasAbsentTouchShadowRadius: CGFloat =
       Constants.kCanvasScreenSeparation / 2
   static let kCanvasAbsentTouchShadowYOffset: CGFloat = 0
@@ -24,7 +24,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   static let kCanvasActiveTouchShadowYOffset: CGFloat = 0
   
   /// The duration of the shadow animation when painter touches are active.
-  static let kPainterTouchesActiveAnimationDuration: NSTimeInterval = 0.2
+  static let kPainterTouchesActiveAnimationDuration: NSTimeInterval = 0.16
 
   // The minimum and maximum values for the zoom level of the root UIScrollView.
   static let kMaximumZoomLevel: CGFloat = 3
