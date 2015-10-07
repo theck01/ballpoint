@@ -102,13 +102,13 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     rootScrollView.delegate = self
     rootScrollView.maximumZoomScale = DrawingViewController.kMaximumZoomLevel
     rootScrollView.minimumZoomScale = DrawingViewController.kMinimumZoomLevel
-    rootScrollView.panGestureRecognizer.cancelsTouchesInView = false
+    rootScrollView.panGestureRecognizer.cancelsTouchesInView = true
     rootScrollView.panGestureRecognizer.delaysTouchesEnded = true
     rootScrollView.panGestureRecognizer.delaysTouchesEnded = false
     rootScrollView.panGestureRecognizer.maximumNumberOfTouches = 2
     rootScrollView.panGestureRecognizer.minimumNumberOfTouches = 2
     if let scrollViewPinchRecognizer = rootScrollView.pinchGestureRecognizer {
-      scrollViewPinchRecognizer.cancelsTouchesInView = false
+      scrollViewPinchRecognizer.cancelsTouchesInView = true
       scrollViewPinchRecognizer.delaysTouchesBegan = false
       scrollViewPinchRecognizer.delaysTouchesEnded = false
     }

@@ -33,10 +33,6 @@ class PainterView: UIView {
     /// The raw address of the UITouch object used to generate the stroke.
     let touchPointerId: UnsafePointer<Void>
 
-    /// Whether the pending stroke has been cancelled and is just being kept
-    /// around for bookkeeping.
-    let isCancelled: Bool
-
     /// The underlying stroke object.
     let stroke: MutableStroke
   }
@@ -69,12 +65,6 @@ class PainterView: UIView {
     return pendingStrokeTuples.map { $0.stroke }
   }
 
-  /// Whether the pending strokes should be rendered.
-  private var shouldRenderPendingStrokes: Bool {
-    return pendingStrokeTuples.count < 2 &&
-        (!(pendingStrokeTuples.first?.isCancelled ?? false))
-  }
-
   // The gesture recognizers that map to application actions.
   private let twoTouchTapRecognizer: UITapGestureRecognizer
 
@@ -95,7 +85,7 @@ class PainterView: UIView {
 
     multipleTouchEnabled = true
 
-    twoTouchTapRecognizer.cancelsTouchesInView = false
+    twoTouchTapRecognizer.cancelsTouchesInView = true
     twoTouchTapRecognizer.delaysTouchesBegan = false
     twoTouchTapRecognizer.delaysTouchesEnded = false
     twoTouchTapRecognizer.numberOfTapsRequired = 1
@@ -113,15 +103,10 @@ class PainterView: UIView {
       let stroke = MutableStroke(color: paintColor, brush: brush)
       stroke.appendPoint(touch.locationInView(self))
       pendingStrokeTuples.append(RenderingStrokeTuple(
-          touchPointerId: unsafeAddressOf(touch), isCancelled: false,
-          stroke: stroke))
+          touchPointerId: unsafeAddressOf(touch), stroke: stroke))
     }
 
-    if shouldRenderPendingStrokes {
-      self.pendingStrokeRenderer?.renderStrokes(pendingStrokes)
-    } else {
-      cancelRenderingStrokes()
-    }
+    self.pendingStrokeRenderer?.renderStrokes(pendingStrokes)
   }
   
   
@@ -139,18 +124,15 @@ class PainterView: UIView {
       }
     }
 
-    if shouldRenderPendingStrokes {
-      self.pendingStrokeRenderer?.renderStrokes(pendingStrokes)
-    }
+    self.pendingStrokeRenderer?.renderStrokes(pendingStrokes)
   }
   
   
   override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
     let tupleCountPriorToTouchEnd = pendingStrokeTuples.count
-    var completedStrokes: [Stroke] = []
+    var activeCompletedStrokes: [Stroke] = []
     
     for touch in touches {
-      let location = touch.locationInView(self)
       let touchPointerId = unsafeAddressOf(touch)
 
       // Update the location stroke pairs, droping pairs associated with the
@@ -162,19 +144,14 @@ class PainterView: UIView {
           return true
         }
         
-        $0.stroke.appendPoint(location)
-        if !$0.isCancelled {
-          completedStrokes.append($0.stroke)
-        }
+        activeCompletedStrokes.append($0.stroke)
 
         return false
       }
     }
 
-    if shouldRenderPendingStrokes {
-      pendingStrokeRenderer?.renderStrokes(pendingStrokes)
-      drawingInteractionDelegate?.completeStrokes(completedStrokes)
-    }
+    pendingStrokeRenderer?.renderStrokes(pendingStrokes)
+    drawingInteractionDelegate?.completeStrokes(activeCompletedStrokes)
 
     assert(
         tupleCountPriorToTouchEnd - touches.count ==
@@ -206,18 +183,6 @@ class PainterView: UIView {
   @objc func handleTwoTouchTapGesture(
       twoTouchTapRecognizer: UITapGestureRecognizer) {
     drawingInteractionDelegate?.toggleTool()
-  }
-
-
-  /// MARK: Helper methods.
-
-  func cancelRenderingStrokes() {
-    pendingStrokeTuples = pendingStrokeTuples.map {
-      return RenderingStrokeTuple(
-          touchPointerId: $0.touchPointerId, isCancelled: true,
-          stroke: $0.stroke)
-    }
-    pendingStrokeRenderer?.renderStrokes([])
   }
 
 
