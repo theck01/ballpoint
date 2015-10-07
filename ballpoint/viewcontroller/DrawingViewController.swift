@@ -27,7 +27,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   static let kPainterTouchesActiveAnimationDuration: NSTimeInterval = 0.16
 
   // The minimum and maximum values for the zoom level of the root UIScrollView.
-  static let kMaximumZoomLevel: CGFloat = 3
+  static let kMaximumZoomLevel: CGFloat = 5
   static let kMinimumZoomLevel: CGFloat = 1
 
   /// The root scroll view of the view hierarchy.
