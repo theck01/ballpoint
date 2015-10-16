@@ -23,6 +23,16 @@ struct Line {
   /// intersect with the x-axis.
   let xIntercept: CGFloat?
 
+  /// Whether the line is vertical.
+  var isVertical: Bool {
+    return yIntercept == nil
+  }
+
+  /// Whether the line is horizontal.
+  var isHorizontal: Bool {
+    return xIntercept == nil
+  }
+
 
   init(point a: CGPoint, otherPoint b: CGPoint) {
     if a.x == b.x && a.y == b.y {
@@ -86,6 +96,9 @@ struct Line {
 
 /// Collection of static methods for operating on Line objects.
 extension Line {
+  private static let kAcceptableCGFloatDiffForEquality: CGFloat = 0.000001
+
+
   /**
   - parameter a:
   - parameter b:
@@ -121,5 +134,46 @@ extension Line {
     }
 
     return CGPoint(x: xIntersection, y: yIntersection)
+  }
+
+
+  /**
+  - parameter point:
+  - parameter line:
+
+  - returns: Whether the point is on the line.
+  */
+  static func isPoint(point: CGPoint, onLine line: Line) -> Bool {
+    if line.isVertical {
+      guard let xIntercept = line.xIntercept else {
+        fatalError("A vertical line must have an x-intercept.")
+      }
+      return fabs(point.x - xIntercept) <= kAcceptableCGFloatDiffForEquality
+    }
+
+    guard let yIntercept = line.yIntercept else {
+      fatalError("A non-vertical line must have a y-intercept")
+    }
+    let yForPointX = line.slope * point.x + yIntercept
+    return fabs(yForPointX - point.y) <= kAcceptableCGFloatDiffForEquality
+  }
+
+
+  /**
+  - parameter distance:
+  - parameter line:
+  - parameter point: A point that is asserted to be on the line.
+
+  - returns: Returns the two points that are the given distance away from the
+      point on the line.
+  */
+  static func pointsAtDistance(
+      distance: CGFloat, onLine line: Line, fromPoint point: CGPoint) ->
+      (p1: CGPoint, p2: CGPoint) {
+    assert(
+        isPoint(point, onLine: line),
+        "Cannot get the points that are a distance from a point not on the " +
+        "argument line.")
+    fatalError("Method not yet implemented.")
   }
 }
