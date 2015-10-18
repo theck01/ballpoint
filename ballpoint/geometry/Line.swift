@@ -11,7 +11,7 @@ import CoreGraphics
 
 
 /// A structure representation of a line.
-struct Line {
+public struct Line {
   /// lhe slope of the line.
   let slope: CGFloat
 
@@ -34,8 +34,8 @@ struct Line {
   }
 
 
-  init(point a: CGPoint, otherPoint b: CGPoint) {
-    if a.x.roughlyEquals(b.x) && a.y.roughlyEquals(b.y) {
+  public init(point a: CGPoint, otherPoint b: CGPoint) {
+    if a.roughlyEquals(b) {
       fatalError("Cannot create a line from identical points")
     }
 
@@ -47,7 +47,7 @@ struct Line {
   }
 
 
-  init(slope: CGFloat, throughPoint p: CGPoint) {
+  public init(slope: CGFloat, throughPoint p: CGPoint) {
     if slope == CGFloat.max {
       self.init(slope: slope, xIntercept: p.x, yIntercept: nil)
     } else if slope == 0 {
@@ -95,7 +95,7 @@ struct Line {
 
 
 /// Collection of static methods for operating on Line objects.
-extension Line {
+public extension Line {
   /**
   - parameter a:
   - parameter b:
@@ -103,7 +103,7 @@ extension Line {
   - returns: The intersection point between the two lines, or nil if the lines
       are parallel and do not intersect.
   */
-  static func intersection(a: Line, _ b: Line) -> CGPoint? {
+  public static func intersection(a: Line, _ b: Line) -> CGPoint? {
     if a.slope.roughlyEquals(b.slope) {
       return nil
     }
@@ -140,7 +140,7 @@ extension Line {
 
   - returns: Whether the point is on the line.
   */
-  static func isPoint(point: CGPoint, onLine line: Line) -> Bool {
+  public static func isPoint(point: CGPoint, onLine line: Line) -> Bool {
     if line.isVertical {
       guard let xIntercept = line.xIntercept else {
         fatalError("A vertical line must have an x-intercept.")
@@ -164,7 +164,7 @@ extension Line {
   - returns: Returns the two points that are the given distance away from the
       point on the line.
   */
-  static func pointsAtDistance(
+  public static func pointsAtDistance(
       distance: CGFloat, onLine line: Line, fromPoint point: CGPoint) ->
       (p1: CGPoint, p2: CGPoint) {
     assert(
