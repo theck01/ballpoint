@@ -13,6 +13,7 @@
 		4270F90C1BB0F95C00940AAE /* DrawingInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4270F90B1BB0F95C00940AAE /* DrawingInteractionDelegate.swift */; settings = {ASSET_TAGS = (); }; };
 		4270F90E1BB0F98000940AAE /* StrokeRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4270F90D1BB0F98000940AAE /* StrokeRenderer.swift */; settings = {ASSET_TAGS = (); }; };
 		427DBC501BB7268A00122848 /* UIView+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427DBC4F1BB7268A00122848 /* UIView+ballpoint.swift */; settings = {ASSET_TAGS = (); }; };
+		42822CBD1BD438210028208A /* CGFloat+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42822CBC1BD438210028208A /* CGFloat+ballpoint.swift */; settings = {ASSET_TAGS = (); }; };
 		42A112931B8EB1D000503D9F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112921B8EB1D000503D9F /* AppDelegate.swift */; };
 		42A1129A1B8EB1D000503D9F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42A112991B8EB1D000503D9F /* Images.xcassets */; };
 		42A1129D1B8EB1D000503D9F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42A1129B1B8EB1D000503D9F /* LaunchScreen.xib */; };
@@ -47,6 +48,7 @@
 		4270F90B1BB0F95C00940AAE /* DrawingInteractionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DrawingInteractionDelegate.swift; path = interfaces/DrawingInteractionDelegate.swift; sourceTree = "<group>"; };
 		4270F90D1BB0F98000940AAE /* StrokeRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = StrokeRenderer.swift; path = interfaces/StrokeRenderer.swift; sourceTree = "<group>"; };
 		427DBC4F1BB7268A00122848 /* UIView+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+ballpoint.swift"; path = "extensions/UIView+ballpoint.swift"; sourceTree = "<group>"; };
+		42822CBC1BD438210028208A /* CGFloat+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CGFloat+ballpoint.swift"; path = "extensions/CGFloat+ballpoint.swift"; sourceTree = "<group>"; };
 		42A1128D1B8EB1D000503D9F /* ballpoint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ballpoint.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42A112911B8EB1D000503D9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42A112921B8EB1D000503D9F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -225,6 +227,7 @@
 				42A6DEB61B935C0A00CC09C2 /* UIColor+ballpoint.swift */,
 				42BA87501B9DEB0300AC842E /* CGVector+ballpoint.swift */,
 				427DBC4F1BB7268A00122848 /* UIView+ballpoint.swift */,
+				42822CBC1BD438210028208A /* CGFloat+ballpoint.swift */,
 			);
 			name = extensions;
 			sourceTree = "<group>";
@@ -341,6 +344,7 @@
 			files = (
 				42BA87511B9DEB0300AC842E /* CGVector+ballpoint.swift in Sources */,
 				42A112C31B8EB50A00503D9F /* Brush.swift in Sources */,
+				42822CBD1BD438210028208A /* CGFloat+ballpoint.swift in Sources */,
 				42A112931B8EB1D000503D9F /* AppDelegate.swift in Sources */,
 				42A112CA1B8EB66300503D9F /* Constants.swift in Sources */,
 				42A112BE1B8EB4E700503D9F /* PainterView.swift in Sources */,

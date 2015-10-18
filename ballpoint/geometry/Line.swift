@@ -35,11 +35,11 @@ struct Line {
 
 
   init(point a: CGPoint, otherPoint b: CGPoint) {
-    if a.x == b.x && a.y == b.y {
+    if a.x.roughlyEquals(b.x) && a.y.roughlyEquals(b.y) {
       fatalError("Cannot create a line from identical points")
     }
 
-    if a.x == b.x {
+    if a.x.roughlyEquals(b.x) {
       self.init(slope: CGFloat.max, throughPoint: a)
     } else {
       self.init(slope: (a.y - b.y) / (a.x - b.x), throughPoint: a)
@@ -96,9 +96,6 @@ struct Line {
 
 /// Collection of static methods for operating on Line objects.
 extension Line {
-  private static let kAcceptableCGFloatDiffForEquality: CGFloat = 0.000001
-
-
   /**
   - parameter a:
   - parameter b:
@@ -107,7 +104,7 @@ extension Line {
       are parallel and do not intersect.
   */
   static func intersection(a: Line, _ b: Line) -> CGPoint? {
-    if a.slope == b.slope {
+    if a.slope.roughlyEquals(b.slope) {
       return nil
     }
 
@@ -148,14 +145,14 @@ extension Line {
       guard let xIntercept = line.xIntercept else {
         fatalError("A vertical line must have an x-intercept.")
       }
-      return fabs(point.x - xIntercept) <= kAcceptableCGFloatDiffForEquality
+      return point.x.roughlyEquals(xIntercept)
     }
 
     guard let yIntercept = line.yIntercept else {
       fatalError("A non-vertical line must have a y-intercept")
     }
     let yForPointX = line.slope * point.x + yIntercept
-    return fabs(yForPointX - point.y) <= kAcceptableCGFloatDiffForEquality
+    return yForPointX.roughlyEquals(point.y)
   }
 
 
