@@ -71,25 +71,25 @@ class LineTestCase: XCTestCase {
     var actualIntersection = Line.intersection(verticalLine, horizontalLine)
     XCTAssertTrue(
         actualIntersection != nil &&
-        actualIntersection!.roughlyEquals(expectedIntersection))
+        actualIntersection! =~= expectedIntersection)
 
     expectedIntersection = CGPoint(x: 2, y: 5)
     actualIntersection = Line.intersection(steepLine, line)
     XCTAssertTrue(
         actualIntersection != nil &&
-        actualIntersection!.roughlyEquals(expectedIntersection))
+        actualIntersection! =~= expectedIntersection)
 
     expectedIntersection = CGPoint(x: 1, y: 4)
     actualIntersection = Line.intersection(verticalLine, line)
     XCTAssertTrue(
         actualIntersection != nil &&
-        actualIntersection!.roughlyEquals(expectedIntersection))
+        actualIntersection! =~= expectedIntersection)
 
     expectedIntersection = CGPoint(x: -0.5, y: 10)
     actualIntersection = Line.intersection(steepLine, horizontalLine)
     XCTAssertTrue(
         actualIntersection != nil &&
-        actualIntersection!.roughlyEquals(expectedIntersection))
+        actualIntersection! =~= expectedIntersection)
 
     XCTAssertTrue(Line.intersection(line, parallelLine) == nil)
   }

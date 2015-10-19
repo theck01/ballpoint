@@ -9,21 +9,14 @@
 import CoreGraphics
 
 
-
-extension CGFloat {
+extension CGFloat: RoughlyEquatable {
   private static let kAcceptableDiffForRoughEquality: CGFloat = 0.00001
 
 
-  /**
-  - parameter otherValue:
-  - parameter diff: Optional difference allowed between the floats to be
-      considered equal. If not provided then default constant is used.
-
-  - returns: Whether the points are within a given difference from each other.
-  */
-  func roughlyEquals(
-      otherValue: CGFloat, withinDifference diff: CGFloat? = nil) -> Bool {
-    let maxDiff = diff ?? CGFloat.kAcceptableDiffForRoughEquality
-    return fabs(self - otherValue) <= maxDiff
+  public func roughlyEquals<T : RoughlyEquatable>(otherValue: T) -> Bool {
+    guard let floatValue = otherValue as? CGFloat else {
+      return false
+    }
+    return fabs(self - floatValue) <= CGFloat.kAcceptableDiffForRoughEquality
   }
 }
