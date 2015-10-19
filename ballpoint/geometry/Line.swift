@@ -166,11 +166,37 @@ public extension Line {
   */
   public static func pointsAtDistance(
       distance: CGFloat, onLine line: Line, fromPoint point: CGPoint) ->
-      (p1: CGPoint, p2: CGPoint) {
+      (CGPoint, CGPoint) {
     assert(
         isPoint(point, onLine: line),
         "Cannot get the points that are a distance from a point not on the " +
         "argument line.")
-    fatalError("Method not yet implemented.")
+
+    // Special case vertical and horizontal lines, which will have vectors with
+    // infinite increases in one dimension.
+    if line.isVertical {
+      return (
+        CGPoint(x: point.x, y: point.y + distance),
+        CGPoint(x: point.x, y: point.y - distance)
+      )
+    } else if line.isHorizontal {
+      return (
+        CGPoint(x: point.x + distance, y: point.y),
+        CGPoint(x: point.x - distance, y: point.y)
+      )
+    }
+
+    let absDistance = fabs(distance)
+    let alongSlopeVector = CGVector(
+        dx: 1 / line.slope, dy: line.slope).vectorWithMagnitude(absDistance)
+    let againstSlopeVector = CGVector(
+        dx: -1 / line.slope, dy: -line.slope).vectorWithMagnitude(absDistance)
+    return (
+      CGPoint(
+          x: point.x + alongSlopeVector.dx, y: point.y + alongSlopeVector.dy),
+      CGPoint(
+          x: point.x + againstSlopeVector.dx,
+          y: point.y + againstSlopeVector.dy)
+    )
   }
 }

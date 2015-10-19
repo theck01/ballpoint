@@ -13,10 +13,8 @@ import ballpoint
 
 
 class LineTestCase: XCTestCase {
-  /**
-   Verify that Line#isPoint:onLine: works for a non-vertical and non-horizontal
-   line.
-  */
+  // Verify that Line#isPoint:onLine: works for a non-vertical and
+  // non-horizontal line.
   func testIsPointOnLine() {
     let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 1))
     XCTAssertTrue(
@@ -33,10 +31,8 @@ class LineTestCase: XCTestCase {
   }
 
 
-  /**
-   Verify that Line#isPoint:onLine: works for a vertical line.
-  */
-  func testIsPointOnLineVerticalLine() {
+  // Verify that Line#isPoint:onLine: works for a vertical line.
+  func testIsPointOnLine_verticalLine() {
     let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 0, y: 1))
     XCTAssertTrue(
         Line.isPoint(CGPointZero, onLine: line),
@@ -52,9 +48,7 @@ class LineTestCase: XCTestCase {
   }
 
 
-  /**
-   Verify that Line#intersection works.
-   */
+  // Verify that Line#intersection works.
   func testIntersection() {
     let verticalLine = Line(
         point: CGPoint(x: 1, y: 1), otherPoint: CGPoint(x: 1, y: 2))
@@ -91,6 +85,54 @@ class LineTestCase: XCTestCase {
         actualIntersection != nil &&
         actualIntersection! =~= expectedIntersection)
 
-    XCTAssertTrue(Line.intersection(line, parallelLine) == nil)
+    XCTAssertNil(Line.intersection(line, parallelLine))
+  }
+
+
+  // Verify that pointsAtDistance:onLine:fromPoint works.
+  func testPointsAtDistanceOnLineFromPoint() {
+    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 1))
+    let point = CGPoint(x: 5, y: 5)
+    let expectedPointA = CGPoint(x: 6, y: 6)
+    let expectedPointB = CGPoint(x: 4, y: 4)
+
+    let (actualPointA, actualPointB) = Line.pointsAtDistance(
+        sqrt(2), onLine: line, fromPoint: point)
+    XCTAssertTrue(
+        actualPointA =~= expectedPointA || actualPointA =~= expectedPointB)
+    XCTAssertTrue(
+        actualPointB =~= expectedPointA || actualPointB =~= expectedPointB)
+  }
+
+
+  // Verify that pointsAtDistance:onLine:fromPoint works for vertical lines.
+  func testPointsAtDistanceOnLineFromPoint_verticalLine() {
+    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 0, y: 1))
+    let point = CGPoint(x: 0, y: 5)
+    let expectedPointA = CGPoint(x: 0, y: 6.5)
+    let expectedPointB = CGPoint(x: 0, y: 3.5)
+
+    let (actualPointA, actualPointB) = Line.pointsAtDistance(
+        1.5, onLine: line, fromPoint: point)
+    XCTAssertTrue(
+        actualPointA =~= expectedPointA || actualPointA =~= expectedPointB)
+    XCTAssertTrue(
+        actualPointB =~= expectedPointA || actualPointB =~= expectedPointB)
+  }
+
+
+  // Verify that pointsAtDistance:onLine:fromPoint works for horizontal lines.
+  func testPointsAtDistanceOnLineFromPoint_horizontalLine() {
+    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 0))
+    let point = CGPoint(x: 5, y: 0)
+    let expectedPointA = CGPoint(x: 10, y: 0)
+    let expectedPointB = CGPoint(x: 0, y: 0)
+
+    let (actualPointA, actualPointB) = Line.pointsAtDistance(
+        5, onLine: line, fromPoint: point)
+    XCTAssertTrue(
+        actualPointA =~= expectedPointA || actualPointA =~= expectedPointB)
+    XCTAssertTrue(
+        actualPointB =~= expectedPointA || actualPointB =~= expectedPointB)
   }
 }
