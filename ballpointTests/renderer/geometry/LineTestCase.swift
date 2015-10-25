@@ -6,7 +6,6 @@
 //  Copyright © 2015 Tyler Heck. All rights reserved.
 //
 
-import Foundation
 import XCTest
 
 import ballpoint
