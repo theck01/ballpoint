@@ -199,4 +199,22 @@ public extension Line {
           y: point.y + againstSlopeVector.dy)
     )
   }
+
+
+  /**
+   - parameter point:
+   - parameter line:
+
+   - returns: The projection of the point onto the line.
+   */
+  public static func projectionOfPoint(
+      point: CGPoint, onLine line: Line) -> CGPoint {
+    if (line.isVertical) {
+      return CGPoint(x: line.xIntercept!, y: point.y)
+    } else if (line.isHorizontal) {
+      return CGPoint(x: point.x, y: line.yIntercept!)
+    }
+    let perpendicularLine = Line(slope: -1 / line.slope, throughPoint: point)
+    return Line.intersection(perpendicularLine, line)!;
+  }
 }

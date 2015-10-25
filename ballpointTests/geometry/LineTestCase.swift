@@ -6,6 +6,7 @@
 //  Copyright © 2015 Tyler Heck. All rights reserved.
 //
 
+import Foundation
 import XCTest
 
 import ballpoint
@@ -134,5 +135,27 @@ class LineTestCase: XCTestCase {
         actualPointA =~= expectedPointA || actualPointA =~= expectedPointB)
     XCTAssertTrue(
         actualPointB =~= expectedPointA || actualPointB =~= expectedPointB)
+  }
+
+  // Verify that projectionOfPoint:onLine: works.
+  func testProjectionOfPointOnLine() {
+    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 1))
+    let verticalLine = Line(
+        point: CGPoint(x: -2, y: 0), otherPoint: CGPoint(x: -2, y: 1))
+    let horizontalLine = Line(
+        point: CGPoint(x: 0, y: 10), otherPoint: CGPoint(x: 1, y: 10))
+    let point = CGPoint(x: 6, y: 0)
+
+    var expectedProjection = CGPoint(x: 3, y: 3)
+    XCTAssertTrue(
+      expectedProjection =~= Line.projectionOfPoint(point, onLine: line))
+
+    expectedProjection = CGPoint(x: -2, y: 0)
+    XCTAssertTrue(expectedProjection =~= Line.projectionOfPoint(
+        point, onLine: verticalLine))
+
+    expectedProjection = CGPoint(x: 6, y: 10)
+    XCTAssertTrue(expectedProjection =~= Line.projectionOfPoint(
+        point, onLine: horizontalLine))
   }
 }
