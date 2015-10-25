@@ -137,6 +137,7 @@ class LineTestCase: XCTestCase {
         actualPointB =~= expectedPointA || actualPointB =~= expectedPointB)
   }
 
+
   // Verify that projectionOfPoint:onLine: works.
   func testProjectionOfPointOnLine() {
     let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 1))
@@ -157,5 +158,26 @@ class LineTestCase: XCTestCase {
     expectedProjection = CGPoint(x: 6, y: 10)
     XCTAssertTrue(expectedProjection =~= Line.projectionOfPoint(
         point, onLine: horizontalLine))
+  }
+
+
+  // Verify that the arePoints:onSameSideOfLine: works.
+  func testArePointsOnSameSideOfLine() {
+    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 1))
+    let verticalLine = Line(point: CGPointZero, otherPoint: CGPoint(x: 0, y: 1))
+    let pointA = CGPoint(x: -1, y: 1)
+    let pointB = CGPoint(x: 1, y: 2)
+    let pointC = CGPoint(x: 2, y: 1)
+
+    XCTAssertTrue(Line.arePoints((pointA, pointB), onSameSideOfLine: line))
+    XCTAssertFalse(Line.arePoints((pointA, pointC), onSameSideOfLine: line))
+    XCTAssertFalse(Line.arePoints((pointB, pointC), onSameSideOfLine: line))
+
+    XCTAssertFalse(
+        Line.arePoints((pointA, pointB), onSameSideOfLine: verticalLine))
+    XCTAssertFalse(
+        Line.arePoints((pointA, pointC), onSameSideOfLine: verticalLine))
+    XCTAssertTrue(
+        Line.arePoints((pointB, pointC), onSameSideOfLine: verticalLine))
   }
 }

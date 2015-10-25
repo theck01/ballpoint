@@ -209,12 +209,37 @@ public extension Line {
    */
   public static func projectionOfPoint(
       point: CGPoint, onLine line: Line) -> CGPoint {
-    if (line.isVertical) {
+    if line.isVertical {
       return CGPoint(x: line.xIntercept!, y: point.y)
     } else if (line.isHorizontal) {
       return CGPoint(x: point.x, y: line.yIntercept!)
     }
     let perpendicularLine = Line(slope: -1 / line.slope, throughPoint: point)
     return Line.intersection(perpendicularLine, line)!;
+  }
+
+
+  /**
+   - parameter points:
+   - parameter line:
+
+   - returns: Whether the points are on the same side of the line.
+   */
+  public static func arePoints(
+      points: (CGPoint, CGPoint), onSameSideOfLine line: Line) -> Bool {
+    var diff0: CGFloat
+    var diff1: CGFloat
+    if line.isVertical {
+      diff0 = points.0.x  - line.xIntercept!
+      diff1 = points.1.x  - line.xIntercept!
+    } else {
+      diff0 = points.0.y - (line.slope * points.0.x + line.yIntercept!)
+      diff1 = points.1.y - (line.slope * points.1.x + line.yIntercept!)
+    }
+
+    // Two points are on the same side of a line if the difference between the
+    // calculated y value and actual line value for the points are of the same
+    // sign (with the same consideration for x values and vertical lines).
+    return (diff0 > 0 && diff1 > 0) || (diff0 < 0 && diff1 < 0)
   }
 }
