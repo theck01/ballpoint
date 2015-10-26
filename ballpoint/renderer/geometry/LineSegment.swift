@@ -52,4 +52,23 @@ public extension LineSegment {
     return
         isPointWithinSegmentBounds && Line.isPoint(point, onLine: segment.line)
   }
+
+
+  /**
+   - parameter a
+   - parameter b
+
+   - returns: The intersection of line segments a and b, or nil if no
+        intersection exists.
+   */
+  public static func intersection(
+      a: LineSegment, _ b: LineSegment) -> CGPoint? {
+    if let lineIntersection = Line.intersection(a.line, b.line) {
+      if LineSegment.isPoint(lineIntersection, onLineSegment: a) &&
+          LineSegment.isPoint(lineIntersection, onLineSegment: b) {
+        return lineIntersection
+      }
+    }
+    return nil
+  }
 }
