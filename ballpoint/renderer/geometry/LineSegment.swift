@@ -36,8 +36,20 @@ public extension LineSegment {
    */
   public static func isPoint(
       point: CGPoint, onLineSegment segment: LineSegment) -> Bool {
+    var isPointWithinSegmentBounds = true
+    isPointWithinSegmentBounds &&=
+        point.x > CGRectGetMinX(segment.boundingBox) ||
+        point.x =~= CGRectGetMinX(segment.boundingBox)
+    isPointWithinSegmentBounds &&=
+        point.x < CGRectGetMaxX(segment.boundingBox) ||
+        point.x =~= CGRectGetMaxX(segment.boundingBox)
+    isPointWithinSegmentBounds &&=
+        point.y > CGRectGetMinY(segment.boundingBox) ||
+        point.y =~= CGRectGetMinY(segment.boundingBox)
+    isPointWithinSegmentBounds &&=
+        point.y < CGRectGetMaxY(segment.boundingBox) ||
+        point.y =~= CGRectGetMaxY(segment.boundingBox)
     return
-        CGRectContainsPoint(segment.boundingBox, point) &&
-        Line.isPoint(point, onLine: segment.line)
+        isPointWithinSegmentBounds && Line.isPoint(point, onLine: segment.line)
   }
 }
