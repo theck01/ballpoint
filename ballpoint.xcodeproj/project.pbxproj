@@ -16,6 +16,7 @@
 		427304021BD5855A0087BEC4 /* RoughlyEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427304011BD5855A0087BEC4 /* RoughlyEquatable.swift */; };
 		427DBC501BB7268A00122848 /* UIView+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427DBC4F1BB7268A00122848 /* UIView+ballpoint.swift */; };
 		42822CBD1BD438210028208A /* CGFloat+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42822CBC1BD438210028208A /* CGFloat+ballpoint.swift */; };
+		4288226D1BDE45F400A0CDE8 /* operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4288226C1BDE45F400A0CDE8 /* operators.swift */; };
 		42A112931B8EB1D000503D9F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112921B8EB1D000503D9F /* AppDelegate.swift */; };
 		42A1129A1B8EB1D000503D9F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42A112991B8EB1D000503D9F /* Images.xcassets */; };
 		42A1129D1B8EB1D000503D9F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42A1129B1B8EB1D000503D9F /* LaunchScreen.xib */; };
@@ -56,6 +57,7 @@
 		427304011BD5855A0087BEC4 /* RoughlyEquatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RoughlyEquatable.swift; path = interfaces/RoughlyEquatable.swift; sourceTree = "<group>"; };
 		427DBC4F1BB7268A00122848 /* UIView+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "UIView+ballpoint.swift"; path = "extensions/UIView+ballpoint.swift"; sourceTree = "<group>"; };
 		42822CBC1BD438210028208A /* CGFloat+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CGFloat+ballpoint.swift"; path = "extensions/CGFloat+ballpoint.swift"; sourceTree = "<group>"; };
+		4288226C1BDE45F400A0CDE8 /* operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = operators.swift; path = extensions/operators.swift; sourceTree = "<group>"; };
 		42A1128D1B8EB1D000503D9F /* ballpoint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ballpoint.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42A112911B8EB1D000503D9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42A112921B8EB1D000503D9F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -242,6 +244,7 @@
 				427DBC4F1BB7268A00122848 /* UIView+ballpoint.swift */,
 				42822CBC1BD438210028208A /* CGFloat+ballpoint.swift */,
 				4244B9F41BD43F3400FE5BEB /* CGPoint+ballpoint.swift */,
+				4288226C1BDE45F400A0CDE8 /* operators.swift */,
 			);
 			name = extensions;
 			sourceTree = "<group>";
@@ -390,6 +393,7 @@
 				42C8498B1BB87A2F0054F65A /* Stroke.swift in Sources */,
 				42A6DEB71B935C0A00CC09C2 /* UIColor+ballpoint.swift in Sources */,
 				426539F71B93CD14001345CB /* DrawingModel.swift in Sources */,
+				4288226D1BDE45F400A0CDE8 /* operators.swift in Sources */,
 				42E750131B9FC922003180C9 /* RendererColorPalette.swift in Sources */,
 				42C9A1841BDD391D005C867A /* LineSegment.swift in Sources */,
 				42A112C51B8EB50A00503D9F /* RendererStroke.swift in Sources */,
