@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4233EA261BE5442E0017B76D /* PointUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4233EA251BE5442E0017B76D /* PointUtil.swift */; };
+		4233EA281BE546DF0017B76D /* PointUtilTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4233EA271BE546DF0017B76D /* PointUtilTestCase.swift */; };
 		4244B9F51BD43F3400FE5BEB /* CGPoint+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4244B9F41BD43F3400FE5BEB /* CGPoint+ballpoint.swift */; };
 		426539F71B93CD14001345CB /* DrawingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426539F61B93CD14001345CB /* DrawingModel.swift */; };
 		426539FD1B93D78E001345CB /* DrawingRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426539FC1B93D78E001345CB /* DrawingRenderer.swift */; };
@@ -48,6 +50,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4233EA251BE5442E0017B76D /* PointUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PointUtil.swift; path = renderer/geometry/PointUtil.swift; sourceTree = "<group>"; };
+		4233EA271BE546DF0017B76D /* PointUtilTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = PointUtilTestCase.swift; path = renderer/geometry/PointUtilTestCase.swift; sourceTree = "<group>"; };
 		4244B9F41BD43F3400FE5BEB /* CGPoint+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CGPoint+ballpoint.swift"; path = "extensions/CGPoint+ballpoint.swift"; sourceTree = "<group>"; };
 		426539F61B93CD14001345CB /* DrawingModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DrawingModel.swift; path = model/DrawingModel.swift; sourceTree = "<group>"; };
 		426539FC1B93D78E001345CB /* DrawingRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = DrawingRenderer.swift; path = renderer/DrawingRenderer.swift; sourceTree = "<group>"; };
@@ -131,6 +135,7 @@
 			children = (
 				42C9A1811BDD38B1005C867A /* LineTestCase.swift */,
 				426992531BDD3CA900584CC8 /* LineSegmentTestCase.swift */,
+				4233EA271BE546DF0017B76D /* PointUtilTestCase.swift */,
 			);
 			name = geometry;
 			sourceTree = "<group>";
@@ -262,6 +267,7 @@
 			children = (
 				42C9A17E1BDD3834005C867A /* Line.swift */,
 				42C9A1831BDD391D005C867A /* LineSegment.swift */,
+				4233EA251BE5442E0017B76D /* PointUtil.swift */,
 			);
 			name = geometry;
 			sourceTree = "<group>";
@@ -394,6 +400,7 @@
 				42A6DEB71B935C0A00CC09C2 /* UIColor+ballpoint.swift in Sources */,
 				426539F71B93CD14001345CB /* DrawingModel.swift in Sources */,
 				4288226D1BDE45F400A0CDE8 /* operators.swift in Sources */,
+				4233EA261BE5442E0017B76D /* PointUtil.swift in Sources */,
 				42E750131B9FC922003180C9 /* RendererColorPalette.swift in Sources */,
 				42C9A1841BDD391D005C867A /* LineSegment.swift in Sources */,
 				42A112C51B8EB50A00503D9F /* RendererStroke.swift in Sources */,
@@ -409,6 +416,7 @@
 			files = (
 				42C9A1821BDD38B1005C867A /* LineTestCase.swift in Sources */,
 				426992541BDD3CA900584CC8 /* LineSegmentTestCase.swift in Sources */,
+				4233EA281BE546DF0017B76D /* PointUtilTestCase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

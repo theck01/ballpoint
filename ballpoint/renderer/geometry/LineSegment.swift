@@ -55,8 +55,8 @@ public extension LineSegment {
 
 
   /**
-   - parameter a
-   - parameter b
+   - parameter a:
+   - parameter b:
 
    - returns: The intersection of line segments a and b, or nil if no
         intersection exists.
@@ -73,6 +73,11 @@ public extension LineSegment {
   }
 
 
+  /**
+   - parameter segment:
+
+   - returns: The midpoint of the line segment.
+   */
   public static func midpoint(segment: LineSegment) -> CGPoint {
     return CGPoint(
         x: (segment.endPoints.0.x + segment.endPoints.1.x) / 2,
