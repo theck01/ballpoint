@@ -71,4 +71,11 @@ public extension LineSegment {
     }
     return nil
   }
+
+
+  public static func midpoint(segment: LineSegment) -> CGPoint {
+    return CGPoint(
+        x: (segment.endPoints.0.x + segment.endPoints.1.x) / 2,
+        y: (segment.endPoints.0.y + segment.endPoints.1.y) / 2)
+  }
 }

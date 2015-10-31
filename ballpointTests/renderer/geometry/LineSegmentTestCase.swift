@@ -66,4 +66,13 @@ class LineSegmentTestCase: XCTestCase {
         verticalSegment, horizontalSegment)
     XCTAssertNil(actualIntersection)
   }
+
+
+  // Verifies that midpoint works
+  func testMidpoint() {
+    let segment = LineSegment(
+        point: CGPoint(x: -4, y: 4), otherPoint: CGPoint(x: 4, y: -4))
+    let expectedMidpoint = CGPointZero
+    XCTAssertTrue(LineSegment.midpoint(segment) =~= expectedMidpoint)
+  }
 }
