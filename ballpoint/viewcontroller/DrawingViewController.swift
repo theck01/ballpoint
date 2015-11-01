@@ -12,6 +12,9 @@ import UIKit
 
 class DrawingViewController: UIViewController, PainterTouchDelegate,
     RendererColorPaletteUpdateListener, UIScrollViewDelegate {
+  // The constants describing the appearance of the canvas backing.
+  static let kCanvasCornerRadius: CGFloat = 5
+
   // The constants describing the shadow behind the canvas backing.
   static let kCanvasAbsentTouchShadowOpacity: CGFloat = 0.6
   static let kCanvasAbsentTouchShadowRadius: CGFloat =
@@ -71,13 +74,13 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     rootScrollView = UIScrollView(frame: UIScreen.mainScreen().bounds)
     contentContainerView = UIView(frame: UIScreen.mainScreen().bounds)
     canvasBackingView = UIView(frame: canvasFrame)
-    drawingImageView = UIImageView(frame: canvasFrame)
-    pendingStrokeRenderer = StrokeRendererView(frame: canvasFrame)
+    drawingImageView = UIImageView(frame: canvasBackingView.bounds)
+    pendingStrokeRenderer = StrokeRendererView(frame: canvasBackingView.bounds)
     painterView = PainterView(
         brush: Constants.kPenBrush,
         paintColor: RendererColorPalette.defaultPalette[
             Constants.kBallpointInkColorId],
-        frame: canvasFrame)
+        frame: canvasBackingView.bounds)
     twoTouchTapRecognizer = UITapGestureRecognizer()
 
     super.init(nibName: nil, bundle: nil)
@@ -85,9 +88,9 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     self.view = rootScrollView
     rootScrollView.addSubview(contentContainerView)
     contentContainerView.addSubview(canvasBackingView)
-    contentContainerView.addSubview(drawingImageView)
-    contentContainerView.addSubview(pendingStrokeRenderer)
-    contentContainerView.addSubview(painterView)
+    canvasBackingView.addSubview(drawingImageView)
+    canvasBackingView.addSubview(pendingStrokeRenderer)
+    canvasBackingView.addSubview(painterView)
 
     rootScrollView.backgroundColor = UIColor.launchScreenBackgroundColor()
     contentContainerView.backgroundColor = UIColor.launchScreenBackgroundColor()
@@ -96,10 +99,6 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     drawingImageView.backgroundColor = UIColor.clearColor()
     pendingStrokeRenderer.backgroundColor = UIColor.clearColor()
     painterView.backgroundColor = UIColor.clearColor()
-
-    canvasBackingView.alpha = 0
-    drawingImageView.alpha = 0
-    pendingStrokeRenderer.alpha = 0
 
     rootScrollView.alwaysBounceHorizontal = true
     rootScrollView.alwaysBounceVertical = true
@@ -118,6 +117,10 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
       scrollViewPinchRecognizer.delaysTouchesBegan = false
       scrollViewPinchRecognizer.delaysTouchesEnded = false
     }
+
+    canvasBackingView.alpha = 0
+    canvasBackingView.layer.cornerRadius =
+        DrawingViewController.kCanvasCornerRadius
 
     painterView.pendingStrokeRenderer = pendingStrokeRenderer
     painterView.painterTouchDelegate = self
@@ -218,9 +221,6 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
     UIView.animateWithDuration(Constants.kViewControllerAppearDuration) {
       self.canvasBackingView.alpha = 1
-      self.drawingImageView.alpha = 1
-      self.pendingStrokeRenderer.alpha = 1
-      self.painterView.alpha = 1
     }
 
     painterView.becomeFirstResponder()
@@ -234,9 +234,6 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     canvasBackingView.layer.shadowOpacity = 0
     canvasBackingView.layer.shadowRadius = 0
     canvasBackingView.layer.shadowOffset = CGSizeZero
-
-    drawingImageView.alpha = 0
-    pendingStrokeRenderer.alpha = 0
 
     super.viewDidDisappear(animated)
   }
