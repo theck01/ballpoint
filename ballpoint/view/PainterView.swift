@@ -79,7 +79,7 @@ class PainterView: UIView {
 
     super.init(frame: frame)
 
-    multipleTouchEnabled = false
+    multipleTouchEnabled = true
   }
 
 
@@ -131,9 +131,15 @@ class PainterView: UIView {
         if ($0.touchPointerId != touchPointerId) {
           return true
         }
-        
-        activeCompletedStrokes.append($0.stroke)
 
+        // If the touch ended at a different location than the previous location
+        // then append the final location to the stroke.
+        let location = touch.locationInView(self)
+        if !(location =~= touch.previousLocationInView(self)) {
+          $0.stroke.appendPoint(location)
+        }
+
+        activeCompletedStrokes.append($0.stroke)
         return false
       }
     }
