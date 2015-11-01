@@ -113,13 +113,6 @@
 			name = model;
 			sourceTree = "<group>";
 		};
-		4270F9061BB0F37A00940AAE /* animations */ = {
-			isa = PBXGroup;
-			children = (
-			);
-			name = animations;
-			sourceTree = "<group>";
-		};
 		4270F90A1BB0F93F00940AAE /* interfaces */ = {
 			isa = PBXGroup;
 			children = (
@@ -205,7 +198,6 @@
 		42A112B21B8EB28600503D9F /* view */ = {
 			isa = PBXGroup;
 			children = (
-				4270F9061BB0F37A00940AAE /* animations */,
 				42A112BB1B8EB4E700503D9F /* PainterView.swift */,
 				42BA874A1B9DDA9000AC842E /* StrokeRendererView.swift */,
 			);

@@ -48,6 +48,9 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   /// The painter view that handles all user interaction.
   let painterView: PainterView
 
+  /// The two touch tap recongizer that handles the tool change gesture.
+  private let twoTouchTapRecognizer: UITapGestureRecognizer
+
   var drawingInteractionDelegate: DrawingInteractionDelegate? {
     get {
       return painterView.drawingInteractionDelegate
@@ -75,6 +78,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
         paintColor: RendererColorPalette.defaultPalette[
             Constants.kBallpointInkColorId],
         frame: canvasFrame)
+    twoTouchTapRecognizer = UITapGestureRecognizer()
 
     super.init(nibName: nil, bundle: nil)
 
@@ -117,6 +121,14 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
     painterView.pendingStrokeRenderer = pendingStrokeRenderer
     painterView.painterTouchDelegate = self
+
+    twoTouchTapRecognizer.cancelsTouchesInView = true
+    twoTouchTapRecognizer.delaysTouchesBegan = false
+    twoTouchTapRecognizer.delaysTouchesEnded = false
+    twoTouchTapRecognizer.numberOfTapsRequired = 1
+    twoTouchTapRecognizer.numberOfTouchesRequired = 2
+    twoTouchTapRecognizer.addTarget(self, action: "handleTwoTouchTapGesture:")
+    painterView.addGestureRecognizer(twoTouchTapRecognizer)
 
     RendererColorPalette.defaultPalette.registerColorPaletteUpdateListener(
         self)
@@ -227,6 +239,12 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     pendingStrokeRenderer.alpha = 0
 
     super.viewDidDisappear(animated)
+  }
+
+
+  @objc private func handleTwoTouchTapGesture(
+      twoTouchTapGesture: UITapGestureRecognizer) {
+    self.drawingInteractionDelegate?.toggleTool()
   }
 
 

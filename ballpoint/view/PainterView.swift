@@ -65,10 +65,7 @@ class PainterView: UIView {
     return pendingStrokeTuples.map { $0.stroke }
   }
 
-  // The gesture recognizers that map to application actions.
-  private let twoTouchTapRecognizer: UITapGestureRecognizer
 
-  
   /**
    Initializes the painter with the given brush, canvas, and paint color. The
    frame of the painter is set to the frame of the canvas.
@@ -79,19 +76,10 @@ class PainterView: UIView {
   init(brush: Brush, paintColor: RendererColor, frame: CGRect = CGRectZero) {
     self.brush = brush
     self.paintColor = paintColor
-    twoTouchTapRecognizer = UITapGestureRecognizer()
 
     super.init(frame: frame)
 
-    multipleTouchEnabled = true
-
-    twoTouchTapRecognizer.cancelsTouchesInView = true
-    twoTouchTapRecognizer.delaysTouchesBegan = false
-    twoTouchTapRecognizer.delaysTouchesEnded = false
-    twoTouchTapRecognizer.numberOfTapsRequired = 1
-    twoTouchTapRecognizer.numberOfTouchesRequired = 2
-    twoTouchTapRecognizer.addTarget(self, action: "handleTwoTouchTapGesture:")
-    addGestureRecognizer(twoTouchTapRecognizer)
+    multipleTouchEnabled = false
   }
 
 
@@ -175,14 +163,6 @@ class PainterView: UIView {
     if motion == UIEventSubtype.MotionShake {
       drawingInteractionDelegate?.clearDrawing()
     }
-  }
-
-
-  /// MARK: Gesture handlers.
-
-  @objc func handleTwoTouchTapGesture(
-      twoTouchTapRecognizer: UITapGestureRecognizer) {
-    drawingInteractionDelegate?.toggleTool()
   }
 
 
