@@ -83,6 +83,11 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     super.init(nibName: nil, bundle: nil)
 
     self.view = rootScrollView
+    rootScrollView.addSubview(contentContainerView)
+    contentContainerView.addSubview(canvasBackingView)
+    contentContainerView.addSubview(drawingImageView)
+    contentContainerView.addSubview(pendingStrokeRenderer)
+    contentContainerView.addSubview(painterView)
 
     rootScrollView.backgroundColor = UIColor.launchScreenBackgroundColor()
     contentContainerView.backgroundColor = UIColor.launchScreenBackgroundColor()
@@ -96,15 +101,10 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     drawingImageView.alpha = 0
     pendingStrokeRenderer.alpha = 0
 
-    rootScrollView.addSubview(contentContainerView)
-    contentContainerView.addSubview(canvasBackingView)
-    contentContainerView.addSubview(drawingImageView)
-    contentContainerView.addSubview(pendingStrokeRenderer)
-    contentContainerView.addSubview(painterView)
-
     rootScrollView.alwaysBounceHorizontal = true
     rootScrollView.alwaysBounceVertical = true
     rootScrollView.contentSize = rootScrollView.bounds.size
+    rootScrollView.delaysContentTouches = false
     rootScrollView.delegate = self
     rootScrollView.maximumZoomScale = DrawingViewController.kMaximumZoomLevel
     rootScrollView.minimumZoomScale = DrawingViewController.kMinimumZoomLevel
