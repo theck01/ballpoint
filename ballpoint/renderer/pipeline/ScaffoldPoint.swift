@@ -10,9 +10,10 @@ import CoreGraphics
 
 
 
-// A point within the RendererScaffold. This point wraps a modelPoint,
-// grouping it with the tangent line to the point and with additional points
-// a and b that are used to connect Point instances.
+/// An object encapsulating all point information required for the scaffold.
+/// This point wraps a modelPoint, grouping it with the tangent line to the
+/// point and with additional points a and b that are used to connect
+/// ScaffoldPoints.
 struct ScaffoldPoint {
   let modelPoint: CGPoint
   let tangentLine: Line

@@ -10,6 +10,7 @@ import CoreGraphics
 
 
 
+/// Interface for a segment that connects two ScaffoldPoints.
 protocol ScaffoldSegment {
   /**
    - parameter path: The path to extend with the scaffold's path.

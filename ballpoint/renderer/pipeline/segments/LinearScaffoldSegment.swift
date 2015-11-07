@@ -10,6 +10,7 @@ import CoreGraphics
 
 
 
+/// A linear connection between ScaffoldPoints.
 struct LinearScaffoldSegment: ScaffoldSegment {
   private let start: CGPoint
   private let end: CGPoint

@@ -32,6 +32,7 @@
 		42BA87511B9DEB0300AC842E /* CGVector+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BA87501B9DEB0300AC842E /* CGVector+ballpoint.swift */; };
 		42C013031BEEB18900E9D6CA /* ScaffoldSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C013021BEEB18900E9D6CA /* ScaffoldSegment.swift */; };
 		42C013061BEEB2A500E9D6CA /* LinearScaffoldSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C013051BEEB2A500E9D6CA /* LinearScaffoldSegment.swift */; };
+		42C013081BEEB6D100E9D6CA /* RenderScaffold.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C013071BEEB6D100E9D6CA /* RenderScaffold.swift */; };
 		42C49A891BEE551A00B0AA0C /* ScaffoldPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C49A881BEE551A00B0AA0C /* ScaffoldPoint.swift */; };
 		42C8498B1BB87A2F0054F65A /* Stroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C8498A1BB87A2F0054F65A /* Stroke.swift */; };
 		42C8498D1BB891450054F65A /* FountainBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C8498C1BB891450054F65A /* FountainBrush.swift */; };
@@ -82,6 +83,7 @@
 		42BA87501B9DEB0300AC842E /* CGVector+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = "CGVector+ballpoint.swift"; path = "extensions/CGVector+ballpoint.swift"; sourceTree = "<group>"; };
 		42C013021BEEB18900E9D6CA /* ScaffoldSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScaffoldSegment.swift; path = renderer/pipeline/ScaffoldSegment.swift; sourceTree = "<group>"; };
 		42C013051BEEB2A500E9D6CA /* LinearScaffoldSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = LinearScaffoldSegment.swift; path = renderer/pipeline/segments/LinearScaffoldSegment.swift; sourceTree = "<group>"; };
+		42C013071BEEB6D100E9D6CA /* RenderScaffold.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = RenderScaffold.swift; path = renderer/pipeline/RenderScaffold.swift; sourceTree = "<group>"; };
 		42C49A881BEE551A00B0AA0C /* ScaffoldPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = ScaffoldPoint.swift; path = renderer/pipeline/ScaffoldPoint.swift; sourceTree = "<group>"; };
 		42C8498A1BB87A2F0054F65A /* Stroke.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Stroke.swift; path = model/Stroke.swift; sourceTree = "<group>"; };
 		42C8498C1BB891450054F65A /* FountainBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = FountainBrush.swift; path = renderer/brushes/FountainBrush.swift; sourceTree = "<group>"; };
@@ -272,6 +274,7 @@
 		42C49A851BEE536F00B0AA0C /* pipeline */ = {
 			isa = PBXGroup;
 			children = (
+				42C013071BEEB6D100E9D6CA /* RenderScaffold.swift */,
 				42C49A881BEE551A00B0AA0C /* ScaffoldPoint.swift */,
 				42C013021BEEB18900E9D6CA /* ScaffoldSegment.swift */,
 				42C013041BEEB23800E9D6CA /* segments */,
@@ -417,6 +420,7 @@
 				42C8498B1BB87A2F0054F65A /* Stroke.swift in Sources */,
 				42A6DEB71B935C0A00CC09C2 /* UIColor+ballpoint.swift in Sources */,
 				426539F71B93CD14001345CB /* DrawingModel.swift in Sources */,
+				42C013081BEEB6D100E9D6CA /* RenderScaffold.swift in Sources */,
 				42C013061BEEB2A500E9D6CA /* LinearScaffoldSegment.swift in Sources */,
 				4288226D1BDE45F400A0CDE8 /* operators.swift in Sources */,
 				4233EA261BE5442E0017B76D /* PointUtil.swift in Sources */,
