@@ -35,12 +35,12 @@ public struct Line {
 
 
   public init(point a: CGPoint, otherPoint b: CGPoint) {
-    if a.roughlyEquals(b) {
+    if a =~= b {
       fatalError("Cannot create a line from identical points")
     }
 
-    if a.x.roughlyEquals(b.x) {
-      self.init(slope: CGFloat.max, throughPoint: a)
+    if a.x =~= b.x {
+      self.init(slope: CGFloat.infinity, throughPoint: a)
     } else {
       self.init(slope: (a.y - b.y) / (a.x - b.x), throughPoint: a)
     }
@@ -48,9 +48,9 @@ public struct Line {
 
 
   public init(slope: CGFloat, throughPoint p: CGPoint) {
-    if slope == CGFloat.max {
+    if slope =~= CGFloat.infinity {
       self.init(slope: slope, xIntercept: p.x, yIntercept: nil)
-    } else if slope == 0 {
+    } else if slope =~= 0 {
       self.init(slope: slope, xIntercept: nil, yIntercept: p.y)
     } else {
       let lineYIntercept = p.y - slope * p.x
@@ -62,7 +62,7 @@ public struct Line {
 
 
   private init(slope: CGFloat, xIntercept: CGFloat?, yIntercept: CGFloat?) {
-    if slope == 0 {
+    if slope =~= 0 {
       assert(
           xIntercept == nil,
           "Cannot have a x intercept for a completely horizontal line.")
@@ -70,11 +70,11 @@ public struct Line {
 
     if xIntercept == nil {
       assert(
-          slope == 0,
+          slope =~= 0,
           "A missing x intercept can only be associated with a vertical line.")
     }
 
-    if slope == CGFloat.max {
+    if slope =~= CGFloat.infinity {
       assert(
           yIntercept == nil,
           "Cannot have a y intercept for a completely vertical line.")
@@ -82,7 +82,7 @@ public struct Line {
 
     if yIntercept == nil {
       assert(
-          slope == CGFloat.max,
+          slope =~= CGFloat.infinity,
           "A missing y intercept can only be associated with a vertical line.")
     }
 
@@ -104,7 +104,7 @@ public extension Line {
       are parallel and do not intersect.
   */
   public static func intersection(a: Line, _ b: Line) -> CGPoint? {
-    if a.slope.roughlyEquals(b.slope) {
+    if a.slope =~= b.slope {
       return nil
     }
 
@@ -145,14 +145,14 @@ public extension Line {
       guard let xIntercept = line.xIntercept else {
         fatalError("A vertical line must have an x-intercept.")
       }
-      return point.x.roughlyEquals(xIntercept)
+      return point.x =~= xIntercept
     }
 
     guard let yIntercept = line.yIntercept else {
       fatalError("A non-vertical line must have a y-intercept")
     }
     let yForPointX = line.slope * point.x + yIntercept
-    return yForPointX.roughlyEquals(point.y)
+    return yForPointX =~= point.y
   }
 
 
