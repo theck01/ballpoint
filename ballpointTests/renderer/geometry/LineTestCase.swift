@@ -137,6 +137,31 @@ class LineTestCase: XCTestCase {
   }
 
 
+  // Verify that linePerpendicularToLine:throughPoint: works.
+  func testLinePerpendicularToLineThroughPoint() {
+    var line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 1))
+    var expectedLine = Line(
+        point: CGPointZero, otherPoint: CGPoint(x: 1, y: -1))
+    XCTAssertEqual(
+        Line.linePerpendicularToLine(line, throughPoint: CGPointZero),
+        expectedLine)
+
+    line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 0))
+    expectedLine = Line(
+        point: CGPointZero, otherPoint: CGPoint(x: 0, y: 1))
+    XCTAssertEqual(
+        Line.linePerpendicularToLine(line, throughPoint: CGPointZero),
+        expectedLine)
+
+    line = Line(point: CGPointZero, otherPoint: CGPoint(x: 0, y: 1))
+    expectedLine = Line(
+        point: CGPointZero, otherPoint: CGPoint(x: 1, y: 0))
+    XCTAssertEqual(
+        Line.linePerpendicularToLine(line, throughPoint: CGPointZero),
+        expectedLine)
+  }
+
+
   // Verify that projectionOfPoint:onLine: works.
   func testProjectionOfPointOnLine() {
     let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 1))

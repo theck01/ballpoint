@@ -11,7 +11,7 @@ import CoreGraphics
 
 
 /// A structure representation of a line.
-public struct Line {
+public struct Line: Equatable {
   /// lhe slope of the line.
   let slope: CGFloat
 
@@ -90,6 +90,13 @@ public struct Line {
     self.xIntercept = xIntercept
     self.yIntercept = yIntercept
   }
+}
+
+
+// Equality function ensuring that Line conforms to Equatable.
+public func ==(lhs: Line, rhs: Line) -> Bool {
+  return lhs.slope == rhs.slope && lhs.yIntercept == rhs.yIntercept &&
+      lhs.xIntercept == rhs.xIntercept
 }
 
 
@@ -202,6 +209,24 @@ public extension Line {
 
 
   /**
+   - parameter line:
+   - parameter point:
+
+   - returns: The perpendicular line to the argument line through the argument
+        point.
+   */
+  public static func linePerpendicularToLine(
+      line: Line, throughPoint point: CGPoint) -> Line {
+    if line.isVertical {
+      return Line(slope: 0, throughPoint: point)
+    } else if line.isHorizontal {
+      return Line(slope: CGFloat.infinity, throughPoint: point)
+    }
+    return Line(slope: -1 / line.slope, throughPoint: point)
+  }
+
+
+  /**
    - parameter point:
    - parameter line:
 
@@ -209,13 +234,8 @@ public extension Line {
    */
   public static func projectionOfPoint(
       point: CGPoint, onLine line: Line) -> CGPoint {
-    if line.isVertical {
-      return CGPoint(x: line.xIntercept!, y: point.y)
-    } else if (line.isHorizontal) {
-      return CGPoint(x: point.x, y: line.yIntercept!)
-    }
-    let perpendicularLine = Line(slope: -1 / line.slope, throughPoint: point)
-    return Line.intersection(perpendicularLine, line)!;
+    return Line.intersection(
+        linePerpendicularToLine(line, throughPoint: point), line)!
   }
 
 
