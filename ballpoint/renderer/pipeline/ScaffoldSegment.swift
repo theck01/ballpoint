@@ -12,6 +12,12 @@ import CoreGraphics
 
 /// Interface for a segment that connects two ScaffoldPoints.
 protocol ScaffoldSegment {
+  /// The start location of the scaffold segment.
+  var origin: CGPoint { get }
+
+  /// The end location of the scaffold segment.
+  var terminal: CGPoint { get }
+  
   /**
    - parameter path: The path to extend with the scaffold's path.
    */

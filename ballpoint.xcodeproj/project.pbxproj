@@ -18,6 +18,7 @@
 		427304021BD5855A0087BEC4 /* RoughlyEquatable.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427304011BD5855A0087BEC4 /* RoughlyEquatable.swift */; };
 		427DBC501BB7268A00122848 /* UIView+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 427DBC4F1BB7268A00122848 /* UIView+ballpoint.swift */; };
 		42822CBD1BD438210028208A /* CGFloat+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42822CBC1BD438210028208A /* CGFloat+ballpoint.swift */; };
+		428811991BEFE04C007B9844 /* RenderPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428811981BEFE04C007B9844 /* RenderPipeline.swift */; };
 		4288226D1BDE45F400A0CDE8 /* operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4288226C1BDE45F400A0CDE8 /* operators.swift */; };
 		42A112931B8EB1D000503D9F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112921B8EB1D000503D9F /* AppDelegate.swift */; };
 		42A1129A1B8EB1D000503D9F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42A112991B8EB1D000503D9F /* Images.xcassets */; };
@@ -65,6 +66,7 @@
 		427304011BD5855A0087BEC4 /* RoughlyEquatable.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RoughlyEquatable.swift; sourceTree = "<group>"; };
 		427DBC4F1BB7268A00122848 /* UIView+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIView+ballpoint.swift"; sourceTree = "<group>"; };
 		42822CBC1BD438210028208A /* CGFloat+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGFloat+ballpoint.swift"; sourceTree = "<group>"; };
+		428811981BEFE04C007B9844 /* RenderPipeline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderPipeline.swift; sourceTree = "<group>"; };
 		4288226C1BDE45F400A0CDE8 /* operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = operators.swift; sourceTree = "<group>"; };
 		42A1128D1B8EB1D000503D9F /* ballpoint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ballpoint.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42A112911B8EB1D000503D9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -152,6 +154,7 @@
 		42A1128F1B8EB1D000503D9F /* ballpoint */ = {
 			isa = PBXGroup;
 			children = (
+				42A112901B8EB1D000503D9F /* Supporting Files */,
 				42A6DEB81B935D8E00CC09C2 /* controller */,
 				42A112CB1B8EB6FB00503D9F /* extensions */,
 				426539F51B93CB9E001345CB /* model */,
@@ -162,7 +165,6 @@
 				42A112C91B8EB66300503D9F /* Constants.swift */,
 				42A112991B8EB1D000503D9F /* Images.xcassets */,
 				42A1129B1B8EB1D000503D9F /* LaunchScreen.xib */,
-				42A112901B8EB1D000503D9F /* Supporting Files */,
 			);
 			path = ballpoint;
 			sourceTree = "<group>";
@@ -178,8 +180,8 @@
 		42A112A51B8EB1D100503D9F /* ballpointTests */ = {
 			isa = PBXGroup;
 			children = (
-				42C9A1801BDD386B005C867A /* renderer */,
 				42A112A61B8EB1D100503D9F /* Supporting Files */,
+				42C9A1801BDD386B005C867A /* renderer */,
 			);
 			path = ballpointTests;
 			sourceTree = "<group>";
@@ -267,6 +269,7 @@
 			isa = PBXGroup;
 			children = (
 				42C013041BEEB23800E9D6CA /* segments */,
+				428811981BEFE04C007B9844 /* RenderPipeline.swift */,
 				42C013071BEEB6D100E9D6CA /* RenderScaffold.swift */,
 				42C49A881BEE551A00B0AA0C /* ScaffoldPoint.swift */,
 				42C013021BEEB18900E9D6CA /* ScaffoldSegment.swift */,
@@ -422,6 +425,7 @@
 				42A112C51B8EB50A00503D9F /* RendererStroke.swift in Sources */,
 				426539FD1B93D78E001345CB /* DrawingRenderer.swift in Sources */,
 				427DBC501BB7268A00122848 /* UIView+ballpoint.swift in Sources */,
+				428811991BEFE04C007B9844 /* RenderPipeline.swift in Sources */,
 				4270F90C1BB0F95C00940AAE /* DrawingInteractionDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

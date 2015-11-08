@@ -15,9 +15,12 @@ struct LinearScaffoldSegment: ScaffoldSegment {
   private let start: CGPoint
   private let end: CGPoint
 
-  init(start: CGPoint, end: CGPoint) {
-    self.start = start
-    self.end = end
+  var origin: CGPoint { return start }
+  var terminal: CGPoint { return end }
+
+  init(origin: CGPoint, terminal: CGPoint) {
+    start = terminal
+    end = terminal
   }
 
 
