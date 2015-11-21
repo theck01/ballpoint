@@ -95,7 +95,7 @@ class DrawingController: DrawingInteractionDelegate {
 
 
   func redo() {
-    model.redo();
+    model.redo()
     viewController.updateDrawingSnapshot(model.drawingSnapshot)
   }
 }

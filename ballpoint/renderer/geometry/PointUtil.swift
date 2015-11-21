@@ -43,7 +43,7 @@ public class PointUtil {
       }
     }
 
-    return true;
+    return true
   }
 
 

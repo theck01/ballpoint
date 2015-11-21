@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		421273641C012EB70007FA48 /* PointPopulationStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421273631C012EB70007FA48 /* PointPopulationStage.swift */; };
 		4233EA261BE5442E0017B76D /* PointUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4233EA251BE5442E0017B76D /* PointUtil.swift */; };
 		4233EA281BE546DF0017B76D /* PointUtilTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4233EA271BE546DF0017B76D /* PointUtilTestCase.swift */; };
 		4244B9F51BD43F3400FE5BEB /* CGPoint+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4244B9F41BD43F3400FE5BEB /* CGPoint+ballpoint.swift */; };
@@ -55,6 +56,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		421273631C012EB70007FA48 /* PointPopulationStage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointPopulationStage.swift; sourceTree = "<group>"; };
 		4233EA251BE5442E0017B76D /* PointUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointUtil.swift; sourceTree = "<group>"; };
 		4233EA271BE546DF0017B76D /* PointUtilTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointUtilTestCase.swift; sourceTree = "<group>"; };
 		4244B9F41BD43F3400FE5BEB /* CGPoint+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGPoint+ballpoint.swift"; sourceTree = "<group>"; };
@@ -114,6 +116,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		421273621C012E990007FA48 /* stages */ = {
+			isa = PBXGroup;
+			children = (
+				421273631C012EB70007FA48 /* PointPopulationStage.swift */,
+			);
+			path = stages;
+			sourceTree = "<group>";
+		};
 		426539F51B93CB9E001345CB /* model */ = {
 			isa = PBXGroup;
 			children = (
@@ -269,6 +279,7 @@
 			isa = PBXGroup;
 			children = (
 				42C013041BEEB23800E9D6CA /* segments */,
+				421273621C012E990007FA48 /* stages */,
 				428811981BEFE04C007B9844 /* RenderPipeline.swift */,
 				42C013071BEEB6D100E9D6CA /* RenderScaffold.swift */,
 				42C49A881BEE551A00B0AA0C /* ScaffoldPoint.swift */,
@@ -415,6 +426,7 @@
 				42C8498B1BB87A2F0054F65A /* Stroke.swift in Sources */,
 				42A6DEB71B935C0A00CC09C2 /* UIColor+ballpoint.swift in Sources */,
 				426539F71B93CD14001345CB /* DrawingModel.swift in Sources */,
+				421273641C012EB70007FA48 /* PointPopulationStage.swift in Sources */,
 				42C013081BEEB6D100E9D6CA /* RenderScaffold.swift in Sources */,
 				42C013061BEEB2A500E9D6CA /* LinearScaffoldSegment.swift in Sources */,
 				4288226D1BDE45F400A0CDE8 /* operators.swift in Sources */,
