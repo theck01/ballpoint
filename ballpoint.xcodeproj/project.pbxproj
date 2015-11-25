@@ -21,6 +21,7 @@
 		42822CBD1BD438210028208A /* CGFloat+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42822CBC1BD438210028208A /* CGFloat+ballpoint.swift */; };
 		428811991BEFE04C007B9844 /* RenderPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428811981BEFE04C007B9844 /* RenderPipeline.swift */; };
 		4288226D1BDE45F400A0CDE8 /* operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4288226C1BDE45F400A0CDE8 /* operators.swift */; };
+		429E71541C05362200BF90D4 /* SegmentPopulationStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429E71531C05362200BF90D4 /* SegmentPopulationStage.swift */; };
 		42A112931B8EB1D000503D9F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112921B8EB1D000503D9F /* AppDelegate.swift */; };
 		42A1129A1B8EB1D000503D9F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42A112991B8EB1D000503D9F /* Images.xcassets */; };
 		42A1129D1B8EB1D000503D9F /* LaunchScreen.xib in Resources */ = {isa = PBXBuildFile; fileRef = 42A1129B1B8EB1D000503D9F /* LaunchScreen.xib */; };
@@ -70,6 +71,7 @@
 		42822CBC1BD438210028208A /* CGFloat+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGFloat+ballpoint.swift"; sourceTree = "<group>"; };
 		428811981BEFE04C007B9844 /* RenderPipeline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderPipeline.swift; sourceTree = "<group>"; };
 		4288226C1BDE45F400A0CDE8 /* operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = operators.swift; sourceTree = "<group>"; };
+		429E71531C05362200BF90D4 /* SegmentPopulationStage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentPopulationStage.swift; sourceTree = "<group>"; };
 		42A1128D1B8EB1D000503D9F /* ballpoint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ballpoint.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42A112911B8EB1D000503D9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		42A112921B8EB1D000503D9F /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -120,6 +122,7 @@
 			isa = PBXGroup;
 			children = (
 				421273631C012EB70007FA48 /* PointPopulationStage.swift */,
+				429E71531C05362200BF90D4 /* SegmentPopulationStage.swift */,
 			);
 			path = stages;
 			sourceTree = "<group>";
@@ -417,6 +420,7 @@
 				4244B9F51BD43F3400FE5BEB /* CGPoint+ballpoint.swift in Sources */,
 				42A112BE1B8EB4E700503D9F /* PainterView.swift in Sources */,
 				42C8498D1BB891450054F65A /* FountainBrush.swift in Sources */,
+				429E71541C05362200BF90D4 /* SegmentPopulationStage.swift in Sources */,
 				42E0FE8E1B99120300E2A0A1 /* DrawingController.swift in Sources */,
 				42C9A17F1BDD3834005C867A /* Line.swift in Sources */,
 				427304021BD5855A0087BEC4 /* RoughlyEquatable.swift in Sources */,
