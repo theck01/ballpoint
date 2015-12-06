@@ -19,7 +19,7 @@ struct LinearScaffoldSegment: ScaffoldSegment {
   var terminal: CGPoint { return end }
 
   init(origin: CGPoint, terminal: CGPoint) {
-    start = terminal
+    start = origin
     end = terminal
   }
 
