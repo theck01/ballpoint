@@ -11,7 +11,7 @@ import CoreGraphics
 
 
 
-class PointPopulationStage: RenderPipelineStage {
+struct PointPopulationStage: RenderPipelineStage {
   /// The radius of each point.
   private let REPLACE_ME: CGFloat = 1
 

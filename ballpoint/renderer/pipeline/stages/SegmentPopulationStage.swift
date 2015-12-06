@@ -12,7 +12,7 @@ import CoreGraphics
 
 /// Creates render segments between all existing render points within a
 /// scaffold.
-class SegmentPopulationStage: RenderPipelineStage {
+struct SegmentPopulationStage: RenderPipelineStage {
   func process(inout scaffold: RenderScaffold, stroke: Stroke) {
     for i in 0..<(scaffold.points.count - 1) {
       let previousPoint: ScaffoldPoint? = i > 0 ? scaffold.points[i - 1] : nil
