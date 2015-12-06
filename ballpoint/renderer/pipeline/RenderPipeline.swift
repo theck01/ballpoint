@@ -11,7 +11,7 @@ import CoreGraphics
 
 
 /// A pipeline that transforms model strokes into renderer strokes.
-class RenderPipeline {
+struct RenderPipeline {
   private let stages: [RenderPipelineStage]
 
 

@@ -11,7 +11,7 @@ import UIKit
 
 
 /// A brush that paints by drawing a path at the desired location.
-class FountainBrush: Brush {
+struct FountainBrush: Brush {
   /// The number of points within the transition from minimum radius to maximum
   /// radius.
   private let transitionPointCount: Int
