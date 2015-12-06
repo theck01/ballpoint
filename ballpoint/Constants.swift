@@ -25,8 +25,11 @@ class Constants {
   static let kViewControllerAppearDuration: NSTimeInterval = 0.6
 
   /// The size of the pen brush.
+  /*
   static let kPenBrush = FountainBrush(
       minRadius: 1, maxRadius: 2, transitionPointsFromMinToMaxSize: 5)
+  */
+  static let kPenBrush = PipelineBrush()
 
   /// The size of the eraser brush.
   static let kEraserBrush = FountainBrush(minRadius: 10, maxRadius: 10)
