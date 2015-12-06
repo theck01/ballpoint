@@ -28,7 +28,7 @@ class RenderPipeline {
   func render(stroke: Stroke) -> CGPath {
     var scaffold = RenderScaffold()
     for s in stages {
-      s.process(&scaffold)
+      s.process(&scaffold, stroke: stroke)
     }
 
     assert(
@@ -40,6 +40,7 @@ class RenderPipeline {
     for segment in scaffold.segments {
       segment.extendPath(path)
     }
+    CGPathCloseSubpath(path)
     return path
   }
 }
