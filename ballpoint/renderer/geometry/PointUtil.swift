@@ -36,7 +36,9 @@ public class PointUtil {
       return true
     }
 
-    let pointLine = Line(point: firstLinePoint, otherPoint: secondLinePoint)
+    // The two points should not be equal, so it is certain that a line exists
+    // between the two points.
+    let pointLine = Line(point: firstLinePoint, otherPoint: secondLinePoint)!
     for p in points {
       if !Line.isPoint(p, onLine: pointLine) {
         return false

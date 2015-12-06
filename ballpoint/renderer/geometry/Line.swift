@@ -34,9 +34,16 @@ public struct Line: Equatable {
   }
 
 
-  public init(point a: CGPoint, otherPoint b: CGPoint) {
+  /**
+   - parameter point:
+   - parameter otherPoint:
+
+   - returns: The line between the two points, or nil if the points are
+     identical.
+   */
+  public init?(point a: CGPoint, otherPoint b: CGPoint) {
     if a =~= b {
-      fatalError("Cannot create a line from identical points")
+      return nil
     }
 
     if a.x =~= b.x {

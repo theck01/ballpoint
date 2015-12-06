@@ -37,12 +37,20 @@ struct ScaffoldPoint {
 
 
   mutating func ensurePointAlignment(previousPoint: ScaffoldPoint) {
-    // TODO: Points may all be collinear, although that case is unlikely.
-    let aLine = Line(point: previousPoint.a, otherPoint: a)
-    if !Line.arePoints((previousPoint.b, b), onSameSideOfLine: aLine) {
-      let temp = a
-      a = b
-      b = temp
+    // TODO: Points may all be collinear or idendical, although those cases are
+    // unlikely.
+    if let aLine = Line(point: previousPoint.a, otherPoint: a) {
+      if !Line.arePoints((previousPoint.b, b), onSameSideOfLine: aLine) {
+        let temp = a
+        a = b
+        b = temp
+      }
+    } else if let bLine = Line(point: previousPoint.b, otherPoint: b) {
+      if !Line.arePoints((previousPoint.a, a), onSameSideOfLine: bLine) {
+        let temp = a
+        a = b
+        b = temp
+      }
     }
   }
 }

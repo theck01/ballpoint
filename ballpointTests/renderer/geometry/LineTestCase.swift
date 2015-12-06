@@ -13,10 +13,18 @@ import ballpoint
 
 
 class LineTestCase: XCTestCase {
+  // Verify that constructing a line with identical points generates a nil
+  // value.
+  func testIdenticalPointsGenerateNil() {
+    let line = Line(point: CGPointZero, otherPoint: CGPointZero)
+    XCTAssertNil(line, "Expected identical points to generate a nil line.")
+  }
+
+
   // Verify that Line#isPoint:onLine: works for a non-vertical and
   // non-horizontal line.
   func testIsPointOnLine() {
-    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 1))
+    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 1))!
     XCTAssertTrue(
         Line.isPoint(CGPointZero, onLine: line),
         "Point used to construct line should be considered on the line")
@@ -33,7 +41,7 @@ class LineTestCase: XCTestCase {
 
   // Verify that Line#isPoint:onLine: works for a vertical line.
   func testIsPointOnLine_verticalLine() {
-    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 0, y: 1))
+    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 0, y: 1))!
     XCTAssertTrue(
         Line.isPoint(CGPointZero, onLine: line),
         "Point used to construct line should be considered on the line")
@@ -51,15 +59,15 @@ class LineTestCase: XCTestCase {
   // Verify that Line#intersection works.
   func testIntersection() {
     let verticalLine = Line(
-        point: CGPoint(x: 1, y: 1), otherPoint: CGPoint(x: 1, y: 2))
+        point: CGPoint(x: 1, y: 1), otherPoint: CGPoint(x: 1, y: 2))!
     let horizontalLine = Line(
-        point: CGPoint(x: 0, y: 10), otherPoint: CGPoint(x: 1, y: 10))
+        point: CGPoint(x: 0, y: 10), otherPoint: CGPoint(x: 1, y: 10))!
     let line = Line(
-        point: CGPoint(x: 2, y: 5), otherPoint: CGPoint(x: 3, y: 6))
+        point: CGPoint(x: 2, y: 5), otherPoint: CGPoint(x: 3, y: 6))!
     let steepLine = Line(
-        point: CGPoint(x: 0, y: 9), otherPoint: CGPoint(x: 1, y: 7))
+        point: CGPoint(x: 0, y: 9), otherPoint: CGPoint(x: 1, y: 7))!
     let parallelLine = Line(
-        point: CGPoint(x: 0, y: 0), otherPoint: CGPoint(x: 1, y: 1))
+        point: CGPoint(x: 0, y: 0), otherPoint: CGPoint(x: 1, y: 1))!
 
     var expectedIntersection = CGPoint(x: 1, y: 10)
     var actualIntersection = Line.intersection(verticalLine, horizontalLine)
@@ -91,7 +99,7 @@ class LineTestCase: XCTestCase {
 
   // Verify that pointsAtDistance:onLine:fromPoint works.
   func testPointsAtDistanceOnLineFromPoint() {
-    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 1))
+    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 1))!
     let point = CGPoint(x: 5, y: 5)
     let expectedPointA = CGPoint(x: 6, y: 6)
     let expectedPointB = CGPoint(x: 4, y: 4)
@@ -107,7 +115,7 @@ class LineTestCase: XCTestCase {
 
   // Verify that pointsAtDistance:onLine:fromPoint works for vertical lines.
   func testPointsAtDistanceOnLineFromPoint_verticalLine() {
-    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 0, y: 1))
+    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 0, y: 1))!
     let point = CGPoint(x: 0, y: 5)
     let expectedPointA = CGPoint(x: 0, y: 6.5)
     let expectedPointB = CGPoint(x: 0, y: 3.5)
@@ -123,7 +131,7 @@ class LineTestCase: XCTestCase {
 
   // Verify that pointsAtDistance:onLine:fromPoint works for horizontal lines.
   func testPointsAtDistanceOnLineFromPoint_horizontalLine() {
-    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 0))
+    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 0))!
     let point = CGPoint(x: 5, y: 0)
     let expectedPointA = CGPoint(x: 10, y: 0)
     let expectedPointB = CGPoint(x: 0, y: 0)
@@ -139,21 +147,21 @@ class LineTestCase: XCTestCase {
 
   // Verify that linePerpendicularToLine:throughPoint: works.
   func testLinePerpendicularToLineThroughPoint() {
-    var line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 1))
+    var line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 1))!
     var expectedLine = Line(
         point: CGPointZero, otherPoint: CGPoint(x: 1, y: -1))
     XCTAssertEqual(
         Line.linePerpendicularToLine(line, throughPoint: CGPointZero),
         expectedLine)
 
-    line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 0))
+    line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 0))!
     expectedLine = Line(
         point: CGPointZero, otherPoint: CGPoint(x: 0, y: 1))
     XCTAssertEqual(
         Line.linePerpendicularToLine(line, throughPoint: CGPointZero),
         expectedLine)
 
-    line = Line(point: CGPointZero, otherPoint: CGPoint(x: 0, y: 1))
+    line = Line(point: CGPointZero, otherPoint: CGPoint(x: 0, y: 1))!
     expectedLine = Line(
         point: CGPointZero, otherPoint: CGPoint(x: 1, y: 0))
     XCTAssertEqual(
@@ -164,11 +172,11 @@ class LineTestCase: XCTestCase {
 
   // Verify that projectionOfPoint:onLine: works.
   func testProjectionOfPointOnLine() {
-    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 1))
+    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 1))!
     let verticalLine = Line(
-        point: CGPoint(x: -2, y: 0), otherPoint: CGPoint(x: -2, y: 1))
+        point: CGPoint(x: -2, y: 0), otherPoint: CGPoint(x: -2, y: 1))!
     let horizontalLine = Line(
-        point: CGPoint(x: 0, y: 10), otherPoint: CGPoint(x: 1, y: 10))
+        point: CGPoint(x: 0, y: 10), otherPoint: CGPoint(x: 1, y: 10))!
     let point = CGPoint(x: 6, y: 0)
 
     var expectedProjection = CGPoint(x: 3, y: 3)
@@ -187,8 +195,9 @@ class LineTestCase: XCTestCase {
 
   // Verify that the arePoints:onSameSideOfLine: works.
   func testArePointsOnSameSideOfLine() {
-    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 1))
-    let verticalLine = Line(point: CGPointZero, otherPoint: CGPoint(x: 0, y: 1))
+    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 1))!
+    let verticalLine = Line(
+        point: CGPointZero, otherPoint: CGPoint(x: 0, y: 1))!
     let pointA = CGPoint(x: -1, y: 1)
     let pointB = CGPoint(x: 1, y: 2)
     let pointC = CGPoint(x: 2, y: 1)

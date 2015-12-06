@@ -16,8 +16,12 @@ public struct LineSegment {
   private let boundingBox: CGRect
 
 
-  public init(point: CGPoint, otherPoint: CGPoint) {
-    line = Line(point: point, otherPoint: otherPoint)
+  public init?(point: CGPoint, otherPoint: CGPoint) {
+    let maybeLine = Line(point: point, otherPoint: otherPoint)
+    if maybeLine == nil {
+      return nil
+    }
+    line = maybeLine!
     endPoints = (point, otherPoint)
     boundingBox = CGRect(
         x: fmin(point.x, otherPoint.y), y: fmin(point.y, otherPoint.y),
