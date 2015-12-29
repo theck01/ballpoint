@@ -21,6 +21,7 @@
 		42822CBD1BD438210028208A /* CGFloat+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42822CBC1BD438210028208A /* CGFloat+ballpoint.swift */; };
 		428811991BEFE04C007B9844 /* RenderPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428811981BEFE04C007B9844 /* RenderPipeline.swift */; };
 		4288226D1BDE45F400A0CDE8 /* operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4288226C1BDE45F400A0CDE8 /* operators.swift */; };
+		42952C221C3348CA006EE4D6 /* QuadraticBezierScaffoldSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42952C211C3348CA006EE4D6 /* QuadraticBezierScaffoldSegment.swift */; };
 		429E71541C05362200BF90D4 /* SegmentPopulationStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429E71531C05362200BF90D4 /* SegmentPopulationStage.swift */; };
 		42A112931B8EB1D000503D9F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112921B8EB1D000503D9F /* AppDelegate.swift */; };
 		42A1129A1B8EB1D000503D9F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42A112991B8EB1D000503D9F /* Images.xcassets */; };
@@ -74,6 +75,7 @@
 		42822CBC1BD438210028208A /* CGFloat+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGFloat+ballpoint.swift"; sourceTree = "<group>"; };
 		428811981BEFE04C007B9844 /* RenderPipeline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderPipeline.swift; sourceTree = "<group>"; };
 		4288226C1BDE45F400A0CDE8 /* operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = operators.swift; sourceTree = "<group>"; };
+		42952C211C3348CA006EE4D6 /* QuadraticBezierScaffoldSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuadraticBezierScaffoldSegment.swift; sourceTree = "<group>"; };
 		429E71531C05362200BF90D4 /* SegmentPopulationStage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentPopulationStage.swift; sourceTree = "<group>"; };
 		42A1128D1B8EB1D000503D9F /* ballpoint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ballpoint.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42A112911B8EB1D000503D9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -282,6 +284,7 @@
 			isa = PBXGroup;
 			children = (
 				42C013051BEEB2A500E9D6CA /* LinearScaffoldSegment.swift */,
+				42952C211C3348CA006EE4D6 /* QuadraticBezierScaffoldSegment.swift */,
 			);
 			path = segments;
 			sourceTree = "<group>";
@@ -447,6 +450,7 @@
 				42A5A0A71C1463500022F663 /* PipelineBrush.swift in Sources */,
 				4288226D1BDE45F400A0CDE8 /* operators.swift in Sources */,
 				4233EA261BE5442E0017B76D /* PointUtil.swift in Sources */,
+				42952C221C3348CA006EE4D6 /* QuadraticBezierScaffoldSegment.swift in Sources */,
 				42E750131B9FC922003180C9 /* RendererColorPalette.swift in Sources */,
 				42C49A891BEE551A00B0AA0C /* ScaffoldPoint.swift in Sources */,
 				42C9A1841BDD391D005C867A /* LineSegment.swift in Sources */,
