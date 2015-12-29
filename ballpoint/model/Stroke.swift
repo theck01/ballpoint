@@ -38,7 +38,7 @@ class MutableStroke: Stroke {
 
   func appendPoint(p: CGPoint) {
     // Don't append identical points to the end of the stroke.
-    if points.count > 1 && points.last! =~= p {
+    if points.count > 0 && points.last! =~= p {
       return
     }
 
