@@ -23,6 +23,7 @@
 		4288226D1BDE45F400A0CDE8 /* operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4288226C1BDE45F400A0CDE8 /* operators.swift */; };
 		42952C221C3348CA006EE4D6 /* QuadraticBezierScaffoldSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42952C211C3348CA006EE4D6 /* QuadraticBezierScaffoldSegment.swift */; };
 		42952C241C334B72006EE4D6 /* CubicBezierScaffoldSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42952C231C334B72006EE4D6 /* CubicBezierScaffoldSegment.swift */; };
+		42952C261C334C6D006EE4D6 /* PointScaffoldSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42952C251C334C6D006EE4D6 /* PointScaffoldSegment.swift */; };
 		429E71541C05362200BF90D4 /* SegmentPopulationStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429E71531C05362200BF90D4 /* SegmentPopulationStage.swift */; };
 		42A112931B8EB1D000503D9F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112921B8EB1D000503D9F /* AppDelegate.swift */; };
 		42A1129A1B8EB1D000503D9F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42A112991B8EB1D000503D9F /* Images.xcassets */; };
@@ -78,6 +79,7 @@
 		4288226C1BDE45F400A0CDE8 /* operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = operators.swift; sourceTree = "<group>"; };
 		42952C211C3348CA006EE4D6 /* QuadraticBezierScaffoldSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuadraticBezierScaffoldSegment.swift; sourceTree = "<group>"; };
 		42952C231C334B72006EE4D6 /* CubicBezierScaffoldSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CubicBezierScaffoldSegment.swift; sourceTree = "<group>"; };
+		42952C251C334C6D006EE4D6 /* PointScaffoldSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointScaffoldSegment.swift; sourceTree = "<group>"; };
 		429E71531C05362200BF90D4 /* SegmentPopulationStage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentPopulationStage.swift; sourceTree = "<group>"; };
 		42A1128D1B8EB1D000503D9F /* ballpoint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ballpoint.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42A112911B8EB1D000503D9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -289,6 +291,7 @@
 				42C013051BEEB2A500E9D6CA /* LinearScaffoldSegment.swift */,
 				42952C211C3348CA006EE4D6 /* QuadraticBezierScaffoldSegment.swift */,
 				42C013021BEEB18900E9D6CA /* ScaffoldSegment.swift */,
+				42952C251C334C6D006EE4D6 /* PointScaffoldSegment.swift */,
 			);
 			path = segments;
 			sourceTree = "<group>";
@@ -436,6 +439,7 @@
 				42A112CA1B8EB66300503D9F /* Constants.swift in Sources */,
 				4244B9F51BD43F3400FE5BEB /* CGPoint+ballpoint.swift in Sources */,
 				42A112BE1B8EB4E700503D9F /* PainterView.swift in Sources */,
+				42952C261C334C6D006EE4D6 /* PointScaffoldSegment.swift in Sources */,
 				42C8498D1BB891450054F65A /* FountainBrush.swift in Sources */,
 				429E71541C05362200BF90D4 /* SegmentPopulationStage.swift in Sources */,
 				42E0FE8E1B99120300E2A0A1 /* DrawingController.swift in Sources */,
