@@ -10,6 +10,7 @@ import CoreGraphics
 
 
 
+/// A quadratic bezier curve connection between ScaffoldPoints.
 struct QuadraticBezierScaffoldSegment: ScaffoldSegment {
   private let start: CGPoint
   private let end: CGPoint
@@ -32,7 +33,7 @@ struct QuadraticBezierScaffoldSegment: ScaffoldSegment {
     }
 
     assert(
-        CGPathGetCurrentPoint(path) == start,
+        CGPathGetCurrentPoint(path) =~= start,
         "Cannot extend a path that is not currently at the expected path " +
         "starting point")
     CGPathAddQuadCurveToPoint(

@@ -18,6 +18,7 @@ struct LinearScaffoldSegment: ScaffoldSegment {
   var origin: CGPoint { return start }
   var terminal: CGPoint { return end }
 
+  
   init(origin: CGPoint, terminal: CGPoint) {
     start = origin
     end = terminal
@@ -30,7 +31,7 @@ struct LinearScaffoldSegment: ScaffoldSegment {
     }
 
     assert(
-        CGPathGetCurrentPoint(path) == start,
+        CGPathGetCurrentPoint(path) =~= start,
         "Cannot extend a path that is not currently at the expected path " +
         "starting point")
     CGPathAddLineToPoint(path, nil, end.x, end.y)

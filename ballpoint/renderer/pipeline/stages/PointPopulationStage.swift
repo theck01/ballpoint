@@ -57,7 +57,6 @@ struct PointPopulationStage: RenderPipelineStage {
         radius: REPLACE_ME))
     }
 
-
     // Two consecutive points in a stroke are assumed to never be equal.
     let finalTangentLine = Line(
         point: stroke.points[stroke.points.count - 2],
