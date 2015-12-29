@@ -129,9 +129,9 @@
 		421273621C012E990007FA48 /* stages */ = {
 			isa = PBXGroup;
 			children = (
+				42A5A0A41C1461B30022F663 /* EndcapPopulationStage.swift */,
 				421273631C012EB70007FA48 /* PointPopulationStage.swift */,
 				429E71531C05362200BF90D4 /* SegmentPopulationStage.swift */,
-				42A5A0A41C1461B30022F663 /* EndcapPopulationStage.swift */,
 			);
 			path = stages;
 			sourceTree = "<group>";
@@ -231,7 +231,6 @@
 				42A112C61B8EB52E00503D9F /* brushes */,
 				42C9A17D1BDD3823005C867A /* geometry */,
 				42C49A851BEE536F00B0AA0C /* pipeline */,
-				42A112C01B8EB50A00503D9F /* Brush.swift */,
 				426539FC1B93D78E001345CB /* DrawingRenderer.swift */,
 				42E750121B9FC922003180C9 /* RendererColorPalette.swift */,
 				42A112C21B8EB50A00503D9F /* RendererStroke.swift */,
@@ -251,6 +250,7 @@
 		42A112C61B8EB52E00503D9F /* brushes */ = {
 			isa = PBXGroup;
 			children = (
+				42A112C01B8EB50A00503D9F /* Brush.swift */,
 				42C8498C1BB891450054F65A /* FountainBrush.swift */,
 				42A5A0A61C1463500022F663 /* PipelineBrush.swift */,
 			);
@@ -285,6 +285,7 @@
 			children = (
 				42C013051BEEB2A500E9D6CA /* LinearScaffoldSegment.swift */,
 				42952C211C3348CA006EE4D6 /* QuadraticBezierScaffoldSegment.swift */,
+				42C013021BEEB18900E9D6CA /* ScaffoldSegment.swift */,
 			);
 			path = segments;
 			sourceTree = "<group>";
@@ -297,7 +298,6 @@
 				428811981BEFE04C007B9844 /* RenderPipeline.swift */,
 				42C013071BEEB6D100E9D6CA /* RenderScaffold.swift */,
 				42C49A881BEE551A00B0AA0C /* ScaffoldPoint.swift */,
-				42C013021BEEB18900E9D6CA /* ScaffoldSegment.swift */,
 				42A5A0A21C145C890022F663 /* ScaffoldSegmentFactory.swift */,
 			);
 			path = pipeline;
