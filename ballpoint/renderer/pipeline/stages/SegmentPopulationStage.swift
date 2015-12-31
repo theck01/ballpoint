@@ -17,7 +17,7 @@ struct SegmentPopulationStage: RenderPipelineStage {
     for i in 0..<(scaffold.points.count - 1) {
       let previousPoint: ScaffoldPoint? = i > 0 ? scaffold.points[i - 1] : nil
       let nextPoint: ScaffoldPoint? =
-          i < scaffold.points.count - 2 ? scaffold.points[i + 1] : nil
+          i < scaffold.points.count - 2 ? scaffold.points[i + 2] : nil
 
       let segmentA = ScaffoldSegmentFactory.generateSegment(
           previousPoint: previousPoint?.a, origin: scaffold.points[i].a,
