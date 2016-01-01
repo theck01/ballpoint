@@ -26,17 +26,6 @@ struct ScaffoldSegmentFactory {
   static func generateSegment(
       previousPoint previousPoint: CGPoint?, origin: CGPoint, terminal: CGPoint,
       nextPoint: CGPoint?) -> ScaffoldSegment {
-    if let pointSegment =
-        maybeCreatePointSegment(origin: origin, terminal: terminal) {
-      return pointSegment
-    }
-
-    if let quadraticSegment = maybeCreateQuadraticBezierSegment(
-        previousPoint: previousPoint, origin: origin, terminal: terminal,
-        nextPoint: nextPoint) {
-      return quadraticSegment
-    }
-
     if let cubicSegment = maybeCreateCubicBezierSegment(
         previousPoint: previousPoint, origin: origin, terminal: terminal,
         nextPoint: nextPoint) {
@@ -140,6 +129,29 @@ struct ScaffoldSegmentFactory {
   static func maybeCreateCubicBezierSegment(
       previousPoint previousPoint: CGPoint?, origin: CGPoint, terminal: CGPoint,
       nextPoint: CGPoint?) -> CubicBezierScaffoldSegment? {
-    return nil
+    guard let segment = LineSegment(point: origin, otherPoint: terminal)
+        else { return nil }
+    let segmentMidpoint = LineSegment.midpoint(segment)
+
+    let originTangentSlopeLine = previousPoint != nil ?
+        Line(point: previousPoint!, otherPoint: terminal) ?? segment.line :
+        segment.line
+    let originTangentLine =
+        Line(slope: originTangentSlopeLine.slope, throughPoint: origin)
+    let firstControlPoint =
+        Line.projectionOfPoint(segmentMidpoint, onLine: originTangentLine)
+
+    let terminalTangentSlopLine = nextPoint != nil ?
+        Line(point: origin, otherPoint: nextPoint!) ?? segment.line :
+        segment.line
+    let terminalTangentLine =
+        Line(slope: terminalTangentSlopLine.slope, throughPoint: terminal)
+    let secondControlPoint =
+        Line.projectionOfPoint(segmentMidpoint, onLine: terminalTangentLine)
+
+    return CubicBezierScaffoldSegment(
+        origin: origin, terminal: terminal,
+        firstControlPoint: firstControlPoint,
+        secondControlPoint: secondControlPoint)
   }
 }
