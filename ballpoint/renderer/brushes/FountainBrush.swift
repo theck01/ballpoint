@@ -53,7 +53,7 @@ struct FountainBrush: Brush {
     var paths: [CGPath] = []
 
     paths.append(pathAroundLocation(
-        stroke.points.first!, radius: minRadius))
+        stroke.points.first!.location, radius: minRadius))
 
     if stroke.points.count > 1 {
       var previousRadius = minRadius
@@ -61,9 +61,16 @@ struct FountainBrush: Brush {
         let radius = radiusForLocationNumber(i, of: stroke.points.count)
 
         paths.append(connectorPath(
-            from: (location: stroke.points[i - 1], radius: previousRadius),
-            to: (location: stroke.points[i], radius: radius)))
-        paths.append(pathAroundLocation(stroke.points[i], radius: radius))
+            from: (
+                location: stroke.points[i - 1].location,
+                radius: previousRadius
+            ),
+            to: (
+                location: stroke.points[i].location,
+                radius: radius
+            )))
+        paths.append(
+            pathAroundLocation(stroke.points[i].location, radius: radius))
 
         previousRadius = radius
       }

@@ -11,28 +11,28 @@ import CoreGraphics
 
 
 /// An object encapsulating all point information required for the scaffold.
-/// This point wraps a modelPoint, grouping it with the tangent line to the
+/// This point wraps a modelLocation, grouping it with the tangent line to the
 /// point and with additional points a and b that are used to connect
 /// ScaffoldPoints.
 struct ScaffoldPoint {
-  let modelPoint: CGPoint
+  let modelLocation: CGPoint
   let modelTangentLine: Line
   private(set) var a: CGPoint
   private(set) var b: CGPoint
 
 
-  init(modelPoint: CGPoint, modelTangentLine: Line, radius: CGFloat) {
+  init(modelLocation: CGPoint, modelTangentLine: Line, radius: CGFloat) {
     assert(
-        Line.isPoint(modelPoint, onLine: modelTangentLine),
+        Line.isPoint(modelLocation, onLine: modelTangentLine),
         "Cannot create a scaffold point from a model point that is not on " +
         "the associated tangent line")
-    self.modelPoint = modelPoint
+    self.modelLocation = modelLocation
     self.modelTangentLine = modelTangentLine
 
     let perpendicularLine = Line.linePerpendicularToLine(
-        modelTangentLine, throughPoint: modelPoint)
+        modelTangentLine, throughPoint: modelLocation)
     (a, b) = Line.pointsAtDistance(
-        radius, onLine: perpendicularLine, fromPoint: modelPoint)
+        radius, onLine: perpendicularLine, fromPoint: modelLocation)
   }
 
 

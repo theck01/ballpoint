@@ -89,7 +89,7 @@ class PainterView: UIView {
   override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
     for touch in touches {
       let stroke = MutableStroke(color: paintColor, brush: brush)
-      stroke.appendPoint(touch.locationInView(self))
+      stroke.appendPoint(StrokePoint(location: touch.locationInView(self)))
       pendingStrokeTuples.append(RenderingStrokeTuple(
           touchPointerId: unsafeAddressOf(touch), stroke: stroke))
     }
@@ -107,7 +107,7 @@ class PainterView: UIView {
       // the given touch and extending the stroke to the new touch location.
       for t in pendingStrokeTuples {
         if t.touchPointerId == touchPointerId {
-          t.stroke.appendPoint(location)
+          t.stroke.appendPoint(StrokePoint(location: location))
         }
       }
     }
@@ -136,7 +136,7 @@ class PainterView: UIView {
         // then append the final location to the stroke.
         let location = touch.locationInView(self)
         if !(location =~= touch.previousLocationInView(self)) {
-          $0.stroke.appendPoint(location)
+          $0.stroke.appendPoint(StrokePoint(location: location))
         }
 
         activeCompletedStrokes.append($0.stroke)

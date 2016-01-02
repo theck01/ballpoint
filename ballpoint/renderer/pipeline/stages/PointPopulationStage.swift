@@ -24,46 +24,51 @@ struct PointPopulationStage: RenderPipelineStage {
     // If the stroke only has one point supply an arbitrary tangent line.
     if stroke.points.count == 1 {
       scaffold.points.append(ScaffoldPoint(
-          modelPoint: stroke.points[0],
+          modelLocation: stroke.points[0].location,
           modelTangentLine:
-              Line(slope: 0, throughPoint: stroke.points[0]),
+              Line(slope: 0, throughPoint: stroke.points[0].location),
           radius: REPLACE_ME))
       return
     }
 
     // Two consecutive points in a stroke are assumed to never be equal.
     let initialTangentLine = Line(
-        point: stroke.points[0], otherPoint: stroke.points[1])!
+        point: stroke.points[0].location,
+        otherPoint: stroke.points[1].location)!
     scaffold.points.append(ScaffoldPoint(
-      modelPoint: stroke.points[0], modelTangentLine: initialTangentLine,
-      radius: REPLACE_ME))
+        modelLocation: stroke.points[0].location,
+        modelTangentLine: initialTangentLine,
+        radius: REPLACE_ME))
 
     for i in 1..<(stroke.points.count - 1) {
       var tangentSlope: CGFloat
       if let slopeLine = Line(
-          point: stroke.points[i - 1], otherPoint: stroke.points[i + 1]) {
+          point: stroke.points[i - 1].location,
+          otherPoint: stroke.points[i + 1].location) {
         tangentSlope = slopeLine.slope
       } else {
         // Two consecutive points in a stroke are assumed to never be equal.
         let perpendicularLine = Line(
-            point: stroke.points[i], otherPoint: stroke.points[i + 1])!
+            point: stroke.points[i].location,
+            otherPoint: stroke.points[i + 1].location)!
         tangentSlope = -1 / perpendicularLine.slope
       }
 
       scaffold.points.append(ScaffoldPoint(
-        modelPoint: stroke.points[i],
-        modelTangentLine:
-            Line(slope: tangentSlope, throughPoint: stroke.points[i]),
-        radius: REPLACE_ME))
+          modelLocation: stroke.points[i].location,
+          modelTangentLine:
+              Line(slope: tangentSlope, throughPoint: stroke.points[i].location),
+          radius: REPLACE_ME))
     }
 
     // Two consecutive points in a stroke are assumed to never be equal.
     let finalTangentLine = Line(
-        point: stroke.points[stroke.points.count - 2],
-        otherPoint: stroke.points.last!)!
+        point: stroke.points[stroke.points.count - 2].location,
+        otherPoint: stroke.points.last!.location)!
     scaffold.points.append(ScaffoldPoint(
-      modelPoint: stroke.points.last!, modelTangentLine: finalTangentLine,
-      radius: REPLACE_ME))
+        modelLocation: stroke.points.last!.location,
+        modelTangentLine: finalTangentLine,
+        radius: REPLACE_ME))
 
     for i in 1..<scaffold.points.count {
       scaffold.points[i].ensurePointAlignment(scaffold.points[i - 1])
