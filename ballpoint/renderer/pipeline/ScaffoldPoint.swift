@@ -16,21 +16,21 @@ import CoreGraphics
 /// ScaffoldPoints.
 struct ScaffoldPoint {
   let modelPoint: CGPoint
-  let tangentLine: Line
+  let modelTangentLine: Line
   private(set) var a: CGPoint
   private(set) var b: CGPoint
 
 
-  init(modelPoint: CGPoint, tangentLine: Line, radius: CGFloat) {
+  init(modelPoint: CGPoint, modelTangentLine: Line, radius: CGFloat) {
     assert(
-        Line.isPoint(modelPoint, onLine: tangentLine),
+        Line.isPoint(modelPoint, onLine: modelTangentLine),
         "Cannot create a scaffold point from a model point that is not on " +
         "the associated tangent line")
     self.modelPoint = modelPoint
-    self.tangentLine = tangentLine
+    self.modelTangentLine = modelTangentLine
 
     let perpendicularLine = Line.linePerpendicularToLine(
-        tangentLine, throughPoint: modelPoint)
+        modelTangentLine, throughPoint: modelPoint)
     (a, b) = Line.pointsAtDistance(
         radius, onLine: perpendicularLine, fromPoint: modelPoint)
   }

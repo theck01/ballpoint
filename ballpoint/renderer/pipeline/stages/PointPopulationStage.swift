@@ -25,7 +25,7 @@ struct PointPopulationStage: RenderPipelineStage {
     if stroke.points.count == 1 {
       scaffold.points.append(ScaffoldPoint(
           modelPoint: stroke.points[0],
-          tangentLine:
+          modelTangentLine:
               Line(slope: 0, throughPoint: stroke.points[0]),
           radius: REPLACE_ME))
       return
@@ -35,7 +35,7 @@ struct PointPopulationStage: RenderPipelineStage {
     let initialTangentLine = Line(
         point: stroke.points[0], otherPoint: stroke.points[1])!
     scaffold.points.append(ScaffoldPoint(
-      modelPoint: stroke.points[0], tangentLine: initialTangentLine,
+      modelPoint: stroke.points[0], modelTangentLine: initialTangentLine,
       radius: REPLACE_ME))
 
     for i in 1..<(stroke.points.count - 1) {
@@ -52,7 +52,7 @@ struct PointPopulationStage: RenderPipelineStage {
 
       scaffold.points.append(ScaffoldPoint(
         modelPoint: stroke.points[i],
-        tangentLine:
+        modelTangentLine:
             Line(slope: tangentSlope, throughPoint: stroke.points[i]),
         radius: REPLACE_ME))
     }
@@ -62,7 +62,7 @@ struct PointPopulationStage: RenderPipelineStage {
         point: stroke.points[stroke.points.count - 2],
         otherPoint: stroke.points.last!)!
     scaffold.points.append(ScaffoldPoint(
-      modelPoint: stroke.points.last!, tangentLine: finalTangentLine,
+      modelPoint: stroke.points.last!, modelTangentLine: finalTangentLine,
       radius: REPLACE_ME))
 
     for i in 1..<scaffold.points.count {
