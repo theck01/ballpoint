@@ -49,6 +49,8 @@ class PainterView: UIView {
 
   var painterTouchDelegate: PainterTouchDelegate?
 
+  var supports3dTouch: Bool = false
+
   /// An array of touch locations and pending strokes that last were updated to
   /// that location.
   private var pendingStrokeTuples: [RenderingStrokeTuple] = [] {
@@ -79,7 +81,25 @@ class PainterView: UIView {
 
     super.init(frame: frame)
 
+    if #available(iOS 9.0, *) {
+      supports3dTouch =
+          traitCollection.forceTouchCapability ==
+          UIForceTouchCapability.Available
+    }
+
     multipleTouchEnabled = true
+  }
+
+
+  func createStrokePointFromTouch(touch: UITouch) -> StrokePoint {
+    if #available(iOS 9.0, *) {
+      if (traitCollection.forceTouchCapability ==
+          UIForceTouchCapability.Available) {
+        return StrokePoint(
+            location: touch.locationInView(self), sizeModifier: touch.force)
+      }
+    }
+    return StrokePoint(location: touch.locationInView(self))
   }
 
 
@@ -89,7 +109,7 @@ class PainterView: UIView {
   override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
     for touch in touches {
       let stroke = MutableStroke(color: paintColor, brush: brush)
-      stroke.appendPoint(StrokePoint(location: touch.locationInView(self)))
+      stroke.appendPoint(createStrokePointFromTouch(touch))
       pendingStrokeTuples.append(RenderingStrokeTuple(
           touchPointerId: unsafeAddressOf(touch), stroke: stroke))
     }
@@ -100,14 +120,13 @@ class PainterView: UIView {
   
   override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
     for touch in touches {
-      let location = touch.locationInView(self)
       let touchPointerId = unsafeAddressOf(touch)
 
       // Update the location-stroke pairs, updating the pair associated with
       // the given touch and extending the stroke to the new touch location.
       for t in pendingStrokeTuples {
         if t.touchPointerId == touchPointerId {
-          t.stroke.appendPoint(StrokePoint(location: location))
+          t.stroke.appendPoint(createStrokePointFromTouch(touch))
         }
       }
     }
@@ -136,7 +155,7 @@ class PainterView: UIView {
         // then append the final location to the stroke.
         let location = touch.locationInView(self)
         if !(location =~= touch.previousLocationInView(self)) {
-          $0.stroke.appendPoint(StrokePoint(location: location))
+          $0.stroke.appendPoint(createStrokePointFromTouch(touch))
         }
 
         activeCompletedStrokes.append($0.stroke)
