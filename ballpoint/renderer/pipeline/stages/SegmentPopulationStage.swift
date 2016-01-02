@@ -15,16 +15,26 @@ import CoreGraphics
 struct SegmentPopulationStage: RenderPipelineStage {
   func process(inout scaffold: RenderScaffold, stroke: Stroke) {
     for i in 0..<(scaffold.points.count - 1) {
-      let previousPoint: ScaffoldPoint? = i > 0 ? scaffold.points[i - 1] : nil
-      let nextPoint: ScaffoldPoint? =
-          i < scaffold.points.count - 2 ? scaffold.points[i + 2] : nil
+      let originTangentSlope = scaffold.points[i].modelTangentLine.slope
+      let terminalTangentSlope = scaffold.points[i + 1].modelTangentLine.slope
 
       let segmentA = ScaffoldSegmentFactory.generateSegment(
-          previousPoint: previousPoint?.a, origin: scaffold.points[i].a,
-          terminal: scaffold.points[i + 1].a, nextPoint: nextPoint?.a)
+          origin: scaffold.points[i].a,
+          originTangentLine: Line(
+              slope: originTangentSlope, throughPoint: scaffold.points[i].a),
+          terminal: scaffold.points[i + 1].a,
+          terminalTangentLine: Line(
+              slope: terminalTangentSlope,
+              throughPoint: scaffold.points[i + 1].a))
+
       let segmentB = ScaffoldSegmentFactory.generateSegment(
-          previousPoint: nextPoint?.b, origin: scaffold.points[i + 1].b,
-          terminal: scaffold.points[i].b, nextPoint: previousPoint?.b)
+          origin: scaffold.points[i + 1].b,
+          originTangentLine: Line(
+              slope: terminalTangentSlope,
+              throughPoint: scaffold.points[i + 1].b),
+          terminal: scaffold.points[i].b,
+          terminalTangentLine: Line(
+              slope: originTangentSlope, throughPoint: scaffold.points[i].b))
 
       scaffold.segmentPairs.append((a: segmentA, b: segmentB))
     }
