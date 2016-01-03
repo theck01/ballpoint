@@ -36,19 +36,33 @@ class Stroke {
   /// The brush used to render the stroke.
   let brush: Brush
 
+  /// The minimum width of the stroke.
+  let minimumWidth: CGFloat
 
-  private init(points: [StrokePoint], color: RendererColor, brush: Brush) {
+  /// The maximum width of the stroke.
+  let maximumWidth: CGFloat
+
+
+  private init(
+      points: [StrokePoint], color: RendererColor, brush: Brush,
+      minimumWidth: CGFloat, maximumWidth: CGFloat) {
     self.points = points
     self.color = color
     self.brush = brush
+    self.minimumWidth = minimumWidth
+    self.maximumWidth = maximumWidth
   }
 }
 
 
 
 class MutableStroke: Stroke {
-  init(color: RendererColor, brush: Brush) {
-    super.init(points: [], color: color, brush: brush)
+  init(
+      color: RendererColor, brush: Brush, minimumWidth: CGFloat,
+      maximumWidth: CGFloat) {
+    super.init(
+        points: [], color: color, brush: brush, minimumWidth: minimumWidth,
+        maximumWidth: maximumWidth)
   }
 
 

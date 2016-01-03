@@ -24,14 +24,16 @@ class Constants {
   /// The duration of the view controller appearance animation.
   static let kViewControllerAppearDuration: NSTimeInterval = 0.6
 
-  /// The size of the pen brush.
-  /*
-  static let kPenBrush = FountainBrush(
-      minRadius: 1, maxRadius: 2, transitionPointsFromMinToMaxSize: 5)
-  */
+  /// The minimum size of strokes.
+  static let kMinimumStrokeWidth: CGFloat = 1
+
+  /// The maximum size of strokes.
+  static let kMaximumStrokeWidth: CGFloat = 10
+
+  /// The brush used for the pen tool.
   static let kPenBrush = PipelineBrush()
 
-  /// The size of the eraser brush.
+  /// The brush used for the eraser tool.
   static let kEraserBrush = FountainBrush(minRadius: 10, maxRadius: 10)
 
   // The color ids for renderer colors uses in the application.

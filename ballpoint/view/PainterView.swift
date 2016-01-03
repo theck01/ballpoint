@@ -108,7 +108,10 @@ class PainterView: UIView {
   
   override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
     for touch in touches {
-      let stroke = MutableStroke(color: paintColor, brush: brush)
+      let stroke = MutableStroke(
+          color: paintColor, brush: brush,
+          minimumWidth: Constants.kMinimumStrokeWidth,
+          maximumWidth: Constants.kMaximumStrokeWidth)
       stroke.appendPoint(createStrokePointFromTouch(touch))
       pendingStrokeTuples.append(RenderingStrokeTuple(
           touchPointerId: unsafeAddressOf(touch), stroke: stroke))
