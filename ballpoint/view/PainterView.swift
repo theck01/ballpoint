@@ -95,8 +95,9 @@ class PainterView: UIView {
     if #available(iOS 9.0, *) {
       if (traitCollection.forceTouchCapability ==
           UIForceTouchCapability.Available) {
+        let sizeFactor = touch.force / touch.maximumPossibleForce
         return StrokePoint(
-            location: touch.locationInView(self), sizeModifier: touch.force)
+            location: touch.locationInView(self), sizeFactor: sizeFactor)
       }
     }
     return StrokePoint(location: touch.locationInView(self))

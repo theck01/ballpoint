@@ -11,17 +11,20 @@ import CoreGraphics
 
 struct StrokePoint {
   let location: CGPoint
-  let sizeModifier: CGFloat
+
+  /// A value between 0 and 1 that indicates the size of a stroke at the point,
+  /// between a minimum and maximum value.
+  let sizeFactor: CGFloat
 
 
   init(location: CGPoint) {
-    self.init(location: location, sizeModifier: 1)
+    self.init(location: location, sizeFactor: 1)
   }
 
 
-  init(location: CGPoint, sizeModifier: CGFloat) {
+  init(location: CGPoint, sizeFactor: CGFloat) {
     self.location = location
-    self.sizeModifier = sizeModifier
+    self.sizeFactor = sizeFactor
   }
 }
 
