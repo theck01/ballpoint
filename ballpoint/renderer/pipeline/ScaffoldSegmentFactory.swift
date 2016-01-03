@@ -12,19 +12,23 @@ import CoreGraphics
 
 struct ScaffoldSegmentFactory {
   /**
+   - parameter previousPoint: The point preceeding the origin of the segment to
+       be created, or nil if one does not exist. Used to apply the appropriate
+       curve to the segment
    - parameter origin:
-   - parameter originTangentLine: The line tangent to segment at the origin.
    - parameter terminal:
-   - parameter terminalTangentLine: The line tangent to segment at the terminal.
-
+   - parameter nextPoint: The point following the terminal of the segment to be
+       created, or nil if one does not exist. Used to apply the appropriate
+       curve to the segment
+   
    - returns: The segment connecting the origin to the terminal.
    */
   static func generateSegment(
-      origin origin: CGPoint, originTangentLine: Line, terminal: CGPoint,
-      terminalTangentLine: Line) -> ScaffoldSegment {
+      previousPoint previousPoint: CGPoint?, origin: CGPoint, terminal: CGPoint,
+      nextPoint: CGPoint?) -> ScaffoldSegment {
     if let cubicSegment = maybeCreateCubicBezierSegment(
-        origin: origin, originTangentLine: originTangentLine,
-        terminal: terminal, terminalTangentLine: terminalTangentLine) {
+        previousPoint: previousPoint, origin: origin, terminal: terminal,
+        nextPoint: nextPoint) {
       return cubicSegment
     }
 
@@ -35,22 +39,39 @@ struct ScaffoldSegmentFactory {
 
 
   /**
+   - parameter previousPoint: The point preceeding the origin of the segment to
+       be created, or nil if one does not exist. Used to apply the appropriate
+       curve to the segment
    - parameter origin:
-   - parameter originTangentLine: The line tangent to segment at the origin.
    - parameter terminal:
-   - parameter terminalTangentLine: The line tangent to segment at the terminal.
-
-   - returns: The segment connecting the origin to the terminal.
+   - parameter nextPoint: The point following the terminal of the segment to be
+       created, or nil if one does not exist. Used to apply the appropriate
+       curve to the segment
+   
+   - returns: The CubicBezierScaffoldSegment connecting the origin to the
+       terminal, or nil if a cubic bezier is not the appropriate connector for
+       the origin and terminal.
    */
   static func maybeCreateCubicBezierSegment(
-      origin origin: CGPoint, originTangentLine: Line, terminal: CGPoint,
-      terminalTangentLine: Line) -> CubicBezierScaffoldSegment? {
+      previousPoint previousPoint: CGPoint?, origin: CGPoint, terminal: CGPoint,
+      nextPoint: CGPoint?) -> CubicBezierScaffoldSegment? {
     guard let segment = LineSegment(point: origin, otherPoint: terminal)
         else { return nil }
     let segmentMidpoint = LineSegment.midpoint(segment)
 
+    let originTangentSlopeLine = previousPoint != nil ?
+        Line(point: previousPoint!, otherPoint: terminal) ?? segment.line :
+        segment.line
+    let originTangentLine =
+        Line(slope: originTangentSlopeLine.slope, throughPoint: origin)
     let firstControlPoint =
         Line.projectionOfPoint(segmentMidpoint, onLine: originTangentLine)
+
+    let terminalTangentSlopLine = nextPoint != nil ?
+        Line(point: origin, otherPoint: nextPoint!) ?? segment.line :
+        segment.line
+    let terminalTangentLine =
+        Line(slope: terminalTangentSlopLine.slope, throughPoint: terminal)
     let secondControlPoint =
         Line.projectionOfPoint(segmentMidpoint, onLine: terminalTangentLine)
 
