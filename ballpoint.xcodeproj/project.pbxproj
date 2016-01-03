@@ -21,6 +21,7 @@
 		42822CBD1BD438210028208A /* CGFloat+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42822CBC1BD438210028208A /* CGFloat+ballpoint.swift */; };
 		428811991BEFE04C007B9844 /* RenderPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428811981BEFE04C007B9844 /* RenderPipeline.swift */; };
 		4288226D1BDE45F400A0CDE8 /* operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4288226C1BDE45F400A0CDE8 /* operators.swift */; };
+		42937B5B1C39A1D4006F63EA /* StrokePoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42937B5A1C39A1D4006F63EA /* StrokePoint.swift */; };
 		42952C241C334B72006EE4D6 /* CubicBezierScaffoldSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42952C231C334B72006EE4D6 /* CubicBezierScaffoldSegment.swift */; };
 		429E71541C05362200BF90D4 /* SegmentPopulationStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429E71531C05362200BF90D4 /* SegmentPopulationStage.swift */; };
 		42A112931B8EB1D000503D9F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112921B8EB1D000503D9F /* AppDelegate.swift */; };
@@ -75,6 +76,7 @@
 		42822CBC1BD438210028208A /* CGFloat+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGFloat+ballpoint.swift"; sourceTree = "<group>"; };
 		428811981BEFE04C007B9844 /* RenderPipeline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderPipeline.swift; sourceTree = "<group>"; };
 		4288226C1BDE45F400A0CDE8 /* operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = operators.swift; sourceTree = "<group>"; };
+		42937B5A1C39A1D4006F63EA /* StrokePoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StrokePoint.swift; sourceTree = "<group>"; };
 		42952C231C334B72006EE4D6 /* CubicBezierScaffoldSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CubicBezierScaffoldSegment.swift; sourceTree = "<group>"; };
 		429E71531C05362200BF90D4 /* SegmentPopulationStage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentPopulationStage.swift; sourceTree = "<group>"; };
 		42A1128D1B8EB1D000503D9F /* ballpoint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ballpoint.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -141,6 +143,7 @@
 			children = (
 				426539F61B93CD14001345CB /* DrawingModel.swift */,
 				42C8498A1BB87A2F0054F65A /* Stroke.swift */,
+				42937B5A1C39A1D4006F63EA /* StrokePoint.swift */,
 			);
 			path = model;
 			sourceTree = "<group>";
@@ -449,6 +452,7 @@
 				42C013061BEEB2A500E9D6CA /* LinearScaffoldSegment.swift in Sources */,
 				42952C241C334B72006EE4D6 /* CubicBezierScaffoldSegment.swift in Sources */,
 				42A5A0A71C1463500022F663 /* PipelineBrush.swift in Sources */,
+				42937B5B1C39A1D4006F63EA /* StrokePoint.swift in Sources */,
 				4288226D1BDE45F400A0CDE8 /* operators.swift in Sources */,
 				4233EA261BE5442E0017B76D /* PointUtil.swift in Sources */,
 				42E750131B9FC922003180C9 /* RendererColorPalette.swift in Sources */,
