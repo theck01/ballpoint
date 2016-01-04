@@ -201,10 +201,17 @@ public extension Line {
     }
 
     let absDistance = fabs(distance)
-    let alongSlopeVector = CGVector(
-        dx: 1 / line.slope, dy: line.slope).vectorWithMagnitude(absDistance)
-    let againstSlopeVector = CGVector(
-        dx: -1 / line.slope, dy: -line.slope).vectorWithMagnitude(absDistance)
+    let alongSlopeVector = line.slope > 0 ?
+        CGVector(dx: 1 / line.slope, dy: line.slope)
+            .vectorWithMagnitude(absDistance) :
+        CGVector(dx: 1 / line.slope, dy: -line.slope)
+            .vectorWithMagnitude(absDistance)
+    let againstSlopeVector = line.slope > 0 ?
+        CGVector(dx: -1 / line.slope, dy: -line.slope)
+            .vectorWithMagnitude(absDistance) :
+        CGVector(dx: -1 / line.slope, dy: line.slope)
+            .vectorWithMagnitude(absDistance)
+
     return (
       CGPoint(
           x: point.x + alongSlopeVector.dx, y: point.y + alongSlopeVector.dy),

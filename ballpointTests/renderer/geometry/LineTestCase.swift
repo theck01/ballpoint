@@ -98,14 +98,29 @@ class LineTestCase: XCTestCase {
 
 
   // Verify that pointsAtDistance:onLine:fromPoint works.
-  func testPointsAtDistanceOnLineFromPoint() {
+  func testPointsAtDistanceOnLineFromPoint_positiveSlope() {
     let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: 1))!
     let point = CGPoint(x: 5, y: 5)
     let expectedPointA = CGPoint(x: 6, y: 6)
     let expectedPointB = CGPoint(x: 4, y: 4)
 
-    let (actualPointA, actualPointB) = Line.pointsAtDistance(
-        sqrt(2), onLine: line, fromPoint: point)
+    let (actualPointA, actualPointB) =
+        Line.pointsAtDistance(sqrt(2), onLine: line, fromPoint: point)
+    XCTAssertTrue(
+        actualPointA =~= expectedPointA || actualPointA =~= expectedPointB)
+    XCTAssertTrue(
+        actualPointB =~= expectedPointA || actualPointB =~= expectedPointB)
+  }
+
+
+  func testPointsAtDistanceOnLineFromPoint_negativeSlope() {
+    let line = Line(point: CGPointZero, otherPoint: CGPoint(x: 1, y: -1))!
+    let point = CGPoint(x: 5, y: -5)
+    let expectedPointA = CGPoint(x: 4, y: -4)
+    let expectedPointB = CGPoint(x: 6, y: -6)
+
+    let (actualPointA, actualPointB) =
+        Line.pointsAtDistance(sqrt(2), onLine: line, fromPoint: point)
     XCTAssertTrue(
         actualPointA =~= expectedPointA || actualPointA =~= expectedPointB)
     XCTAssertTrue(
