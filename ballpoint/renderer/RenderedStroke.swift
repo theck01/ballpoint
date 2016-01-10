@@ -12,23 +12,23 @@ import UIKit
 
 /// An aggregation of CGPath objects making up one rendered drawing stroke.
 struct RenderedStroke {
-  struct RenderedStrokePath {
+  struct Path {
     let cgPath: CGPath
     let color: UIColor
     let mode: CGPathDrawingMode
   }
 
   /// The array of paths and colors that compose the stroke.
-  private let paths: [RenderedStrokePath]
+  private let paths: [Path]
   
   /// The bounding rect completely containing the stroke.
   let boundingRect: CGRect
   
   
-  init(paths: [RenderedStrokePath]) {
+  init(paths: [Path]) {
     self.paths = paths
     boundingRect = paths.reduce(CGRectNull) {
-        (rect: CGRect, p: RenderedStrokePath) in
+        (rect: CGRect, p: Path) in
       return CGRectUnion(rect, CGPathGetBoundingBox(p.cgPath))
     }
   }
@@ -47,7 +47,7 @@ struct RenderedStroke {
 
 
   private func paintPath(
-      path: RenderedStrokePath, onContext context: CGContext) {
+      path: Path, onContext context: CGContext) {
     CGContextAddPath(context, path.cgPath)
 
     let colorComponents = path.color.components()
