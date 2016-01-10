@@ -21,6 +21,8 @@ extension UIColor {
   private static var _ballpointSurfaceColor: UIColor?
 
 
+  /// MARK: Custom colors
+
   static func launchScreenBackgroundColor() -> UIColor {
     if _launchScreenBackgroundColor == nil {
       _launchScreenBackgroundColor = UIColor(white: 0.938, alpha: 1)
@@ -42,5 +44,18 @@ extension UIColor {
       _ballpointSurfaceColor = UIColor(white: 1, alpha: 1)
     }
     return _ballpointSurfaceColor!
+  }
+
+
+  /// MARK: Helper methods
+
+  func components() ->
+      (red: CGFloat, blue: CGFloat, green: CGFloat, alpha: CGFloat) {
+    var r: CGFloat = 0
+    var g: CGFloat = 0
+    var b: CGFloat = 0
+    var a: CGFloat = 0
+    getRed(&r, green: &g, blue: &b, alpha: &a)
+    return (red: r, green: g, blue: b, alpha: a)
   }
 }
