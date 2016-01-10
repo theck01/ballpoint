@@ -10,7 +10,16 @@ import CoreGraphics
 
 
 
-struct PipelineBrush: Brush {
+class PipelineBrush: Brush {
+  var renderDebugPaths: Bool {
+    get {
+      return pipeline.renderDebugPaths
+    }
+    set {
+      pipeline.renderDebugPaths = newValue
+    }
+  }
+
   private let pipeline: RenderPipeline = RenderPipeline(stages:
       PointPopulationStage(), SegmentPopulationStage(), EndcapPopulationStage())
 

@@ -6,13 +6,15 @@
 //  Copyright © 2015 Tyler Heck. All rights reserved.
 //
 
-import CoreGraphics
+import UIKit
 
 
 
 /// A pipeline that transforms model strokes into renderer strokes.
-struct RenderPipeline {
+class RenderPipeline {
   private let stages: [RenderPipelineStage]
+
+  var renderDebugPaths: Bool = false
 
 
   init(stages: RenderPipelineStage...) {
@@ -42,9 +44,26 @@ struct RenderPipeline {
     }
     CGPathCloseSubpath(path)
 
-    let renderedPath = RenderedStroke.Path(
+    var renderedPaths: [RenderedStroke.Path] = []
+    renderedPaths.append(RenderedStroke.Path(
         cgPath: path, color: stroke.color.backingColor,
-        mode: CGPathDrawingMode.FillStroke)
-    return [renderedPath]
+        mode: CGPathDrawingMode.Fill))
+
+    if renderDebugPaths {
+      renderedPaths += renderDebugPaths(scaffold)
+    }
+
+    return renderedPaths
+  }
+
+
+  /**
+   - parameter scaffold:
+
+   - returns: The set of debug paths generated from the render scaffold.
+   */
+  func renderDebugPaths(scaffold: RenderScaffold) -> [RenderedStroke.Path] {
+    var debugPaths: [RenderedStroke.Path] = []
+    return debugPaths
   }
 }

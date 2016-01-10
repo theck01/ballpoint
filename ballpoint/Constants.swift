@@ -31,14 +31,20 @@ class Constants {
   static let kMaximumStrokeWidth: CGFloat = 15
 
   /// The brush used for the pen tool.
-  static let kPenBrush = PipelineBrush()
+  static var kPenBrush = PipelineBrush()
 
   /// The brush used for the eraser tool.
-  static let kEraserBrush = PipelineBrush()
+  static var kEraserBrush = PipelineBrush()
 
   // The color ids for renderer colors uses in the application.
   static let kBallpointInkColorId: RendererColorId =
       "renderer-color-ballpoint-ink-color-id"
   static let kBallpointSurfaceColorId: RendererColorId =
       "renderer-color-ballpoint-surface-color-id"
+
+  
+  /// MARK: Debug constants.
+
+  /// Whether the application should be run with debug renderer active.
+  static let kDebugRender = true
 }
