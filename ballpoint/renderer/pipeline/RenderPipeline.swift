@@ -12,6 +12,9 @@ import UIKit
 
 /// A pipeline that transforms model strokes into renderer strokes.
 class RenderPipeline {
+  // Colors used for debug paths.
+  private static let kDebugStrokeOutlineColor = UIColor.magentaColor()
+
   private let stages: [RenderPipelineStage]
 
   var renderDebugPaths: Bool = false
@@ -64,6 +67,16 @@ class RenderPipeline {
    */
   func renderDebugPaths(scaffold: RenderScaffold) -> [RenderedStroke.Path] {
     var debugPaths: [RenderedStroke.Path] = []
+
+    let path = CGPathCreateMutable()
+    for segment in scaffold.segments {
+      segment.extendPath(path)
+    }
+    CGPathCloseSubpath(path)
+    debugPaths.append(RenderedStroke.Path(
+        cgPath: path, color: RenderPipeline.kDebugStrokeOutlineColor,
+        mode: CGPathDrawingMode.Stroke))
+
     return debugPaths
   }
 }
