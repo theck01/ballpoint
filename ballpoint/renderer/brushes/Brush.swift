@@ -16,5 +16,5 @@ protocol Brush {
 
    - returns: The rendered stroke, if the stroke could be rendered.
    */
-  func render(stroke: Stroke) -> RendererStroke?
+  func render(stroke: Stroke) -> RenderedStroke?
 }

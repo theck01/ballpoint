@@ -45,7 +45,7 @@ struct FountainBrush: Brush {
   
   /// MARK: Brush method implementations.
 
-  func render(stroke: Stroke) -> RendererStroke? {
+  func render(stroke: Stroke) -> RenderedStroke? {
     if stroke.points.isEmpty {
       return nil
     }
@@ -76,7 +76,7 @@ struct FountainBrush: Brush {
       }
     }
 
-    return RendererStroke(paths: paths, color: stroke.color)
+    return RenderedStroke(paths: paths, color: stroke.color)
   }
 
   

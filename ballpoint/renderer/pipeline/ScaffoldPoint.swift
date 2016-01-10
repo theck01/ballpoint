@@ -1,5 +1,5 @@
 //
-//  RendererStrokeScaffold.swift
+//  RenderedStrokeScaffold.swift
 //  ballpoint
 //
 //  Created by Tyler Heck on 11/7/15.

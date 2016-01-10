@@ -11,7 +11,7 @@ import UIKit
 
 
 /// An aggregation of CGPath objects making up one rendered drawing stroke.
-struct RendererStroke {
+struct RenderedStroke {
   /// The array of paths that compose the stroke.
   private let paths: [CGPath]
   
