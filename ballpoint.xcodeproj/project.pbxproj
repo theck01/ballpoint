@@ -235,8 +235,8 @@
 				42C9A17D1BDD3823005C867A /* geometry */,
 				42C49A851BEE536F00B0AA0C /* pipeline */,
 				426539FC1B93D78E001345CB /* DrawingRenderer.swift */,
-				42E750121B9FC922003180C9 /* RendererColorPalette.swift */,
 				42A112C21B8EB50A00503D9F /* RenderedStroke.swift */,
+				42E750121B9FC922003180C9 /* RendererColorPalette.swift */,
 				4270F90D1BB0F98000940AAE /* StrokeRenderer.swift */,
 			);
 			path = renderer;
@@ -289,6 +289,7 @@
 				42952C231C334B72006EE4D6 /* CubicBezierScaffoldSegment.swift */,
 				42C013051BEEB2A500E9D6CA /* LinearScaffoldSegment.swift */,
 				42C013021BEEB18900E9D6CA /* ScaffoldSegment.swift */,
+				42A5A0A21C145C890022F663 /* ScaffoldSegmentFactory.swift */,
 			);
 			path = segments;
 			sourceTree = "<group>";
@@ -301,7 +302,6 @@
 				428811981BEFE04C007B9844 /* RenderPipeline.swift */,
 				42C013071BEEB6D100E9D6CA /* RenderScaffold.swift */,
 				42C49A881BEE551A00B0AA0C /* ScaffoldPoint.swift */,
-				42A5A0A21C145C890022F663 /* ScaffoldSegmentFactory.swift */,
 			);
 			path = pipeline;
 			sourceTree = "<group>";
