@@ -54,7 +54,7 @@ struct RenderedStroke {
     CGContextSetRGBFillColor(
         context, colorComponents.red, colorComponents.green,
         colorComponents.blue, colorComponents.alpha)
-    CGContextSetRGBFillColor(
+    CGContextSetRGBStrokeColor(
         context, colorComponents.red, colorComponents.green,
         colorComponents.blue, colorComponents.alpha)
 
