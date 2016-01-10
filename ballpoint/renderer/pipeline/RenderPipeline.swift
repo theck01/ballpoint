@@ -25,7 +25,7 @@ struct RenderPipeline {
 
    - returns: The model stroke rendered as a CGPath.
    */
-  func render(stroke: Stroke) -> CGPath {
+  func render(stroke: Stroke) -> [RenderedStroke.RenderedStrokePath] {
     var scaffold = RenderScaffold()
     for s in stages {
       s.process(&scaffold, stroke: stroke)
@@ -41,6 +41,10 @@ struct RenderPipeline {
       segment.extendPath(path)
     }
     CGPathCloseSubpath(path)
-    return path
+
+    let renderedPath = RenderedStroke.RenderedStrokePath(
+        cgPath: path, color: stroke.color.backingColor,
+        mode: CGPathDrawingMode.FillStroke)
+    return [renderedPath]
   }
 }

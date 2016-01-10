@@ -15,6 +15,6 @@ struct PipelineBrush: Brush {
       PointPopulationStage(), SegmentPopulationStage(), EndcapPopulationStage())
 
   func render(stroke: Stroke) -> RenderedStroke? {
-    return RenderedStroke(paths: [pipeline.render(stroke)], color: stroke.color)
+    return RenderedStroke(paths: pipeline.render(stroke))
   }
 }

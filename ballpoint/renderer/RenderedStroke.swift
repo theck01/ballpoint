@@ -12,21 +12,24 @@ import UIKit
 
 /// An aggregation of CGPath objects making up one rendered drawing stroke.
 struct RenderedStroke {
-  /// The array of paths that compose the stroke.
-  private let paths: [CGPath]
-  
-  /// The color of the stroke.
-  private let color: RendererColor
+  struct RenderedStrokePath {
+    let cgPath: CGPath
+    let color: UIColor
+    let mode: CGPathDrawingMode
+  }
 
+  /// The array of paths and colors that compose the stroke.
+  private let paths: [RenderedStrokePath]
+  
   /// The bounding rect completely containing the stroke.
   let boundingRect: CGRect
   
   
-  init(paths: [CGPath], color: RendererColor) {
+  init(paths: [RenderedStrokePath]) {
     self.paths = paths
-    self.color = color
-    boundingRect = paths.reduce(CGRectNull) { (rect: CGRect, p: CGPath) in
-      return CGRectUnion(rect, CGPathGetBoundingBox(p))
+    boundingRect = paths.reduce(CGRectNull) {
+        (rect: CGRect, p: RenderedStrokePath) in
+      return CGRectUnion(rect, CGPathGetBoundingBox(p.cgPath))
     }
   }
 
@@ -38,15 +41,23 @@ struct RenderedStroke {
    */
   func paintOn(context: CGContext) {
     for p in paths {
-      paintCGPath(p, onContext: context)
+      paintPath(p, onContext: context)
     }
   }
 
 
-  private func paintCGPath(path: CGPath, onContext context: CGContext) {
-    CGContextAddPath(context, path)
+  private func paintPath(
+      path: RenderedStrokePath, onContext context: CGContext) {
+    CGContextAddPath(context, path.cgPath)
+
+    let colorComponents = path.color.components()
     CGContextSetRGBFillColor(
-        context, color.red, color.green, color.blue, color.alpha)
-    CGContextFillPath(context)
+        context, colorComponents.red, colorComponents.green,
+        colorComponents.blue, colorComponents.alpha)
+    CGContextSetRGBFillColor(
+        context, colorComponents.red, colorComponents.green,
+        colorComponents.blue, colorComponents.alpha)
+
+    CGContextDrawPath(context, path.mode)
   }
 }
