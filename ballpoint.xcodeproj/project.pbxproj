@@ -21,6 +21,7 @@
 		42822CBD1BD438210028208A /* CGFloat+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42822CBC1BD438210028208A /* CGFloat+ballpoint.swift */; };
 		428811991BEFE04C007B9844 /* RenderPipeline.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428811981BEFE04C007B9844 /* RenderPipeline.swift */; };
 		4288226D1BDE45F400A0CDE8 /* operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4288226C1BDE45F400A0CDE8 /* operators.swift */; };
+		428C6A921C42AD3F0042E4E3 /* RenderPipelineStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428C6A911C42AD3F0042E4E3 /* RenderPipelineStage.swift */; };
 		42937B5B1C39A1D4006F63EA /* StrokePoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42937B5A1C39A1D4006F63EA /* StrokePoint.swift */; };
 		42952C241C334B72006EE4D6 /* CubicBezierScaffoldSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42952C231C334B72006EE4D6 /* CubicBezierScaffoldSegment.swift */; };
 		429E71541C05362200BF90D4 /* SegmentPopulationStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429E71531C05362200BF90D4 /* SegmentPopulationStage.swift */; };
@@ -76,6 +77,7 @@
 		42822CBC1BD438210028208A /* CGFloat+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGFloat+ballpoint.swift"; sourceTree = "<group>"; };
 		428811981BEFE04C007B9844 /* RenderPipeline.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderPipeline.swift; sourceTree = "<group>"; };
 		4288226C1BDE45F400A0CDE8 /* operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = operators.swift; sourceTree = "<group>"; };
+		428C6A911C42AD3F0042E4E3 /* RenderPipelineStage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderPipelineStage.swift; sourceTree = "<group>"; };
 		42937B5A1C39A1D4006F63EA /* StrokePoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StrokePoint.swift; sourceTree = "<group>"; };
 		42952C231C334B72006EE4D6 /* CubicBezierScaffoldSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CubicBezierScaffoldSegment.swift; sourceTree = "<group>"; };
 		429E71531C05362200BF90D4 /* SegmentPopulationStage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentPopulationStage.swift; sourceTree = "<group>"; };
@@ -134,6 +136,7 @@
 				42A5A0A41C1461B30022F663 /* EndcapPopulationStage.swift */,
 				421273631C012EB70007FA48 /* PointPopulationStage.swift */,
 				429E71531C05362200BF90D4 /* SegmentPopulationStage.swift */,
+				428C6A911C42AD3F0042E4E3 /* RenderPipelineStage.swift */,
 			);
 			path = stages;
 			sourceTree = "<group>";
@@ -428,6 +431,7 @@
 			files = (
 				42BA87511B9DEB0300AC842E /* CGVector+ballpoint.swift in Sources */,
 				42A5A0A31C145C890022F663 /* ScaffoldSegmentFactory.swift in Sources */,
+				428C6A921C42AD3F0042E4E3 /* RenderPipelineStage.swift in Sources */,
 				42A5A0A51C1461B30022F663 /* EndcapPopulationStage.swift in Sources */,
 				42A112C31B8EB50A00503D9F /* Brush.swift in Sources */,
 				42C013031BEEB18900E9D6CA /* ScaffoldSegment.swift in Sources */,

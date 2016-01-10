@@ -44,14 +44,3 @@ struct RenderPipeline {
     return path
   }
 }
-
-
-
-/// Interface for a single stage within the renderer pipeline.
-protocol RenderPipelineStage {
-  /**
-   - parameter scaffold: The partially constructed renderer scaffold. Stages
-       should update the scaffold in place.
-   */
-  func process(inout scaffold: RenderScaffold, stroke: Stroke)
-}
