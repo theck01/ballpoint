@@ -20,10 +20,6 @@ typealias RendererColorId = String
 protocol RendererColor {
   var id: RendererColorId { get }
   var backingColor: UIColor { get }
-  var red: CGFloat { get }
-  var green: CGFloat { get }
-  var blue: CGFloat { get }
-  var alpha: CGFloat { get }
 }
 
 
@@ -123,7 +119,6 @@ class RendererColorPalette {
       l.didUpdateRenderColorPalette(self)
     }
   }
-
 }
 
 
@@ -132,40 +127,11 @@ class RendererColorPalette {
 /// external sources from creating RenderColors outside of a palette.
 private class RendererColorImpl: RendererColor {
   let id: RendererColorId
-
-  var backingColor: UIColor {
-    didSet {
-      updateColorComponentsWithColor(backingColor)
-    }
-  }
-
-  var red: CGFloat
-  var green: CGFloat
-  var blue: CGFloat
-  var alpha: CGFloat
+  var backingColor: UIColor
 
 
   init(id: RendererColorId, backingColor: UIColor) {
     self.id = id
     self.backingColor = backingColor
-    red = 0
-    green = 0
-    blue = 0
-    alpha = 0
-
-    updateColorComponentsWithColor(backingColor)
-  }
-
-
-  func updateColorComponentsWithColor(color: UIColor) {
-    var r: CGFloat = 0
-    var g: CGFloat = 0
-    var b: CGFloat = 0
-    var a: CGFloat = 0
-    backingColor.getRed(&r, green: &g, blue: &b, alpha: &a)
-    red = r
-    blue = b
-    green = g
-    alpha = a
   }
 }
