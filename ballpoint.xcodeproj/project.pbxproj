@@ -44,7 +44,6 @@
 		42C013081BEEB6D100E9D6CA /* RenderScaffold.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C013071BEEB6D100E9D6CA /* RenderScaffold.swift */; };
 		42C49A891BEE551A00B0AA0C /* ScaffoldPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C49A881BEE551A00B0AA0C /* ScaffoldPoint.swift */; };
 		42C8498B1BB87A2F0054F65A /* Stroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C8498A1BB87A2F0054F65A /* Stroke.swift */; };
-		42C8498D1BB891450054F65A /* FountainBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C8498C1BB891450054F65A /* FountainBrush.swift */; };
 		42C9A17F1BDD3834005C867A /* Line.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C9A17E1BDD3834005C867A /* Line.swift */; };
 		42C9A1821BDD38B1005C867A /* LineTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C9A1811BDD38B1005C867A /* LineTestCase.swift */; };
 		42C9A1841BDD391D005C867A /* LineSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C9A1831BDD391D005C867A /* LineSegment.swift */; };
@@ -104,7 +103,6 @@
 		42C013071BEEB6D100E9D6CA /* RenderScaffold.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderScaffold.swift; sourceTree = "<group>"; };
 		42C49A881BEE551A00B0AA0C /* ScaffoldPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaffoldPoint.swift; sourceTree = "<group>"; };
 		42C8498A1BB87A2F0054F65A /* Stroke.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stroke.swift; sourceTree = "<group>"; };
-		42C8498C1BB891450054F65A /* FountainBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = FountainBrush.swift; sourceTree = "<group>"; };
 		42C9A17E1BDD3834005C867A /* Line.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Line.swift; sourceTree = "<group>"; };
 		42C9A1811BDD38B1005C867A /* LineTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineTestCase.swift; sourceTree = "<group>"; };
 		42C9A1831BDD391D005C867A /* LineSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineSegment.swift; sourceTree = "<group>"; };
@@ -257,7 +255,6 @@
 			isa = PBXGroup;
 			children = (
 				42A112C01B8EB50A00503D9F /* Brush.swift */,
-				42C8498C1BB891450054F65A /* FountainBrush.swift */,
 				42A5A0A61C1463500022F663 /* PipelineBrush.swift */,
 			);
 			path = brushes;
@@ -440,7 +437,6 @@
 				42A112CA1B8EB66300503D9F /* Constants.swift in Sources */,
 				4244B9F51BD43F3400FE5BEB /* CGPoint+ballpoint.swift in Sources */,
 				42A112BE1B8EB4E700503D9F /* PainterView.swift in Sources */,
-				42C8498D1BB891450054F65A /* FountainBrush.swift in Sources */,
 				429E71541C05362200BF90D4 /* SegmentPopulationStage.swift in Sources */,
 				42E0FE8E1B99120300E2A0A1 /* DrawingController.swift in Sources */,
 				42C9A17F1BDD3834005C867A /* Line.swift in Sources */,

@@ -34,7 +34,7 @@ class Constants {
   static let kPenBrush = PipelineBrush()
 
   /// The brush used for the eraser tool.
-  static let kEraserBrush = FountainBrush(minRadius: 10, maxRadius: 10)
+  static let kEraserBrush = PipelineBrush()
 
   // The color ids for renderer colors uses in the application.
   static let kBallpointInkColorId: RendererColorId =
