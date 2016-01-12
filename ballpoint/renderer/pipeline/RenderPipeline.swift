@@ -18,7 +18,7 @@ class RenderPipeline {
   private static let kDebugStrokeASidePointColor = UIColor.redColor()
   private static let kDebugStrokeBSidePointColor = UIColor.blueColor()
 
-  private static let kDebugPointRadius: CGFloat = 1.5
+  private static let kDebugPointRadius: CGFloat = 0.5
 
   private let stages: [RenderPipelineStage]
 
