@@ -58,4 +58,14 @@ public class PointUtil {
     return PointUtil.arePointsCollinear(points)
   }
 
+
+  /**
+   - paramenter a:
+   - paramenter b:
+
+   - returns: The distance between points a and b
+   */
+  public static func distance(a: CGPoint, _ b: CGPoint) -> CGFloat {
+    return sqrt(pow(a.y - b.y, 2) + pow(a.x - b.x, 2))
+  }
 }

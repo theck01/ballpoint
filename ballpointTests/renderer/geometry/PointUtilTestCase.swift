@@ -26,4 +26,9 @@ class PointUtilTestCase: XCTestCase {
         CGPointZero, CGPoint(x: 1, y: 1), CGPoint(x: 100, y: -100),
         CGPoint(x: 15.56, y: 15.56)))
   }
+
+
+  func testDistance() {
+    XCTAssertEqual(PointUtil.distance(CGPoint.zero , CGPoint(x: 3, y: 4)), 5)
+  }
 }
