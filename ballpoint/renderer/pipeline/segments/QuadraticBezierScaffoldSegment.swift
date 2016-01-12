@@ -10,24 +10,20 @@ import CoreGraphics
 
 
 
-/// A cubic bezier curve connection between ScaffoldPoints.
-struct CubicBezierScaffoldSegment: ScaffoldSegment {
+/// A quadratic bezier curve connection between ScaffoldPoints.
+struct QuadraticBezierScaffoldSegment: ScaffoldSegment {
   private let start: CGPoint
   private let end: CGPoint
-  private let firstControlPoint: CGPoint
-  private let secondControlPoint: CGPoint
+  private let controlPoint: CGPoint
 
   var origin: CGPoint { return start }
   var terminal: CGPoint { return end }
 
 
-  init(
-      origin: CGPoint, terminal: CGPoint, firstControlPoint: CGPoint,
-      secondControlPoint: CGPoint) {
+  init(origin: CGPoint, terminal: CGPoint, controlPoint: CGPoint) {
     start = origin
     end = terminal
-    self.firstControlPoint = firstControlPoint
-    self.secondControlPoint = secondControlPoint
+    self.controlPoint = controlPoint
   }
 
 
@@ -40,8 +36,7 @@ struct CubicBezierScaffoldSegment: ScaffoldSegment {
         CGPathGetCurrentPoint(path) =~= start,
         "Cannot extend a path that is not currently at the expected path " +
         "starting point")
-    CGPathAddCurveToPoint(
-        path, nil, firstControlPoint.x, firstControlPoint.y,
-        secondControlPoint.x, secondControlPoint.y, end.x, end.y)
+    CGPathAddQuadCurveToPoint(
+        path, nil, controlPoint.x, controlPoint.y, end.x, end.y)
   }
 }

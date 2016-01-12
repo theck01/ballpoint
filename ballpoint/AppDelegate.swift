@@ -19,9 +19,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) ->
           Bool {
     registerRendererColors()
-    if Constants.kDebugRender {
-      setupDebugRendering()
-    }
 
     let window = UIWindow(frame: UIScreen.mainScreen().bounds)
     self.window = window
@@ -46,14 +43,6 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
       Constants.kBallpointInkColorId: UIColor.ballpointInkColor(),
       Constants.kBallpointSurfaceColorId: UIColor.ballpointSurfaceColor(),
     ])
-  }
-
-
-  private func setupDebugRendering() {
-    assert(
-        Constants.kDebugRender,
-        "Should not setup debug rendering if debug render constant is false.")
-    Constants.kPenBrush.renderDebugPaths = true
   }
 }
 

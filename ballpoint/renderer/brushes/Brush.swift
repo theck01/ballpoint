@@ -11,9 +11,6 @@ import UIKit
 
 
 protocol Brush {
-  var renderDebugPaths: Bool { get set }
-
-
   /**
    - parameter stroke:
 

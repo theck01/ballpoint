@@ -43,36 +43,18 @@ struct RenderScaffold {
     return list
   }
 
-  /// Whether the scaffold describes a completely enclosed stroke or not.
-  var doesDescribeCompleteStroke: Bool {
-    if segmentPairs.count != points.count - 1 {
-      return false
-    }
 
-    for i in 0..<segmentPairs.count {
-      let origin = points[i]
-      let terminal = points[i+1]
-      let aSegment = segmentPairs[i].a
-      let bSegment = segmentPairs[i].b
-
-      if aSegment.origin != origin.a || aSegment.terminal != terminal.a ||
-          bSegment.origin != terminal.b || bSegment.terminal != origin.b {
+  /**
+   - returns: Whether the scaffold describes a completely enclosed stroke or
+       not.
+   */
+  func doesDescribeCompleteStroke() -> Bool {
+    let segmentCache = segments
+    for i in 0..<segmentCache.count {
+      let previousIndex = i > 0 ? i - 1 : segmentCache.count - 1
+      if segmentCache[i].origin != segmentCache[previousIndex].terminal {
         return false
       }
-    }
-
-    guard let startCap = startCapSegment else {
-      return false
-    }
-    if startCap.origin != points[0].b || startCap.terminal != points[0].a {
-      return false
-    }
-
-    guard let endCap = endCapSegment else {
-      return false
-    }
-    if endCap.origin != points.last!.a || endCap.terminal != points.last!.b {
-      return false
     }
 
     return true

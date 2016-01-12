@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		421273641C012EB70007FA48 /* PointPopulationStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421273631C012EB70007FA48 /* PointPopulationStage.swift */; };
+		423211801C44944F00562311 /* QuadraticBezierScaffoldSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4232117F1C44944F00562311 /* QuadraticBezierScaffoldSegment.swift */; };
 		4233EA261BE5442E0017B76D /* PointUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4233EA251BE5442E0017B76D /* PointUtil.swift */; };
 		4233EA281BE546DF0017B76D /* PointUtilTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4233EA271BE546DF0017B76D /* PointUtilTestCase.swift */; };
 		4244B9F51BD43F3400FE5BEB /* CGPoint+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4244B9F41BD43F3400FE5BEB /* CGPoint+ballpoint.swift */; };
@@ -23,7 +24,6 @@
 		4288226D1BDE45F400A0CDE8 /* operators.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4288226C1BDE45F400A0CDE8 /* operators.swift */; };
 		428C6A921C42AD3F0042E4E3 /* RenderPipelineStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 428C6A911C42AD3F0042E4E3 /* RenderPipelineStage.swift */; };
 		42937B5B1C39A1D4006F63EA /* StrokePoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42937B5A1C39A1D4006F63EA /* StrokePoint.swift */; };
-		42952C241C334B72006EE4D6 /* CubicBezierScaffoldSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42952C231C334B72006EE4D6 /* CubicBezierScaffoldSegment.swift */; };
 		429E71541C05362200BF90D4 /* SegmentPopulationStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 429E71531C05362200BF90D4 /* SegmentPopulationStage.swift */; };
 		42A112931B8EB1D000503D9F /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112921B8EB1D000503D9F /* AppDelegate.swift */; };
 		42A1129A1B8EB1D000503D9F /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 42A112991B8EB1D000503D9F /* Images.xcassets */; };
@@ -33,7 +33,6 @@
 		42A112C31B8EB50A00503D9F /* Brush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112C01B8EB50A00503D9F /* Brush.swift */; };
 		42A112C51B8EB50A00503D9F /* RenderedStroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112C21B8EB50A00503D9F /* RenderedStroke.swift */; };
 		42A112CA1B8EB66300503D9F /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A112C91B8EB66300503D9F /* Constants.swift */; };
-		42A5A0A31C145C890022F663 /* ScaffoldSegmentFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A5A0A21C145C890022F663 /* ScaffoldSegmentFactory.swift */; };
 		42A5A0A51C1461B30022F663 /* EndcapPopulationStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A5A0A41C1461B30022F663 /* EndcapPopulationStage.swift */; };
 		42A5A0A71C1463500022F663 /* PipelineBrush.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A5A0A61C1463500022F663 /* PipelineBrush.swift */; };
 		42A6DEB71B935C0A00CC09C2 /* UIColor+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42A6DEB61B935C0A00CC09C2 /* UIColor+ballpoint.swift */; };
@@ -63,6 +62,7 @@
 
 /* Begin PBXFileReference section */
 		421273631C012EB70007FA48 /* PointPopulationStage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointPopulationStage.swift; sourceTree = "<group>"; };
+		4232117F1C44944F00562311 /* QuadraticBezierScaffoldSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuadraticBezierScaffoldSegment.swift; sourceTree = "<group>"; };
 		4233EA251BE5442E0017B76D /* PointUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointUtil.swift; sourceTree = "<group>"; };
 		4233EA271BE546DF0017B76D /* PointUtilTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointUtilTestCase.swift; sourceTree = "<group>"; };
 		4244B9F41BD43F3400FE5BEB /* CGPoint+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGPoint+ballpoint.swift"; sourceTree = "<group>"; };
@@ -78,7 +78,6 @@
 		4288226C1BDE45F400A0CDE8 /* operators.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = operators.swift; sourceTree = "<group>"; };
 		428C6A911C42AD3F0042E4E3 /* RenderPipelineStage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderPipelineStage.swift; sourceTree = "<group>"; };
 		42937B5A1C39A1D4006F63EA /* StrokePoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StrokePoint.swift; sourceTree = "<group>"; };
-		42952C231C334B72006EE4D6 /* CubicBezierScaffoldSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CubicBezierScaffoldSegment.swift; sourceTree = "<group>"; };
 		429E71531C05362200BF90D4 /* SegmentPopulationStage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SegmentPopulationStage.swift; sourceTree = "<group>"; };
 		42A1128D1B8EB1D000503D9F /* ballpoint.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = ballpoint.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		42A112911B8EB1D000503D9F /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -92,7 +91,6 @@
 		42A112C01B8EB50A00503D9F /* Brush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Brush.swift; sourceTree = "<group>"; };
 		42A112C21B8EB50A00503D9F /* RenderedStroke.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderedStroke.swift; sourceTree = "<group>"; };
 		42A112C91B8EB66300503D9F /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
-		42A5A0A21C145C890022F663 /* ScaffoldSegmentFactory.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaffoldSegmentFactory.swift; sourceTree = "<group>"; };
 		42A5A0A41C1461B30022F663 /* EndcapPopulationStage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = EndcapPopulationStage.swift; sourceTree = "<group>"; };
 		42A5A0A61C1463500022F663 /* PipelineBrush.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PipelineBrush.swift; sourceTree = "<group>"; };
 		42A6DEB61B935C0A00CC09C2 /* UIColor+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "UIColor+ballpoint.swift"; sourceTree = "<group>"; };
@@ -286,10 +284,9 @@
 		42C013041BEEB23800E9D6CA /* segments */ = {
 			isa = PBXGroup;
 			children = (
-				42952C231C334B72006EE4D6 /* CubicBezierScaffoldSegment.swift */,
+				4232117F1C44944F00562311 /* QuadraticBezierScaffoldSegment.swift */,
 				42C013051BEEB2A500E9D6CA /* LinearScaffoldSegment.swift */,
 				42C013021BEEB18900E9D6CA /* ScaffoldSegment.swift */,
-				42A5A0A21C145C890022F663 /* ScaffoldSegmentFactory.swift */,
 			);
 			path = segments;
 			sourceTree = "<group>";
@@ -427,7 +424,6 @@
 			buildActionMask = 2147483647;
 			files = (
 				42BA87511B9DEB0300AC842E /* CGVector+ballpoint.swift in Sources */,
-				42A5A0A31C145C890022F663 /* ScaffoldSegmentFactory.swift in Sources */,
 				428C6A921C42AD3F0042E4E3 /* RenderPipelineStage.swift in Sources */,
 				42A5A0A51C1461B30022F663 /* EndcapPopulationStage.swift in Sources */,
 				42A112C31B8EB50A00503D9F /* Brush.swift in Sources */,
@@ -450,11 +446,11 @@
 				421273641C012EB70007FA48 /* PointPopulationStage.swift in Sources */,
 				42C013081BEEB6D100E9D6CA /* RenderScaffold.swift in Sources */,
 				42C013061BEEB2A500E9D6CA /* LinearScaffoldSegment.swift in Sources */,
-				42952C241C334B72006EE4D6 /* CubicBezierScaffoldSegment.swift in Sources */,
 				42A5A0A71C1463500022F663 /* PipelineBrush.swift in Sources */,
 				42937B5B1C39A1D4006F63EA /* StrokePoint.swift in Sources */,
 				4288226D1BDE45F400A0CDE8 /* operators.swift in Sources */,
 				4233EA261BE5442E0017B76D /* PointUtil.swift in Sources */,
+				423211801C44944F00562311 /* QuadraticBezierScaffoldSegment.swift in Sources */,
 				42E750131B9FC922003180C9 /* RendererColorPalette.swift in Sources */,
 				42C49A891BEE551A00B0AA0C /* ScaffoldPoint.swift in Sources */,
 				42C9A1841BDD391D005C867A /* LineSegment.swift in Sources */,
