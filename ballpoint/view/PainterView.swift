@@ -49,8 +49,6 @@ class PainterView: UIView {
 
   var painterTouchDelegate: PainterTouchDelegate?
 
-  var supports3dTouch: Bool = false
-
   /// An array of touch locations and pending strokes that last were updated to
   /// that location.
   private var pendingStrokeTuples: [RenderingStrokeTuple] = [] {
@@ -80,12 +78,6 @@ class PainterView: UIView {
     self.paintColor = paintColor
 
     super.init(frame: frame)
-
-    if #available(iOS 9.0, *) {
-      supports3dTouch =
-          traitCollection.forceTouchCapability ==
-          UIForceTouchCapability.Available
-    }
 
     multipleTouchEnabled = true
   }
