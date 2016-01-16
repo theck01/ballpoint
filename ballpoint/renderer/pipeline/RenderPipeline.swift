@@ -40,8 +40,12 @@ class RenderPipeline {
     for segment in scaffold.segments {
       segment.extendPath(path)
     }
-    CGPathCloseSubpath(path)
 
+    if CGPathIsEmpty(path) {
+      return []
+    }
+
+    CGPathCloseSubpath(path)
     var renderedPaths: [RenderedStroke.Path] = []
     renderedPaths.append(RenderedStroke.Path(
         cgPath: path, color: stroke.color.backingColor,
