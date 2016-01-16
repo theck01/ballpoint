@@ -17,12 +17,7 @@ struct StrokePoint {
   /// between a minimum and maximum value.
   let sizeFactor: CGFloat
 
-
-  init(location: CGPoint) {
-    self.init(location: location, sizeFactor: 1)
-  }
-
-
+  
   init(location: CGPoint, sizeFactor: CGFloat) {
     self.location = location
     self.sizeFactor = sizeFactor

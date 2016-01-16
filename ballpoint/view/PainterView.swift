@@ -37,6 +37,10 @@ class PainterView: UIView {
     let stroke: MutableStroke
   }
 
+  /// The size factor to supply when 3D Touch is not available:
+  /// 1 (average touch force) / 6.667 (maximum touch force)
+  private static let kDefaultSizeFactor: CGFloat = 0.15
+
   /// The brush used to create strokes on the canvas.
   var brush: Brush
   
@@ -92,7 +96,9 @@ class PainterView: UIView {
             location: touch.locationInView(self), sizeFactor: sizeFactor)
       }
     }
-    return StrokePoint(location: touch.locationInView(self))
+    return StrokePoint(
+        location: touch.locationInView(self),
+        sizeFactor: PainterView.kDefaultSizeFactor)
   }
 
 
