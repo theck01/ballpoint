@@ -34,27 +34,34 @@ struct PointPopulationStage: RenderPipelineStage {
           stroke.points[i]
 
       var tangentSlope: CGFloat
+      var direction: CGVector
       if let slopeLine =
           Line(point: previousPoint.location, otherPoint: nextPoint.location) {
         tangentSlope = slopeLine.slope
+        direction = CGVector(
+            dx: nextPoint.location.x - previousPoint.location.x,
+            dy: nextPoint.location.y - previousPoint.location.y)
       } else if let perpendicularLine = Line(
           point: stroke.points[i].location, otherPoint: nextPoint.location) {
         tangentSlope = -1 / perpendicularLine.slope
+        direction = CGVector(
+            dx: nextPoint.location.x - stroke.points[i].location.x,
+            dy: nextPoint.location.y - stroke.points[i].location.y)
       } else {
         // If a tangent slope cannot be determined then supply an arbitrary
-        // slope.
+        // slope and direction.
         tangentSlope = 0
+        direction = CGVector(dx: 1, dy: 0)
       }
+
+      let tangentLine = Line(
+          slope: tangentSlope, throughPoint: stroke.points[i].location)
 
       scaffold.points.append(ScaffoldPoint(
           modelLocation: stroke.points[i].location,
-          modelTangentLine: Line(
-              slope: tangentSlope, throughPoint: stroke.points[i].location),
+          modelTangentLine:
+              DirectedLine(line: tangentLine, direction: direction),
           radius: pointRadii[i]))
-    }
-
-    for i in 1..<scaffold.points.count {
-      scaffold.points[i].ensurePointAlignment(scaffold.points[i - 1])
     }
   }
 

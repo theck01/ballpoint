@@ -16,10 +16,10 @@ struct RenderScaffold {
 
   /// The segments that describe the boundary of the stroke. segmentPair[i]
   /// should describe the boundary connecting points[i] to points[i+1], on
-  /// both the a and b side.
-  /// a segments should connect points[i].a to points[i+1].a
-  /// b segments should connect points[i+1].b to points[i].b
-  var segmentPairs: [(a: ScaffoldSegment, b: ScaffoldSegment)] = []
+  /// both the left and right side.
+  /// left segments should connect points[i].left to points[i+1].left
+  /// right segments should connect points[i+1].right to points[i].right
+  var segmentPairs: [(left: ScaffoldSegment, right: ScaffoldSegment)] = []
 
   /// The segment capping the first scaffold point.
   /// The segment should connect points[0].b to points[0].a
@@ -32,11 +32,11 @@ struct RenderScaffold {
   /// The segments within the scaffold ordered to create a path around the
   /// stroke.
   var segments: [ScaffoldSegment] {
-    var list = segmentPairs.map { $0.a }
+    var list = segmentPairs.map { $0.left }
     if let endCap = endCapSegment {
       list.append(endCap)
     }
-    list += segmentPairs.reverse().map { $0.b }
+    list += segmentPairs.reverse().map { $0.right }
     if let startCap = startCapSegment {
       list.append(startCap)
     }

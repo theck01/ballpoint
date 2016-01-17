@@ -21,14 +21,14 @@ struct SegmentPopulationStage: RenderPipelineStage {
     for i in 1..<(scaffold.points.count - 1) {
       let previousPoint = scaffold.points[i - 1]
       let currentPoint = scaffold.points[i]
-      let nextPoint: ScaffoldPoint = scaffold.points[i + 1]
+      let nextPoint = scaffold.points[i + 1]
 
-      let segmentA = createQuadraticSegmentConnector(
-          previousPoint.a, b: currentPoint.a, c: nextPoint.a)
-      let segmentB = createQuadraticSegmentConnector(
-          nextPoint.b, b: currentPoint.b, c: previousPoint.b)
+      let segmentLeft = createQuadraticSegmentConnector(
+          previousPoint.left, b: currentPoint.left, c: nextPoint.left)
+      let segmentRight = createQuadraticSegmentConnector(
+          nextPoint.right, b: currentPoint.right, c: previousPoint.right)
 
-      scaffold.segmentPairs.append((a: segmentA, b: segmentB))
+      scaffold.segmentPairs.append((left: segmentLeft, right: segmentRight))
     }
   }
 

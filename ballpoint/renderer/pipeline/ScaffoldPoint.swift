@@ -16,41 +16,31 @@ import CoreGraphics
 /// ScaffoldPoints.
 struct ScaffoldPoint {
   let modelLocation: CGPoint
-  let modelTangentLine: Line
-  private(set) var a: CGPoint
-  private(set) var b: CGPoint
+  let modelTangentLine: DirectedLine
+  private(set) var left: CGPoint
+  private(set) var right: CGPoint
 
 
-  init(modelLocation: CGPoint, modelTangentLine: Line, radius: CGFloat) {
+  init(modelLocation: CGPoint, modelTangentLine: DirectedLine, radius: CGFloat) {
     assert(
-        Line.isPoint(modelLocation, onLine: modelTangentLine),
+        Line.isPoint(modelLocation, onLine: modelTangentLine.line),
         "Cannot create a scaffold point from a model point that is not on " +
         "the associated tangent line")
     self.modelLocation = modelLocation
     self.modelTangentLine = modelTangentLine
 
     let perpendicularLine = Line.linePerpendicularToLine(
-        modelTangentLine, throughPoint: modelLocation)
-    (a, b) = Line.pointsAtDistance(
+        modelTangentLine.line, throughPoint: modelLocation)
+    let (a, b) = Line.pointsAtDistance(
         radius, onLine: perpendicularLine, fromPoint: modelLocation)
-  }
-
-
-  mutating func ensurePointAlignment(previousPoint: ScaffoldPoint) {
-    // TODO: Points may all be collinear or idendical, although those cases are
-    // unlikely.
-    if let aLine = Line(point: previousPoint.a, otherPoint: a) {
-      if !Line.arePoints((previousPoint.b, b), onSameSideOfLine: aLine) {
-        let temp = a
-        a = b
-        b = temp
-      }
-    } else if let bLine = Line(point: previousPoint.b, otherPoint: b) {
-      if !Line.arePoints((previousPoint.a, a), onSameSideOfLine: bLine) {
-        let temp = a
-        a = b
-        b = temp
-      }
+    
+    if DirectedLine.orientationOfPoint(a, toLine: modelTangentLine) ==
+        DirectedLine.Orientation.Left {
+      left = a
+      right = b
+    } else {
+      left = b
+      right = a
     }
   }
 }
