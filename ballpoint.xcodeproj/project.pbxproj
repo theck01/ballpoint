@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		4202BAE51C4B4B14006709C9 /* DirectedLine.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4202BAE41C4B4B14006709C9 /* DirectedLine.swift */; };
+		4202BAE71C4B5465006709C9 /* DirectedLineTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4202BAE61C4B5465006709C9 /* DirectedLineTestCase.swift */; };
 		421273641C012EB70007FA48 /* PointPopulationStage.swift in Sources */ = {isa = PBXBuildFile; fileRef = 421273631C012EB70007FA48 /* PointPopulationStage.swift */; };
 		423211801C44944F00562311 /* QuadraticBezierScaffoldSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4232117F1C44944F00562311 /* QuadraticBezierScaffoldSegment.swift */; };
 		4233EA261BE5442E0017B76D /* PointUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4233EA251BE5442E0017B76D /* PointUtil.swift */; };
@@ -61,6 +63,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		4202BAE41C4B4B14006709C9 /* DirectedLine.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectedLine.swift; sourceTree = "<group>"; };
+		4202BAE61C4B5465006709C9 /* DirectedLineTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DirectedLineTestCase.swift; sourceTree = "<group>"; };
 		421273631C012EB70007FA48 /* PointPopulationStage.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointPopulationStage.swift; sourceTree = "<group>"; };
 		4232117F1C44944F00562311 /* QuadraticBezierScaffoldSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = QuadraticBezierScaffoldSegment.swift; sourceTree = "<group>"; };
 		4233EA251BE5442E0017B76D /* PointUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointUtil.swift; sourceTree = "<group>"; };
@@ -153,6 +157,7 @@
 				426992531BDD3CA900584CC8 /* LineSegmentTestCase.swift */,
 				42C9A1811BDD38B1005C867A /* LineTestCase.swift */,
 				4233EA271BE546DF0017B76D /* PointUtilTestCase.swift */,
+				4202BAE61C4B5465006709C9 /* DirectedLineTestCase.swift */,
 			);
 			path = geometry;
 			sourceTree = "<group>";
@@ -309,6 +314,7 @@
 				42C9A17E1BDD3834005C867A /* Line.swift */,
 				42C9A1831BDD391D005C867A /* LineSegment.swift */,
 				4233EA251BE5442E0017B76D /* PointUtil.swift */,
+				4202BAE41C4B4B14006709C9 /* DirectedLine.swift */,
 			);
 			path = geometry;
 			sourceTree = "<group>";
@@ -441,6 +447,7 @@
 				4270F90E1BB0F98000940AAE /* StrokeRenderer.swift in Sources */,
 				42A112B91B8EB4D800503D9F /* DrawingViewController.swift in Sources */,
 				42C8498B1BB87A2F0054F65A /* Stroke.swift in Sources */,
+				4202BAE51C4B4B14006709C9 /* DirectedLine.swift in Sources */,
 				42A6DEB71B935C0A00CC09C2 /* UIColor+ballpoint.swift in Sources */,
 				426539F71B93CD14001345CB /* DrawingModel.swift in Sources */,
 				421273641C012EB70007FA48 /* PointPopulationStage.swift in Sources */,
@@ -467,6 +474,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				42C9A1821BDD38B1005C867A /* LineTestCase.swift in Sources */,
+				4202BAE71C4B5465006709C9 /* DirectedLineTestCase.swift in Sources */,
 				426992541BDD3CA900584CC8 /* LineSegmentTestCase.swift in Sources */,
 				4233EA281BE546DF0017B76D /* PointUtilTestCase.swift in Sources */,
 			);
