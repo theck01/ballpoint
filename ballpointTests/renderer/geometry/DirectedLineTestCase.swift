@@ -25,5 +25,11 @@ class DirectedLineTestCase: XCTestCase {
     XCTAssertEqual(
         DirectedLine.orientationOfPoint(CGPoint(x: -10, y: 1), toLine: line),
         DirectedLine.Orientation.Right)
+
+    line = DirectedLine(
+        earlyPoint: CGPoint(x: 0, y : 5), latePoint: CGPoint(x: -1, y: 5))!
+    XCTAssertEqual(
+        DirectedLine.orientationOfPoint(CGPoint(x: -10, y: 4), toLine: line),
+        DirectedLine.Orientation.Left)
   }
 }

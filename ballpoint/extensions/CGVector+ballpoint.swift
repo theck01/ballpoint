@@ -13,25 +13,7 @@ import CoreGraphics
 extension CGVector {
   /// The angle of the vector in degrees, clockwise from the x axis.
   var angleInRadians: CGFloat {
-    if dx == 0 {
-      if dy > 0 {
-        return 90
-      } else if dy < 0 {
-        return 270
-      }
-
-      fatalError("Cannot get the angle of a zero vector.")
-    }
-
-    if dx > 0 && dy > 0 {
-      return atan(dy / dx)
-    } else if dx < 0 && dy > 0 {
-      return CGFloat(M_PI - Double(atan(dy / -dx)))
-    } else if dx < 0 && dy < 0 {
-      return CGFloat(M_PI + Double(atan(dy / dx)))
-    } else {
-      return CGFloat(2 * M_PI - Double(atan(-dy / dx)))
-    }
+    return atan2(dy, dx)
   }
 
   var angleInDegrees: CGFloat {
