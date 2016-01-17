@@ -38,6 +38,10 @@ extension CGVector {
     return angleInRadians * CGFloat(180 / M_PI)
   }
 
+  var magnitude: CGFloat {
+    return sqrt(pow(dx, 2) + pow(dy, 2))
+  }
+
 
   /**
    - parameter vector:
@@ -71,5 +75,19 @@ extension CGVector {
     let selfAngle = angleInRadians
     return CGVector(
         dx: cos(selfAngle) * magnitude, dy: sin(selfAngle) * magnitude)
+  }
+
+
+  /**
+   - parameter angleInRadians:
+
+   - returns: A vector with the same magnitude as this vector, after having
+       been rotated.
+   */
+  func vectorRotatedBy(angleInRadians: CGFloat) -> CGVector {
+    let newAngle = angleInRadians + self.angleInRadians
+    let selfMagnitude = magnitude
+    return CGVector(
+        dx: cos(newAngle) * selfMagnitude, dy: sin(newAngle) * magnitude)
   }
 }
