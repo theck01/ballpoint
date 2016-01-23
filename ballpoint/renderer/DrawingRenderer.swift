@@ -12,27 +12,29 @@ import UIKit
 
 /// The object responsible for rendering strokes on a bitmap.
 class DrawingRenderer {
-  private static var defaultEmptyRenderedDrawingInstance_: UIImage?
+  /// The size of the rendered output.
+  private let drawingSize: CGSize
 
-  static var kEmptyRenderedDrawing: UIImage {
-    if defaultEmptyRenderedDrawingInstance_ == nil {
-      UIGraphicsBeginImageContextWithOptions(Constants.kDrawingSize, false, 0.0)
-      defaultEmptyRenderedDrawingInstance_ =
-          UIGraphicsGetImageFromCurrentImageContext()
-      UIGraphicsEndImageContext()
-    }
+  /// An image containing a drawing composed of no strokes.
+  let emptyDrawing: UIImage
 
-    return defaultEmptyRenderedDrawingInstance_!
+
+  init(drawingSize: CGSize) {
+    self.drawingSize = drawingSize
+
+    UIGraphicsBeginImageContextWithOptions(drawingSize, false, 0)
+    self.emptyDrawing = UIGraphicsGetImageFromCurrentImageContext()
+    UIGraphicsEndImageContext()
   }
 
 
   func renderStrokes(
       strokes: [Stroke], onImage image: UIImage? = nil) -> UIImage {
-    UIGraphicsBeginImageContextWithOptions(Constants.kDrawingSize, false, 0.0)
+    UIGraphicsBeginImageContextWithOptions(drawingSize, false, 0.0)
 
     // Draw image on the new context, using -drawInRect to ensure that the
     // image is oriented properly within the context.
-    image?.drawInRect(CGRect(origin: CGPointZero, size: Constants.kDrawingSize))
+    image?.drawInRect(CGRect(origin: CGPointZero, size: drawingSize))
 
     // Draw remaining strokes directly on the bitmap context.
     if let bmpContext = UIGraphicsGetCurrentContext() {

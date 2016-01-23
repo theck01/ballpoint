@@ -18,7 +18,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   // The constants describing the shadow behind the canvas backing.
   static let kCanvasAbsentTouchShadowOpacity: CGFloat = 0.6
   static let kCanvasAbsentTouchShadowRadius: CGFloat =
-      Constants.kCanvasScreenSeparation / 2
+      Constants.kCanvasMargin / 2
   static let kCanvasAbsentTouchShadowYOffset: CGFloat = 0
   static let kCanvasActiveTouchShadowOpacity: CGFloat =
       DrawingViewController.kCanvasAbsentTouchShadowOpacity / 2
@@ -32,6 +32,9 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   // The minimum and maximum values for the zoom level of the root UIScrollView.
   static let kMaximumZoomLevel: CGFloat = 5
   static let kMinimumZoomLevel: CGFloat = 1
+
+  /// The size of the view that renders the drawing.
+  let drawingRenderViewSize: CGSize
 
   /// The root scroll view of the view hierarchy.
   let rootScrollView: UIScrollView
@@ -65,11 +68,17 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
 
   init() {
+    drawingRenderViewSize = CGSize(
+        width: UIScreen.mainScreen().bounds.size.width -
+            2 * Constants.kCanvasMargin,
+        height: UIScreen.mainScreen().bounds.size.height -
+            2 * Constants.kCanvasMargin)
+
     let canvasFrame = CGRect(
         origin: CGPoint(
-            x: Constants.kCanvasScreenSeparation,
-            y: Constants.kCanvasScreenSeparation),
-        size: Constants.kDrawingSize)
+            x: Constants.kCanvasMargin,
+            y: Constants.kCanvasMargin),
+        size: drawingRenderViewSize)
 
     rootScrollView = UIScrollView(frame: UIScreen.mainScreen().bounds)
     contentContainerView = UIView(frame: UIScreen.mainScreen().bounds)

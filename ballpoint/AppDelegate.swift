@@ -24,10 +24,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     self.window = window
     window.backgroundColor = UIColor.whiteColor()
 
-    let renderer = DrawingRenderer()
-
-    let model = DrawingModel(renderer: renderer)
     let drawingVC = DrawingViewController()
+    let renderer = DrawingRenderer(drawingSize: drawingVC.drawingRenderViewSize)
+    let model = DrawingModel(renderer: renderer)
     let controller = DrawingController(model: model, viewController: drawingVC)
     drawingVC.drawingInteractionDelegate = controller
 

@@ -35,8 +35,7 @@ struct DrawingModelSnapshotDiff {
 
 /// An in-memory model of the current drawing.
 class DrawingModel: RendererColorPaletteUpdateListener {
-  private(set) var drawingSnapshot: UIImage =
-      DrawingRenderer.kEmptyRenderedDrawing
+  private(set) var drawingSnapshot: UIImage
   private(set) var strokesInSnapshot: [Stroke] = []
 
   private let renderer: DrawingRenderer
@@ -47,6 +46,7 @@ class DrawingModel: RendererColorPaletteUpdateListener {
 
   init (renderer: DrawingRenderer) {
     self.renderer = renderer
+    self.drawingSnapshot = renderer.emptyDrawing
     RendererColorPalette.defaultPalette.registerColorPaletteUpdateListener(self)
   }
 
