@@ -12,9 +12,6 @@ import UIKit
 
 class DrawingViewController: UIViewController, PainterTouchDelegate,
     RendererColorPaletteUpdateListener, UIScrollViewDelegate {
-  // The constants describing the appearance of the canvas backing.
-  static let kCanvasCornerRadius: CGFloat = 5
-
   // The constants describing the shadow behind the canvas backing.
   static let kCanvasAbsentTouchShadowOpacity: CGFloat = 0.6
   static let kCanvasAbsentTouchShadowRadius: CGFloat =
@@ -128,8 +125,6 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     }
 
     canvasBackingView.alpha = 0
-    canvasBackingView.layer.cornerRadius =
-        DrawingViewController.kCanvasCornerRadius
 
     painterView.pendingStrokeRenderer = pendingStrokeRenderer
     painterView.painterTouchDelegate = self
