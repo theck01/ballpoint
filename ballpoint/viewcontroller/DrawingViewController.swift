@@ -14,7 +14,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     RendererColorPaletteUpdateListener, UIScrollViewDelegate {
   /// The separation between the canvas and the screen boundary.
   static let kCanvasMargin: CGFloat = 16
-  
+
   // The shadow opacity behind the canvas backing.
   static let kCanvasActiveTouchShadowOpacity: CGFloat = 0.6
   static let kCanvasAbsentTouchShadowOpacity: CGFloat = 0.2
@@ -36,7 +36,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   static let kPainterTouchesActiveAnimationDuration: NSTimeInterval = 0.16
 
   // The minimum and maximum values for the zoom level of the root UIScrollView.
-  static let kMaximumZoomLevel: CGFloat = 5
+  static let kMaximumZoomLevel: CGFloat = 7
   static let kMinimumZoomLevel: CGFloat = 1
 
   /// The size of the view that renders the drawing.
