@@ -12,6 +12,9 @@ import UIKit
 
 class DrawingViewController: UIViewController, PainterTouchDelegate,
     RendererColorPaletteUpdateListener, UIScrollViewDelegate {
+  /// The separation between the canvas and the screen boundary.
+  static let kCanvasMargin: CGFloat = 16
+  
   // The shadow opacity behind the canvas backing.
   static let kCanvasActiveTouchShadowOpacity: CGFloat = 0.6
   static let kCanvasAbsentTouchShadowOpacity: CGFloat = 0.2
@@ -76,14 +79,14 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   init() {
     drawingRenderViewSize = CGSize(
         width: UIScreen.mainScreen().bounds.size.width -
-            2 * Constants.kCanvasMargin,
+            2 * DrawingViewController.kCanvasMargin,
         height: UIScreen.mainScreen().bounds.size.height -
-            2 * Constants.kCanvasMargin)
+            2 * DrawingViewController.kCanvasMargin)
 
     let canvasFrame = CGRect(
         origin: CGPoint(
-            x: Constants.kCanvasMargin,
-            y: Constants.kCanvasMargin),
+            x: DrawingViewController.kCanvasMargin,
+            y: DrawingViewController.kCanvasMargin),
         size: drawingRenderViewSize)
 
     rootScrollView = UIScrollView(frame: UIScreen.mainScreen().bounds)

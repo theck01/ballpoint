@@ -11,9 +11,6 @@ import UIKit
 
 
 class Constants {
-  /// The minimum separation between the canvas and the screen edge.
-  static let kCanvasMargin: CGFloat = 12
-
   /// The minimum size of strokes.
   static let kMinimumStrokeWidth: CGFloat = 1
 
