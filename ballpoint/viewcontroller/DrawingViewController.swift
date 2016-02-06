@@ -12,17 +12,23 @@ import UIKit
 
 class DrawingViewController: UIViewController, PainterTouchDelegate,
     RendererColorPaletteUpdateListener, UIScrollViewDelegate {
-  // The constants describing the shadow behind the canvas backing.
-  static let kCanvasAbsentTouchShadowOpacity: CGFloat = 0.6
-  static let kCanvasAbsentTouchShadowRadius: CGFloat =
-      Constants.kCanvasMargin / 2
-  static let kCanvasAbsentTouchShadowYOffset: CGFloat = 0
-  static let kCanvasActiveTouchShadowOpacity: CGFloat =
-      DrawingViewController.kCanvasAbsentTouchShadowOpacity / 2
-  static let kCanvasActiveTouchShadowRadius: CGFloat =
-      DrawingViewController.kCanvasAbsentTouchShadowRadius / 2
-  static let kCanvasActiveTouchShadowYOffset: CGFloat = 0
-  
+  // The shadow opacity behind the canvas backing.
+  static let kCanvasActiveTouchShadowOpacity: CGFloat = 0.6
+  static let kCanvasAbsentTouchShadowOpacity: CGFloat = 0.2
+
+  // The shadow overflow behind the canvas backing
+  static let kCanvasActiveTouchShadowOverflow: CGSize =
+      CGSize(width: 1, height: 1)
+  static let kCanvasAbsentTouchShadowOverflow: CGSize =
+      CGSize(width: 3, height: 3)
+
+  // The offsets of the shadow center from the canvas center
+  static let kCanvasActiveTouchShadowOffset = CGPoint(x: 0, y: 0.5)
+  static let kCanvasAbsentTouchShadowOffset = CGPoint(x: 0, y: 3)
+
+  /// The duration of the canvas raise animation.
+  static let kCanvasRaiseAnimationDuration: NSTimeInterval = 1
+
   /// The duration of the shadow animation when painter touches are active.
   static let kPainterTouchesActiveAnimationDuration: NSTimeInterval = 0.16
 
@@ -38,6 +44,9 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
   /// The content container view of the view heirarchy.
   let contentContainerView: UIView
+
+  /// The view of the canvas that provides a shadow.
+  let canvasShadowView: UIView
   
   /// The backing view of the canvas.
   let canvasBackingView: UIView
@@ -79,27 +88,30 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
     rootScrollView = UIScrollView(frame: UIScreen.mainScreen().bounds)
     contentContainerView = UIView(frame: UIScreen.mainScreen().bounds)
+    canvasShadowView = UIView(frame: canvasFrame)
     canvasBackingView = UIView(frame: canvasFrame)
-    drawingImageView = UIImageView(frame: canvasBackingView.bounds)
-    pendingStrokeRenderer = StrokeRendererView(frame: canvasBackingView.bounds)
+    drawingImageView = UIImageView(frame: canvasFrame)
+    pendingStrokeRenderer = StrokeRendererView(frame: canvasFrame)
     painterView = PainterView(
         brush: Constants.kPenBrush,
         paintColor: RendererColorPalette.defaultPalette[
             Constants.kBallpointInkColorId],
-        frame: canvasBackingView.bounds)
+        frame: canvasFrame)
     twoTouchTapRecognizer = UITapGestureRecognizer()
 
     super.init(nibName: nil, bundle: nil)
 
     self.view = rootScrollView
     rootScrollView.addSubview(contentContainerView)
+    contentContainerView.addSubview(canvasShadowView)
     contentContainerView.addSubview(canvasBackingView)
-    canvasBackingView.addSubview(drawingImageView)
-    canvasBackingView.addSubview(pendingStrokeRenderer)
-    canvasBackingView.addSubview(painterView)
+    contentContainerView.addSubview(drawingImageView)
+    contentContainerView.addSubview(pendingStrokeRenderer)
+    contentContainerView.addSubview(painterView)
 
     rootScrollView.backgroundColor = UIColor.launchScreenBackgroundColor()
     contentContainerView.backgroundColor = UIColor.launchScreenBackgroundColor()
+    canvasShadowView.backgroundColor = UIColor.darkGrayColor()
     canvasBackingView.backgroundColor = RendererColorPalette.defaultPalette[
         Constants.kBallpointSurfaceColorId].backingColor
     drawingImageView.backgroundColor = UIColor.clearColor()
@@ -124,6 +136,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
       scrollViewPinchRecognizer.delaysTouchesEnded = false
     }
 
+    canvasShadowView.alpha = 0
     canvasBackingView.alpha = 0
 
     painterView.pendingStrokeRenderer = pendingStrokeRenderer
@@ -155,20 +168,67 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   /// MARK: PainterTouchDelegate methods
 
   func painterTouchesActive() {
-    canvasBackingView.animateShadowAppearanceWithDuration(
+    UIView.animateWithDuration(
         DrawingViewController.kPainterTouchesActiveAnimationDuration,
-        shadowOpacity: DrawingViewController.kCanvasActiveTouchShadowOpacity,
-        shadowRadius: DrawingViewController.kCanvasActiveTouchShadowRadius,
-        shadowYOffset: DrawingViewController.kCanvasActiveTouchShadowYOffset)
+        delay: 0,
+        options: [
+            UIViewAnimationOptions.BeginFromCurrentState,
+            UIViewAnimationOptions.CurveEaseOut],
+        animations: {
+          let shadowSize = CGSize(
+              width:
+                  self.drawingRenderViewSize.width +
+                  DrawingViewController.kCanvasActiveTouchShadowOverflow.width,
+              height:
+                  self.drawingRenderViewSize.height +
+                  DrawingViewController.kCanvasActiveTouchShadowOverflow.height)
+          self.canvasShadowView.frame =
+              CGRect(origin: CGPoint.zero, size: shadowSize)
+          self.canvasShadowView.center = CGPoint(
+              x:
+                  self.canvasBackingView.center.x +
+                  DrawingViewController.kCanvasActiveTouchShadowOffset.x,
+              y:
+                  self.canvasBackingView.center.y +
+                  DrawingViewController.kCanvasActiveTouchShadowOffset.y)
+
+
+          self.canvasShadowView.alpha =
+              DrawingViewController.kCanvasActiveTouchShadowOpacity
+        },
+        completion: nil)
   }
 
 
   func painterTouchesAbsent() {
-    canvasBackingView.animateShadowAppearanceWithDuration(
+    UIView.animateWithDuration(
         DrawingViewController.kPainterTouchesActiveAnimationDuration,
-        shadowOpacity: DrawingViewController.kCanvasAbsentTouchShadowOpacity,
-        shadowRadius: DrawingViewController.kCanvasAbsentTouchShadowRadius,
-        shadowYOffset: DrawingViewController.kCanvasAbsentTouchShadowYOffset)
+        delay: 0,
+        options: [
+            UIViewAnimationOptions.BeginFromCurrentState,
+            UIViewAnimationOptions.CurveEaseOut],
+        animations: {
+          let shadowSize = CGSize(
+              width:
+                  self.drawingRenderViewSize.width +
+                  DrawingViewController.kCanvasAbsentTouchShadowOverflow.width,
+              height:
+                  self.drawingRenderViewSize.height +
+                  DrawingViewController.kCanvasAbsentTouchShadowOverflow.height)
+          self.canvasShadowView.frame =
+              CGRect(origin: CGPoint.zero, size: shadowSize)
+          self.canvasShadowView.center = CGPoint(
+              x:
+                  self.canvasBackingView.center.x +
+                  DrawingViewController.kCanvasAbsentTouchShadowOffset.x,
+              y:
+                  self.canvasBackingView.center.y +
+                  DrawingViewController.kCanvasAbsentTouchShadowOffset.y)
+
+          self.canvasShadowView.alpha =
+              DrawingViewController.kCanvasAbsentTouchShadowOpacity
+        },
+        completion: nil)
   }
 
 
@@ -217,15 +277,33 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
 
-    canvasBackingView.animateShadowAppearanceWithDuration(
-        Constants.kViewControllerAppearDuration,
-        shadowOpacity: DrawingViewController.kCanvasAbsentTouchShadowOpacity,
-        shadowRadius: DrawingViewController.kCanvasAbsentTouchShadowRadius,
-        shadowYOffset: DrawingViewController.kCanvasAbsentTouchShadowYOffset)
+    UIView.animateWithDuration(
+        DrawingViewController.kCanvasRaiseAnimationDuration,
+        delay: 0,
+        options: UIViewAnimationOptions.CurveEaseOut,
+        animations: {
+          let shadowSize = CGSize(
+              width:
+                  self.drawingRenderViewSize.width +
+                  DrawingViewController.kCanvasAbsentTouchShadowOverflow.width,
+              height:
+                  self.drawingRenderViewSize.height +
+                  DrawingViewController.kCanvasAbsentTouchShadowOverflow.height)
+          self.canvasShadowView.frame =
+              CGRect(origin: CGPoint.zero, size: shadowSize)
+          self.canvasShadowView.center = CGPoint(
+              x:
+                  self.canvasBackingView.center.x +
+                  DrawingViewController.kCanvasAbsentTouchShadowOffset.x,
+              y:
+                  self.canvasBackingView.center.y +
+                  DrawingViewController.kCanvasAbsentTouchShadowOffset.y)
 
-    UIView.animateWithDuration(Constants.kViewControllerAppearDuration) {
-      self.canvasBackingView.alpha = 1
-    }
+          self.canvasBackingView.alpha = 1
+          self.canvasShadowView.alpha =
+              DrawingViewController.kCanvasAbsentTouchShadowOpacity
+        },
+        completion: nil)
 
     painterView.becomeFirstResponder()
   }

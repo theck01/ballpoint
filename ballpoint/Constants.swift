@@ -14,9 +14,6 @@ class Constants {
   /// The minimum separation between the canvas and the screen edge.
   static let kCanvasMargin: CGFloat = 12
 
-  /// The duration of the view controller appearance animation.
-  static let kViewControllerAppearDuration: NSTimeInterval = 0.6
-
   /// The minimum size of strokes.
   static let kMinimumStrokeWidth: CGFloat = 1
 
