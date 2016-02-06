@@ -17,7 +17,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
   // The shadow opacity behind the canvas backing.
   static let kCanvasActiveTouchShadowOpacity: CGFloat = 0.6
-  static let kCanvasAbsentTouchShadowOpacity: CGFloat = 0.2
+  static let kCanvasAbsentTouchShadowOpacity: CGFloat = 0.3
 
   // The shadow overflow behind the canvas backing
   static let kCanvasActiveTouchShadowOverflow: CGSize =
