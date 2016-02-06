@@ -16,17 +16,17 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   static let kCanvasMargin: CGFloat = 16
 
   // The shadow opacity behind the canvas backing.
-  static let kCanvasActiveTouchShadowOpacity: CGFloat = 0.6
-  static let kCanvasAbsentTouchShadowOpacity: CGFloat = 0.3
+  static let kCanvasActiveTouchShadowOpacity: CGFloat = 0.5
+  static let kCanvasAbsentTouchShadowOpacity: CGFloat = 0.2
 
   // The shadow overflow behind the canvas backing
   static let kCanvasActiveTouchShadowOverflow: CGSize =
-      CGSize(width: 1, height: 1)
+      CGSize(width: 1, height: 2)
   static let kCanvasAbsentTouchShadowOverflow: CGSize =
       CGSize(width: 3, height: 3)
 
   // The offsets of the shadow center from the canvas center
-  static let kCanvasActiveTouchShadowOffset = CGPoint(x: 0, y: 0.5)
+  static let kCanvasActiveTouchShadowOffset = CGPoint(x: 0, y: 1)
   static let kCanvasAbsentTouchShadowOffset = CGPoint(x: 0, y: 3)
 
   /// The duration of the canvas raise animation.
