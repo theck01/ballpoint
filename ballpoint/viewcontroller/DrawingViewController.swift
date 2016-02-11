@@ -323,6 +323,10 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     // Disable view animations during transitions to a new size. Specifically
     // this blocks animations due to screen rotations.
     UIView.setAnimationsEnabled(false)
+    self.rootScrollView.contentOffset = CGPoint.zero
+    self.rootScrollView.contentInset =
+        UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    self.rootScrollView.zoomScale = 0
     coordinator.animateAlongsideTransition(nil) {
         (context: UIViewControllerTransitionCoordinatorContext) in
       UIView.setAnimationsEnabled(true)
