@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Tyler Heck. All rights reserved.
 //
 
+import Foundation
 import UIKit
 
 
@@ -13,6 +14,7 @@ import UIKit
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
+  var drawingVC: DrawingViewController?
 
   func application(
       application: UIApplication,
@@ -24,16 +26,40 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     self.window = window
     window.backgroundColor = UIColor.whiteColor()
 
-    let drawingVC = DrawingViewController()
-    let renderer = DrawingRenderer(drawingSize: drawingVC.drawingRenderViewSize)
+    let bounds = UIScreen.mainScreen().bounds
+    let drawingSize = bounds.width < bounds.height ?
+         CGSize(
+            width: bounds.width - 2 * DrawingViewController.kCanvasMargin,
+            height: bounds.height - 2 * DrawingViewController.kCanvasMargin) :
+        CGSize(
+            width: bounds.height - 2 * DrawingViewController.kCanvasMargin,
+            height: bounds.width - 2 * DrawingViewController.kCanvasMargin)
+
+    let drawingVC = DrawingViewController(drawingSize: drawingSize)
+    self.drawingVC = drawingVC
+    let renderer = DrawingRenderer(drawingSize: drawingSize)
     let model = DrawingModel(renderer: renderer)
     let controller = DrawingController(model: model, viewController: drawingVC)
     drawingVC.drawingInteractionDelegate = controller
 
     window.rootViewController = drawingVC
     window.makeKeyAndVisible()
-            
+
+    NSNotificationCenter.defaultCenter().addObserver(
+        self, selector: "handleDeviceRotation",
+        name: UIDeviceOrientationDidChangeNotification, object: nil)
+    UIDevice.currentDevice().beginGeneratingDeviceOrientationNotifications()
+
     return true
+  }
+
+
+  func handleDeviceRotation() {
+    let device = UIDevice.currentDevice()
+    if UIDeviceOrientationIsValidInterfaceOrientation(device.orientation) {
+      drawingVC?.setDrawingContentRotation(
+          device.deviceOrientationAngleOrDefault(0))
+    }
   }
 
 

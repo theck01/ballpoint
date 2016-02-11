@@ -6,6 +6,7 @@
 //  Copyright (c) 2015 Tyler Heck. All rights reserved.
 //
 
+import CoreGraphics
 import UIKit
 
 
@@ -39,9 +40,6 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   static let kMaximumZoomLevel: CGFloat = 7
   static let kMinimumZoomLevel: CGFloat = 1
 
-  /// The size of the view that renders the drawing.
-  let drawingRenderViewSize: CGSize
-
   /// The root scroll view of the view hierarchy.
   let rootScrollView: UIScrollView
 
@@ -54,6 +52,9 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   /// The backing view of the canvas.
   let canvasBackingView: UIView
 
+  /// The view containing displayed drawings.
+  let drawingContainerView: UIView
+
   /// The image view that displays the rendered drawing.
   let drawingImageView: UIImageView
 
@@ -63,8 +64,14 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   /// The painter view that handles all user interaction.
   let painterView: PainterView
 
+  /// The size of the view that renders the drawing in portrait orientation.
+  private let drawingViewSize: CGSize
+
   /// The two touch tap recongizer that handles the tool change gesture.
   private let twoTouchTapRecognizer: UITapGestureRecognizer
+
+  /// Whether touches are active on screen.
+  private var arePainterTouchesActive: Bool = false
 
   var drawingInteractionDelegate: DrawingInteractionDelegate? {
     get {
@@ -76,30 +83,23 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   }
 
 
-  init() {
-    drawingRenderViewSize = CGSize(
-        width: UIScreen.mainScreen().bounds.size.width -
-            2 * DrawingViewController.kCanvasMargin,
-        height: UIScreen.mainScreen().bounds.size.height -
-            2 * DrawingViewController.kCanvasMargin)
-
-    let canvasFrame = CGRect(
-        origin: CGPoint(
-            x: DrawingViewController.kCanvasMargin,
-            y: DrawingViewController.kCanvasMargin),
-        size: drawingRenderViewSize)
-
-    rootScrollView = UIScrollView(frame: UIScreen.mainScreen().bounds)
-    contentContainerView = UIView(frame: UIScreen.mainScreen().bounds)
-    canvasShadowView = UIView(frame: canvasFrame)
-    canvasBackingView = UIView(frame: canvasFrame)
-    drawingImageView = UIImageView(frame: canvasFrame)
-    pendingStrokeRenderer = StrokeRendererView(frame: canvasFrame)
+  /**
+   - parameter drawingSize: The size of the drawing in portrait orientation.
+   */
+  init(drawingSize: CGSize) {
+    rootScrollView = UIScrollView(frame: CGRect.zero)
+    contentContainerView = UIView(frame: CGRect.zero)
+    canvasShadowView = UIView(frame: CGRect.zero)
+    canvasBackingView = UIView(frame: CGRect.zero)
+    drawingContainerView = UIView(frame: CGRect.zero)
+    drawingImageView = UIImageView(frame: CGRect.zero)
+    pendingStrokeRenderer = StrokeRendererView(frame: CGRect.zero)
     painterView = PainterView(
         brush: Constants.kPenBrush,
-        paintColor: RendererColorPalette.defaultPalette[
-            Constants.kBallpointInkColorId],
-        frame: canvasFrame)
+        paintColor:
+            RendererColorPalette.defaultPalette[Constants.kBallpointInkColorId],
+        frame: CGRect.zero)
+    drawingViewSize = drawingSize
     twoTouchTapRecognizer = UITapGestureRecognizer()
 
     super.init(nibName: nil, bundle: nil)
@@ -108,15 +108,17 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     rootScrollView.addSubview(contentContainerView)
     contentContainerView.addSubview(canvasShadowView)
     contentContainerView.addSubview(canvasBackingView)
-    contentContainerView.addSubview(drawingImageView)
-    contentContainerView.addSubview(pendingStrokeRenderer)
-    contentContainerView.addSubview(painterView)
+    contentContainerView.addSubview(drawingContainerView)
+    drawingContainerView.addSubview(drawingImageView)
+    drawingContainerView.addSubview(pendingStrokeRenderer)
+    drawingContainerView.addSubview(painterView)
 
     rootScrollView.backgroundColor = UIColor.launchScreenBackgroundColor()
     contentContainerView.backgroundColor = UIColor.launchScreenBackgroundColor()
     canvasShadowView.backgroundColor = UIColor.darkGrayColor()
     canvasBackingView.backgroundColor = RendererColorPalette.defaultPalette[
         Constants.kBallpointSurfaceColorId].backingColor
+    drawingContainerView.backgroundColor = UIColor.clearColor()
     drawingImageView.backgroundColor = UIColor.clearColor()
     pendingStrokeRenderer.backgroundColor = UIColor.clearColor()
     painterView.backgroundColor = UIColor.clearColor()
@@ -168,9 +170,22 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   }
 
 
+  /**
+   Updates drawing rotation.
+   
+   - parameter rotation: The rotation angle for the drawing content, in radians.
+   */
+  func setDrawingContentRotation(rotation: CGFloat) {
+    drawingContainerView.transform = CGAffineTransformMakeRotation(rotation)
+    // Request a layout to properly position rotated view.
+    view.setNeedsLayout()
+  }
+
+
   /// MARK: PainterTouchDelegate methods
 
   func painterTouchesActive() {
+    arePainterTouchesActive = true
     UIView.animateWithDuration(
         DrawingViewController.kPainterTouchesActiveAnimationDuration,
         delay: 0,
@@ -178,32 +193,14 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
             UIViewAnimationOptions.BeginFromCurrentState,
             UIViewAnimationOptions.CurveEaseOut],
         animations: {
-          let shadowSize = CGSize(
-              width:
-                  self.drawingRenderViewSize.width +
-                  DrawingViewController.kCanvasActiveTouchShadowOverflow.width,
-              height:
-                  self.drawingRenderViewSize.height +
-                  DrawingViewController.kCanvasActiveTouchShadowOverflow.height)
-          self.canvasShadowView.frame =
-              CGRect(origin: CGPoint.zero, size: shadowSize)
-          self.canvasShadowView.center = CGPoint(
-              x:
-                  self.canvasBackingView.center.x +
-                  DrawingViewController.kCanvasActiveTouchShadowOffset.x,
-              y:
-                  self.canvasBackingView.center.y +
-                  DrawingViewController.kCanvasActiveTouchShadowOffset.y)
-
-
-          self.canvasShadowView.alpha =
-              DrawingViewController.kCanvasActiveTouchShadowOpacity
+          self.updateShadowForPainterTouchPresence()
         },
         completion: nil)
   }
 
 
   func painterTouchesAbsent() {
+    arePainterTouchesActive = false
     UIView.animateWithDuration(
         DrawingViewController.kPainterTouchesActiveAnimationDuration,
         delay: 0,
@@ -211,27 +208,32 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
             UIViewAnimationOptions.BeginFromCurrentState,
             UIViewAnimationOptions.CurveEaseOut],
         animations: {
-          let shadowSize = CGSize(
-              width:
-                  self.drawingRenderViewSize.width +
-                  DrawingViewController.kCanvasAbsentTouchShadowOverflow.width,
-              height:
-                  self.drawingRenderViewSize.height +
-                  DrawingViewController.kCanvasAbsentTouchShadowOverflow.height)
-          self.canvasShadowView.frame =
-              CGRect(origin: CGPoint.zero, size: shadowSize)
-          self.canvasShadowView.center = CGPoint(
-              x:
-                  self.canvasBackingView.center.x +
-                  DrawingViewController.kCanvasAbsentTouchShadowOffset.x,
-              y:
-                  self.canvasBackingView.center.y +
-                  DrawingViewController.kCanvasAbsentTouchShadowOffset.y)
-
-          self.canvasShadowView.alpha =
-              DrawingViewController.kCanvasAbsentTouchShadowOpacity
+          self.updateShadowForPainterTouchPresence()
         },
         completion: nil)
+  }
+
+
+  private func updateShadowForPainterTouchPresence() {
+    let overflow = arePainterTouchesActive ?
+        DrawingViewController.kCanvasActiveTouchShadowOverflow :
+        DrawingViewController.kCanvasAbsentTouchShadowOverflow
+    let shadowSize = CGSize(
+        width: self.canvasBackingView.bounds.width + overflow.width,
+        height: self.canvasBackingView.bounds.height + overflow.height)
+    self.canvasShadowView.frame =
+        CGRect(origin: CGPoint.zero, size: shadowSize)
+
+    let offset = arePainterTouchesActive ?
+        DrawingViewController.kCanvasActiveTouchShadowOffset :
+        DrawingViewController.kCanvasAbsentTouchShadowOffset
+    self.canvasShadowView.center = CGPoint(
+        x: self.canvasBackingView.center.x + offset.x,
+        y: self.canvasBackingView.center.y + offset.y)
+
+    self.canvasShadowView.alpha = arePainterTouchesActive ?
+        DrawingViewController.kCanvasActiveTouchShadowOpacity :
+        DrawingViewController.kCanvasAbsentTouchShadowOpacity
   }
 
 
@@ -272,6 +274,34 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
   /// MARK: UIViewController method overrides.
 
+  override func viewDidLayoutSubviews() {
+    let canvasFrame = view.bounds.width > view.bounds.height ?
+        CGRect(
+          origin: CGPoint(
+              x: DrawingViewController.kCanvasMargin,
+              y: DrawingViewController.kCanvasMargin),
+          size: CGSize(
+              width: drawingViewSize.height,
+              height: drawingViewSize.width)) :
+        CGRect(
+          origin: CGPoint(
+              x: DrawingViewController.kCanvasMargin,
+              y: DrawingViewController.kCanvasMargin),
+          size: drawingViewSize)
+    let drawingFrame = CGRect(origin: CGPoint.zero, size: drawingViewSize)
+
+    rootScrollView.frame = view.bounds
+    contentContainerView.frame = view.bounds
+    canvasBackingView.frame = canvasFrame
+    // Update shadow frame, after backing view has been set to ensure proper
+    // shadow sizing.
+    updateShadowForPainterTouchPresence()
+    drawingContainerView.frame = canvasFrame
+    drawingImageView.frame = drawingFrame
+    pendingStrokeRenderer.frame = drawingFrame
+    painterView.frame = drawingFrame
+  }
+
   override func prefersStatusBarHidden() -> Bool {
     return true
   }
@@ -287,10 +317,10 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
         animations: {
           let shadowSize = CGSize(
               width:
-                  self.drawingRenderViewSize.width +
+                  self.drawingViewSize.width +
                   DrawingViewController.kCanvasAbsentTouchShadowOverflow.width,
               height:
-                  self.drawingRenderViewSize.height +
+                  self.drawingViewSize.height +
                   DrawingViewController.kCanvasAbsentTouchShadowOverflow.height)
           self.canvasShadowView.frame =
               CGRect(origin: CGPoint.zero, size: shadowSize)
