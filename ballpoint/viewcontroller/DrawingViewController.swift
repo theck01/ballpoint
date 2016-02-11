@@ -70,8 +70,15 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   /// The two touch tap recongizer that handles the tool change gesture.
   private let twoTouchTapRecognizer: UITapGestureRecognizer
 
+  /// The state of painter touches are presence on screen.
+  private enum PainterTouchPresence {
+    case Present
+    case Absent
+    case Unknown
+  }
+
   /// Whether touches are active on screen.
-  private var arePainterTouchesActive: Bool = false
+  private var painterTouchPresence = PainterTouchPresence.Unknown
 
   var drawingInteractionDelegate: DrawingInteractionDelegate? {
     get {
@@ -185,7 +192,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   /// MARK: PainterTouchDelegate methods
 
   func painterTouchesActive() {
-    arePainterTouchesActive = true
+    painterTouchPresence = PainterTouchPresence.Present
     UIView.animateWithDuration(
         DrawingViewController.kPainterTouchesActiveAnimationDuration,
         delay: 0,
@@ -200,7 +207,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
 
   func painterTouchesAbsent() {
-    arePainterTouchesActive = false
+    painterTouchPresence = PainterTouchPresence.Absent
     UIView.animateWithDuration(
         DrawingViewController.kPainterTouchesActiveAnimationDuration,
         delay: 0,
@@ -215,25 +222,31 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
 
   private func updateShadowForPainterTouchPresence() {
-    let overflow = arePainterTouchesActive ?
-        DrawingViewController.kCanvasActiveTouchShadowOverflow :
-        DrawingViewController.kCanvasAbsentTouchShadowOverflow
+    var overflow = CGSize.zero
+    var offset = CGPoint.zero
+    var alpha = canvasShadowView.alpha
+    switch(painterTouchPresence) {
+      case PainterTouchPresence.Present:
+        overflow = DrawingViewController.kCanvasActiveTouchShadowOverflow
+        offset = DrawingViewController.kCanvasActiveTouchShadowOffset
+        alpha = DrawingViewController.kCanvasActiveTouchShadowOpacity
+      case PainterTouchPresence.Absent:
+        overflow = DrawingViewController.kCanvasAbsentTouchShadowOverflow
+        offset = DrawingViewController.kCanvasAbsentTouchShadowOffset
+        alpha = DrawingViewController.kCanvasAbsentTouchShadowOpacity
+      default:
+        break
+    }
+
     let shadowSize = CGSize(
         width: self.canvasBackingView.bounds.width + overflow.width,
         height: self.canvasBackingView.bounds.height + overflow.height)
     self.canvasShadowView.frame =
         CGRect(origin: CGPoint.zero, size: shadowSize)
-
-    let offset = arePainterTouchesActive ?
-        DrawingViewController.kCanvasActiveTouchShadowOffset :
-        DrawingViewController.kCanvasAbsentTouchShadowOffset
     self.canvasShadowView.center = CGPoint(
         x: self.canvasBackingView.center.x + offset.x,
         y: self.canvasBackingView.center.y + offset.y)
-
-    self.canvasShadowView.alpha = arePainterTouchesActive ?
-        DrawingViewController.kCanvasActiveTouchShadowOpacity :
-        DrawingViewController.kCanvasAbsentTouchShadowOpacity
+    self.canvasShadowView.alpha = alpha
   }
 
 
@@ -324,31 +337,14 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   override func viewDidAppear(animated: Bool) {
     super.viewDidAppear(animated)
 
+    painterTouchPresence = PainterTouchPresence.Absent
     UIView.animateWithDuration(
         DrawingViewController.kCanvasRaiseAnimationDuration,
         delay: 0,
         options: UIViewAnimationOptions.CurveEaseOut,
         animations: {
-          let shadowSize = CGSize(
-              width:
-                  self.drawingViewSize.width +
-                  DrawingViewController.kCanvasAbsentTouchShadowOverflow.width,
-              height:
-                  self.drawingViewSize.height +
-                  DrawingViewController.kCanvasAbsentTouchShadowOverflow.height)
-          self.canvasShadowView.frame =
-              CGRect(origin: CGPoint.zero, size: shadowSize)
-          self.canvasShadowView.center = CGPoint(
-              x:
-                  self.canvasBackingView.center.x +
-                  DrawingViewController.kCanvasAbsentTouchShadowOffset.x,
-              y:
-                  self.canvasBackingView.center.y +
-                  DrawingViewController.kCanvasAbsentTouchShadowOffset.y)
-
+          self.updateShadowForPainterTouchPresence()
           self.canvasBackingView.alpha = 1
-          self.canvasShadowView.alpha =
-              DrawingViewController.kCanvasAbsentTouchShadowOpacity
         },
         completion: nil)
 
