@@ -302,6 +302,20 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     painterView.frame = drawingFrame
   }
 
+
+  override func viewWillTransitionToSize(
+      size: CGSize,
+      withTransitionCoordinator coordinator:
+          UIViewControllerTransitionCoordinator) {
+    // Disable view animations during transitions to a new size. Specifically
+    // this blocks animations due to screen rotations.
+    UIView.setAnimationsEnabled(false)
+    coordinator.animateAlongsideTransition(nil) {
+        (context: UIViewControllerTransitionCoordinatorContext) in
+      UIView.setAnimationsEnabled(true)
+    }
+  }
+
   override func prefersStatusBarHidden() -> Bool {
     return true
   }
