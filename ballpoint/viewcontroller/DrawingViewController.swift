@@ -111,7 +111,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
     super.init(nibName: nil, bundle: nil)
 
-    self.view = rootScrollView
+    self.view.addSubview(rootScrollView)
     rootScrollView.addSubview(contentContainerView)
     contentContainerView.addSubview(canvasShadowView)
     contentContainerView.addSubview(canvasBackingView)
@@ -132,7 +132,6 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
     rootScrollView.alwaysBounceHorizontal = true
     rootScrollView.alwaysBounceVertical = true
-    rootScrollView.contentSize = rootScrollView.bounds.size
     rootScrollView.delaysContentTouches = false
     rootScrollView.delegate = self
     rootScrollView.maximumZoomScale = DrawingViewController.kMaximumZoomLevel
@@ -304,6 +303,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     let drawingFrame = CGRect(origin: CGPoint.zero, size: drawingViewSize)
 
     rootScrollView.frame = view.bounds
+    rootScrollView.contentSize = view.bounds.size
     contentContainerView.frame = view.bounds
     canvasBackingView.frame = canvasFrame
     // Update shadow frame, after backing view has been set to ensure proper
