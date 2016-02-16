@@ -16,6 +16,10 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var window: UIWindow?
   var drawingVC: DrawingViewController?
 
+  /// The previous orientation of the device in radians. Initially infinity to
+  /// indicate that the orientation is unknown.
+  var previousOrientationAngle = CGFloat.infinity
+
   func application(
       application: UIApplication,
       didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) ->
@@ -57,8 +61,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   func handleDeviceRotation() {
     let device = UIDevice.currentDevice()
     if UIDeviceOrientationIsValidInterfaceOrientation(device.orientation) {
-      drawingVC?.setDrawingContentRotation(
-          device.deviceOrientationAngleOrDefault(0))
+      let newAngle = device.deviceOrientationAngleOrDefault(0)
+      if newAngle != previousOrientationAngle {
+        drawingVC?.setDrawingContentRotation(newAngle)
+        previousOrientationAngle = newAngle
+      }
     }
   }
 
