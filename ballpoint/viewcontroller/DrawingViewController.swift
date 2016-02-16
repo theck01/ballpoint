@@ -185,6 +185,14 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     drawingContainerView.transform = CGAffineTransformMakeRotation(rotation)
     // Request a layout to properly position rotated view.
     view.setNeedsLayout()
+
+    // Reset zooming and scroll view content offsets to default state to
+    // account for rotation.
+    rootScrollView.zoomScale = 1
+    rootScrollView.contentSize = view.bounds.size
+    rootScrollView.contentInset =
+        UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+    rootScrollView.contentOffset = CGPoint.zero
   }
 
 
@@ -303,7 +311,6 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     let drawingFrame = CGRect(origin: CGPoint.zero, size: drawingViewSize)
 
     rootScrollView.frame = view.bounds
-    rootScrollView.contentSize = view.bounds.size
     contentContainerView.frame = view.bounds
     canvasBackingView.frame = canvasFrame
     // Update shadow frame, after backing view has been set to ensure proper
@@ -323,10 +330,6 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     // Disable view animations during transitions to a new size. Specifically
     // this blocks animations due to screen rotations.
     UIView.setAnimationsEnabled(false)
-    self.rootScrollView.contentOffset = CGPoint.zero
-    self.rootScrollView.contentInset =
-        UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    self.rootScrollView.zoomScale = 0
     coordinator.animateAlongsideTransition(nil) {
         (context: UIViewControllerTransitionCoordinatorContext) in
       UIView.setAnimationsEnabled(true)
