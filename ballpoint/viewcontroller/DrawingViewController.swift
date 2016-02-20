@@ -338,8 +338,14 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     }
   }
 
+
   override func prefersStatusBarHidden() -> Bool {
     return true
+  }
+
+
+  override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
+    return UIInterfaceOrientationMask.All
   }
   
   
