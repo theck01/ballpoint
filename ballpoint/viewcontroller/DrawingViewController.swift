@@ -189,7 +189,6 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     // Reset zooming and scroll view content offsets to default state to
     // account for rotation.
     rootScrollView.zoomScale = 1
-    rootScrollView.contentSize = view.bounds.size
     rootScrollView.contentInset =
         UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
     rootScrollView.contentOffset = CGPoint.zero
@@ -311,6 +310,9 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     let drawingFrame = CGRect(origin: CGPoint.zero, size: drawingViewSize)
 
     rootScrollView.frame = view.bounds
+    rootScrollView.contentSize = CGSize(
+        width: view.bounds.width * rootScrollView.zoomScale,
+        height: view.bounds.width * rootScrollView.zoomScale)
     contentContainerView.frame = view.bounds
     canvasBackingView.frame = canvasFrame
     // Update shadow frame, after backing view has been set to ensure proper
