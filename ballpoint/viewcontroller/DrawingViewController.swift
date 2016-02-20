@@ -70,6 +70,9 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   /// The two touch tap recongizer that handles the tool change gesture.
   private let twoTouchTapRecognizer: UITapGestureRecognizer
 
+  /// The content offset of the scroll view prior to most recent rotation.
+  private var preRotationContentOffset = CGPoint.zero
+
   /// The state of painter touches are presence on screen.
   private enum PainterTouchPresence {
     case Present
@@ -180,18 +183,104 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
    Updates drawing rotation.
    
    - parameter rotation: The rotation angle for the drawing content, in radians.
+   - parameter previousRotation: The previous rotation angle for the drawing
+         content, in radians. May be infinity if there was no previous
+         orientation.
    */
-  func setDrawingContentRotation(rotation: CGFloat) {
+  func setDrawingContentRotation(rotation: CGFloat, previousRotation: CGFloat) {
     drawingContainerView.transform = CGAffineTransformMakeRotation(rotation)
     // Request a layout to properly position rotated view.
     view.setNeedsLayout()
 
-    // Reset zooming and scroll view content offsets to default state to
-    // account for rotation.
-    rootScrollView.zoomScale = 1
-    rootScrollView.contentInset =
-        UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-    rootScrollView.contentOffset = CGPoint.zero
+    let portraitViewSize = rotation % CGFloat(M_PI) == 0 ?
+        view.bounds.size :
+        CGSize(width: view.bounds.height, height: view.bounds.width)
+    var portraitViewport: CGRect
+    switch (previousRotation) {
+      case UIDevice.kPortraitAngle:
+        portraitViewport =
+            CGRect(origin: preRotationContentOffset, size: portraitViewSize)
+
+      case UIDevice.kLandscapeRightAngle:
+        let previousOriginInPortrait =
+            CGPoint(x: 0, y: portraitViewSize.height * rootScrollView.zoomScale)
+        portraitViewport = CGRect(
+            origin: CGPoint(
+                x: preRotationContentOffset.y,
+                y: previousOriginInPortrait.y -
+                    (preRotationContentOffset.x + portraitViewSize.height)),
+            size: portraitViewSize)
+
+      case UIDevice.kUpsideDownPortraitAngle:
+        let previousOriginInPortrait = CGPoint(
+            x: portraitViewSize.width * rootScrollView.zoomScale,
+            y: portraitViewSize.height * rootScrollView.zoomScale)
+        portraitViewport = CGRect(
+            origin: CGPoint(
+                x: previousOriginInPortrait.x -
+                    (preRotationContentOffset.x + portraitViewSize.width),
+                y: previousOriginInPortrait.y -
+                    (preRotationContentOffset.y + portraitViewSize.height)),
+            size: portraitViewSize)
+
+      case UIDevice.kLandscapeLeftAngle:
+        let previousOriginInPortrait =
+            CGPoint(x: portraitViewSize.width * rootScrollView.zoomScale, y: 0)
+        portraitViewport = CGRect(
+            origin: CGPoint(
+                x: previousOriginInPortrait.x -
+                    (preRotationContentOffset.y + portraitViewSize.width),
+                y: preRotationContentOffset.x),
+            size: portraitViewSize)
+
+      default:
+        portraitViewport = CGRect(origin: CGPoint.zero, size: portraitViewSize)
+    }
+
+    var matchingViewport: CGRect
+    switch (rotation) {
+      case UIDevice.kPortraitAngle:
+        matchingViewport = portraitViewport
+
+      case UIDevice.kLandscapeRightAngle:
+        let portraitOriginInRotation =
+            CGPoint(x: portraitViewSize.height * rootScrollView.zoomScale, y: 0)
+        matchingViewport = CGRect(
+            origin: CGPoint(
+                x: portraitOriginInRotation.x -
+                    (portraitViewSize.height + portraitViewport.origin.y),
+                y: portraitViewport.origin.x),
+            size: view.bounds.size)
+
+      case UIDevice.kUpsideDownPortraitAngle:
+        let portraitOriginInRotation = CGPoint(
+            x: portraitViewSize.width * rootScrollView.zoomScale,
+            y: portraitViewSize.height * rootScrollView.zoomScale)
+        matchingViewport = CGRect(
+            origin: CGPoint(
+                x: portraitOriginInRotation.x -
+                    (portraitViewSize.width + portraitViewport.origin.x),
+                y: portraitOriginInRotation.y -
+                    (portraitViewSize.height + portraitViewport.origin.y)),
+            size: view.bounds.size)
+
+      case UIDevice.kLandscapeLeftAngle:
+        let portraitOriginInRotation =
+            CGPoint(x: 0, y: portraitViewSize.width * rootScrollView.zoomScale)
+        matchingViewport = CGRect(
+            origin: CGPoint(
+                x: portraitViewport.origin.y,
+                y: portraitOriginInRotation.y -
+                    (portraitViewSize.width + portraitViewport.origin.x)),
+            size: view.bounds.size)
+
+      default:
+        matchingViewport = CGRect(origin: CGPoint.zero, size: view.bounds.size)
+    }
+
+    // Set the content offset of the scrollview to display the same section of
+    // content before and after rotation.
+    rootScrollView.contentOffset = matchingViewport.origin
   }
 
 
@@ -294,6 +383,12 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   /// MARK: UIViewController method overrides.
 
   override func viewDidLayoutSubviews() {
+    // Isolate zoom and content offset from layout changes, both will be
+    // reinstated after layout completes.
+    let contentOffset = rootScrollView.contentOffset
+    let zoomScale = rootScrollView.zoomScale
+    rootScrollView.zoomScale = 1
+
     let canvasFrame = view.bounds.width > view.bounds.height ?
         CGRect(
           origin: CGPoint(
@@ -310,9 +405,8 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     let drawingFrame = CGRect(origin: CGPoint.zero, size: drawingViewSize)
 
     rootScrollView.frame = view.bounds
-    rootScrollView.contentSize = CGSize(
-        width: view.bounds.width * rootScrollView.zoomScale,
-        height: view.bounds.width * rootScrollView.zoomScale)
+    rootScrollView.contentSize =
+        CGSize(width: view.bounds.width, height: view.bounds.height)
     contentContainerView.frame = view.bounds
     canvasBackingView.frame = canvasFrame
     // Update shadow frame, after backing view has been set to ensure proper
@@ -322,6 +416,10 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     drawingImageView.frame = drawingFrame
     pendingStrokeRenderer.frame = drawingFrame
     painterView.frame = drawingFrame
+
+    // Reinstate previous zoom and content offset at the end of layout.
+    rootScrollView.zoomScale = zoomScale
+    rootScrollView.contentOffset = contentOffset
   }
 
 
@@ -329,6 +427,8 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
       size: CGSize,
       withTransitionCoordinator coordinator:
           UIViewControllerTransitionCoordinator) {
+    preRotationContentOffset = rootScrollView.contentOffset
+
     // Disable view animations during transitions to a new size. Specifically
     // this blocks animations due to screen rotations.
     UIView.setAnimationsEnabled(false)

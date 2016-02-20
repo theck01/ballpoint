@@ -63,7 +63,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     if UIDeviceOrientationIsValidInterfaceOrientation(device.orientation) {
       let newAngle = device.deviceOrientationAngleOrDefault(0)
       if newAngle != previousOrientationAngle {
-        drawingVC?.setDrawingContentRotation(newAngle)
+        drawingVC?.setDrawingContentRotation(
+            newAngle, previousRotation: previousOrientationAngle)
         previousOrientationAngle = newAngle
       }
     }
