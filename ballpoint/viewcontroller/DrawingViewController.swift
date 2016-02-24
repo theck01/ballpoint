@@ -191,7 +191,19 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     drawingContainerView.transform = CGAffineTransformMakeRotation(rotation)
     // Request a layout to properly position rotated view.
     view.setNeedsLayout()
+    updateViewportForRotation(rotation, previousRotation: previousRotation)
+  }
 
+
+  /**
+   Updates the viewport to display the same drawing area in the new rotaion as
+   it did in the old rotation.
+
+   - parameter rotation: The new rotation of the viewport in radians.
+   - parameter rotation: The old rotation of the viewport in radians.
+   */
+  private func updateViewportForRotation(
+      rotation: CGFloat, previousRotation: CGFloat) {
     let portraitViewSize = rotation % CGFloat(M_PI) == 0 ?
         view.bounds.size :
         CGSize(width: view.bounds.height, height: view.bounds.width)
