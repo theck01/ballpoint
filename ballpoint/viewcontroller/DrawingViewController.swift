@@ -191,7 +191,29 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     drawingContainerView.transform = CGAffineTransformMakeRotation(rotation)
     // Request a layout to properly position rotated view.
     view.setNeedsLayout()
-    updateViewportForRotation(rotation, previousRotation: previousRotation)
+
+    // Update the viewport within the scroll view to display the same portion
+    // or content.
+    let portraitViewportSize = rotation % CGFloat(M_PI) == 0 ?
+        view.bounds.size :
+        CGSize(width: view.bounds.height, height: view.bounds.width)
+    let previousViewportSize = previousRotation % CGFloat(M_PI) == 0 ?
+        portraitViewportSize :
+        CGSize(
+            width: portraitViewportSize.height,
+            height: portraitViewportSize.width)
+    let previousViewport =
+        CGRect(origin: preRotationContentOffset, size: previousViewportSize)
+    let boundingPortraitSize = CGSize(
+        width: portraitViewportSize.width * rootScrollView.zoomScale,
+        height: portraitViewportSize.height * rootScrollView.zoomScale)
+
+    let newViewport = rotateRect(
+        previousViewport, fromRotation: previousRotation, toRotation: rotation,
+        withinBoundingSizeInPortraitOrientation: boundingPortraitSize)
+    if let newContentOffset = newViewport?.origin {
+      rootScrollView.contentOffset = newContentOffset
+    }
   }
 
 
@@ -202,97 +224,64 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
    - parameter rotation: The new rotation of the viewport in radians.
    - parameter rotation: The old rotation of the viewport in radians.
    */
-  private func updateViewportForRotation(
-      rotation: CGFloat, previousRotation: CGFloat) {
-    let portraitViewSize = rotation % CGFloat(M_PI) == 0 ?
-        view.bounds.size :
-        CGSize(width: view.bounds.height, height: view.bounds.width)
-    var portraitViewport: CGRect
-    switch (previousRotation) {
+  private func rotateRect(
+      rect: CGRect, fromRotation: CGFloat, toRotation: CGFloat,
+      withinBoundingSizeInPortraitOrientation pbSize: CGSize) -> CGRect? {
+    var portraitRect: CGRect
+    switch (fromRotation) {
       case UIDevice.kPortraitAngle:
-        portraitViewport =
-            CGRect(origin: preRotationContentOffset, size: portraitViewSize)
-
+        portraitRect = rect
       case UIDevice.kLandscapeRightAngle:
-        let previousOriginInPortrait =
-            CGPoint(x: 0, y: portraitViewSize.height * rootScrollView.zoomScale)
-        portraitViewport = CGRect(
+        portraitRect = CGRect(
             origin: CGPoint(
-                x: preRotationContentOffset.y,
-                y: previousOriginInPortrait.y -
-                    (preRotationContentOffset.x + portraitViewSize.height)),
-            size: portraitViewSize)
-
+                x: rect.origin.y,
+                y: pbSize.height - (rect.origin.x + rect.width)),
+            size: CGSize(width: rect.height, height: rect.width))
       case UIDevice.kUpsideDownPortraitAngle:
-        let previousOriginInPortrait = CGPoint(
-            x: portraitViewSize.width * rootScrollView.zoomScale,
-            y: portraitViewSize.height * rootScrollView.zoomScale)
-        portraitViewport = CGRect(
+        portraitRect = CGRect(
             origin: CGPoint(
-                x: previousOriginInPortrait.x -
-                    (preRotationContentOffset.x + portraitViewSize.width),
-                y: previousOriginInPortrait.y -
-                    (preRotationContentOffset.y + portraitViewSize.height)),
-            size: portraitViewSize)
-
+                x: pbSize.width - (rect.origin.x + rect.width),
+                y: pbSize.height - (rect.origin.y + rect.height)),
+            size: rect.size)
       case UIDevice.kLandscapeLeftAngle:
-        let previousOriginInPortrait =
-            CGPoint(x: portraitViewSize.width * rootScrollView.zoomScale, y: 0)
-        portraitViewport = CGRect(
+        portraitRect = CGRect(
             origin: CGPoint(
-                x: previousOriginInPortrait.x -
-                    (preRotationContentOffset.y + portraitViewSize.width),
-                y: preRotationContentOffset.x),
-            size: portraitViewSize)
-
+                x: pbSize.width - (rect.origin.y + rect.height),
+                y: rect.origin.x),
+            size: CGSize(width: rect.height, height: rect.width))
       default:
-        portraitViewport = CGRect(origin: CGPoint.zero, size: portraitViewSize)
+          return nil
     }
 
-    var matchingViewport: CGRect
-    switch (rotation) {
+    switch (toRotation) {
       case UIDevice.kPortraitAngle:
-        matchingViewport = portraitViewport
-
+        return portraitRect
       case UIDevice.kLandscapeRightAngle:
-        let portraitOriginInRotation =
-            CGPoint(x: portraitViewSize.height * rootScrollView.zoomScale, y: 0)
-        matchingViewport = CGRect(
+        return CGRect(
             origin: CGPoint(
-                x: portraitOriginInRotation.x -
-                    (portraitViewSize.height + portraitViewport.origin.y),
-                y: portraitViewport.origin.x),
-            size: view.bounds.size)
-
+                x: pbSize.height -
+                    (portraitRect.origin.y + portraitRect.height),
+                y: portraitRect.origin.x),
+            size:
+                CGSize(width: portraitRect.height, height: portraitRect.width))
       case UIDevice.kUpsideDownPortraitAngle:
-        let portraitOriginInRotation = CGPoint(
-            x: portraitViewSize.width * rootScrollView.zoomScale,
-            y: portraitViewSize.height * rootScrollView.zoomScale)
-        matchingViewport = CGRect(
+        return CGRect(
             origin: CGPoint(
-                x: portraitOriginInRotation.x -
-                    (portraitViewSize.width + portraitViewport.origin.x),
-                y: portraitOriginInRotation.y -
-                    (portraitViewSize.height + portraitViewport.origin.y)),
-            size: view.bounds.size)
-
+                x: pbSize.width -
+                    (portraitRect.origin.x + portraitRect.width),
+                y: pbSize.height -
+                    (portraitRect.origin.y + portraitRect.height)),
+            size: portraitRect.size)
       case UIDevice.kLandscapeLeftAngle:
-        let portraitOriginInRotation =
-            CGPoint(x: 0, y: portraitViewSize.width * rootScrollView.zoomScale)
-        matchingViewport = CGRect(
+        return CGRect(
             origin: CGPoint(
-                x: portraitViewport.origin.y,
-                y: portraitOriginInRotation.y -
-                    (portraitViewSize.width + portraitViewport.origin.x)),
+                x: portraitRect.origin.y,
+                y: pbSize.width -
+                    (portraitRect.origin.x + portraitRect.width)),
             size: view.bounds.size)
-
       default:
-        matchingViewport = CGRect(origin: CGPoint.zero, size: view.bounds.size)
+        return nil
     }
-
-    // Set the content offset of the scrollview to display the same section of
-    // content before and after rotation.
-    rootScrollView.contentOffset = matchingViewport.origin
   }
 
 
