@@ -122,14 +122,14 @@ class DrawingModel: RendererColorPaletteUpdateListener {
   }
 
 
-  /// MARK: RendererColorPaletteUpdateListener methods
+  // MARK: RendererColorPaletteUpdateListener methods
 
   func didUpdateRenderColorPalette(palette: RendererColorPalette) {
     applyEdits(edits, toSnapshot: nil)
   }
 
 
-  /// MARK: Helper methods.
+  // MARK: Helper methods.
 
   /**
    Applys the edits to the drawing snapshot and updates the snapshot and array

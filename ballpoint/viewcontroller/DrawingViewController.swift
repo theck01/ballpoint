@@ -163,7 +163,8 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     twoTouchTapRecognizer.delaysTouchesEnded = false
     twoTouchTapRecognizer.numberOfTapsRequired = 1
     twoTouchTapRecognizer.numberOfTouchesRequired = 2
-    twoTouchTapRecognizer.addTarget(self, action: "handleTwoTouchTapGesture:")
+    twoTouchTapRecognizer.addTarget(
+        self, action: #selector(handleTwoTouchTapGesture))
     painterView.addGestureRecognizer(twoTouchTapRecognizer)
 
     RendererColorPalette.defaultPalette.registerColorPaletteUpdateListener(
@@ -287,7 +288,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   }
 
 
-  /// MARK: PainterTouchDelegate methods
+  // MARK: PainterTouchDelegate methods
 
   func painterTouchesActive() {
     painterTouchPresence = PainterTouchPresence.Present
@@ -348,14 +349,14 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   }
 
 
-  /// MARK: PainterStrokeScaleProvider methods
+  // MARK: PainterStrokeScaleProvider methods
 
   func getStrokeScaleFactor() -> CGFloat {
     return 1 / rootScrollView.zoomScale
   }
 
 
-  /// MARK: RendererColorPaletteUpdateListener methods
+  // MARK: RendererColorPaletteUpdateListener methods
 
   func didUpdateRenderColorPalette(palette: RendererColorPalette) {
     pendingStrokeRenderer.setNeedsDisplay()
@@ -364,7 +365,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   }
 
 
-  /// MARK: UIScrollViewDelegate methods
+  // MARK: UIScrollViewDelegate methods
 
   func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
     return contentContainerView
@@ -390,7 +391,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   }
 
 
-  /// MARK: UIViewController method overrides.
+  // MARK: UIViewController method overrides.
 
   override func viewDidLayoutSubviews() {
     // Isolate zoom and content offset from layout changes, both will be

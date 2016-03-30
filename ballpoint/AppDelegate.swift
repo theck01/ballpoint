@@ -50,7 +50,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     window.makeKeyAndVisible()
 
     NSNotificationCenter.defaultCenter().addObserver(
-        self, selector: "handleDeviceRotation",
+        self, selector: #selector(handleDeviceRotation),
         name: UIDeviceOrientationDidChangeNotification, object: nil)
     UIDevice.currentDevice().beginGeneratingDeviceOrientationNotifications()
 

@@ -60,7 +60,7 @@ class DrawingController: DrawingInteractionDelegate {
   }
 
 
-  /// MARK: DrawingInteractionDelegate methods.
+  // MARK: DrawingInteractionDelegate methods.
 
   func completeStrokes(strokes: [Stroke]) {
     let edit = DrawingModelEdit(

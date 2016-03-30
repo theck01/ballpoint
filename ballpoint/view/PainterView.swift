@@ -125,7 +125,7 @@ class PainterView: UIView {
   }
 
 
-  /// MARK: Touch event handlers.
+  // MARK: Touch event handlers.
   
   
   override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
@@ -204,7 +204,7 @@ class PainterView: UIView {
   }
 
 
-  /// MARK: Motion event handlers.
+  // MARK: Motion event handlers.
 
   override func motionEnded(motion: UIEventSubtype, withEvent event: UIEvent?) {
     if motion == UIEventSubtype.MotionShake {
@@ -213,7 +213,7 @@ class PainterView: UIView {
   }
 
 
-  /// MARK: UIResponder method overrides.
+  // MARK: UIResponder method overrides.
 
   override func canBecomeFirstResponder() -> Bool {
     return true
