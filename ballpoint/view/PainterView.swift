@@ -48,7 +48,7 @@ class PainterView: UIView {
 
   /// The minimum proportional stroke size from a light 3d touch.
   private static let kMinProportionalStrokeRadius: CGFloat =
-      Constants.kProportionalStrokeRadius * 0.9
+      Constants.kProportionalStrokeRadius * 0.75
 
   /// The maximum proportional stroke size from a strong 3d touch.
   private static let kMaxProportionalStrokeRadius: CGFloat =
