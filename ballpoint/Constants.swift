@@ -12,10 +12,7 @@ import UIKit
 
 class Constants {
   /// The minimum size of strokes.
-  static let kMinimumStrokeWidth: CGFloat = 1
-
-  /// The maximum size of strokes.
-  static let kMaximumStrokeWidth: CGFloat = 15
+  static let kProportionalStrokeRadius: CGFloat = 5
 
   /// The brush used for the pen tool.
   static let kPenBrush = PipelineBrush()

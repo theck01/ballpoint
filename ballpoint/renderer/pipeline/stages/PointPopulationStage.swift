@@ -21,12 +21,7 @@ struct PointPopulationStage: RenderPipelineStage {
         stroke.points.count > 0,
         "Cannot populate scaffold points for an empty stroke.")
 
-    let pointRadii = stroke.points.map {
-      return
-          ((stroke.maximumWidth - stroke.minimumWidth) * $0.sizeFactor +
-           stroke.minimumWidth) / 2
-    }
-
+    let pointRadii = stroke.points.map { $0.radius }
     for i in 0..<stroke.points.count {
       let previousPoint = i > 0 ? stroke.points[i - 1] : stroke.points[i]
       let nextPoint = i < stroke.points.count - 1 ?
@@ -73,14 +68,9 @@ struct PointPopulationStage: RenderPipelineStage {
        scaffold point.
    */
   private func calculatePointRadii(stroke: Stroke) -> [CGFloat] {
-    let sizeFactors = stroke.points.map { $0.sizeFactor }
-    let filteredSizeFactors = averageFilterSizeFactors(
-        sizeFactors,
-        averageFilterWindowSize: PointPopulationStage.kAverageFilterWindowSize)
-    return filteredSizeFactors.map {
-      ((stroke.maximumWidth - stroke.minimumWidth) * $0 +
-          stroke.minimumWidth) / 2
-    }
+    let radii = stroke.points.map { $0.radius }
+    return averageFilter(
+      radii, windowSize: PointPopulationStage.kAverageFilterWindowSize)
   }
   
 
@@ -91,29 +81,26 @@ struct PointPopulationStage: RenderPipelineStage {
    - returns: An array of size factors that has been average filtered with the
        given window.
    */
-  private func averageFilterSizeFactors(
-      sizeFactors: [CGFloat], averageFilterWindowSize: Int) -> [CGFloat] {
-    var averageFilteredSizeFactors: [CGFloat] = []
-    for i in 0..<sizeFactors.count {
-      var sizeFactorSum: CGFloat = 0
-      let averageFilterWindowStart = max(0, i - averageFilterWindowSize / 2)
-      let averageFilterWindowEnd =
-          min(sizeFactors.count - 1, i + averageFilterWindowSize / 2)
-      for j in averageFilterWindowStart...averageFilterWindowEnd {
-        sizeFactorSum += sizeFactors[j]
+  private func averageFilter(
+      floats: [CGFloat], windowSize: Int) -> [CGFloat] {
+    var averageFilteredFloats: [CGFloat] = []
+    for i in 0..<floats.count {
+      var sum: CGFloat = 0
+      let windowStart = max(0, i - windowSize / 2)
+      let windowEnd = min(floats.count - 1, i + windowSize / 2)
+      for j in windowStart...windowEnd {
+        sum += floats[j]
       }
 
       // Pad the sum with the central value in the window if fewer size factors
       // than the desired window size were used to prevent miss weighting those
       // factors.
-      let windowSize = averageFilterWindowEnd - averageFilterWindowStart + 1
-      sizeFactorSum +=
-          CGFloat(averageFilterWindowSize - windowSize) * sizeFactors[i]
+      let includedFloatCount = windowEnd - windowStart + 1
+      sum += CGFloat(windowSize - includedFloatCount) * floats[i]
 
-      averageFilteredSizeFactors.append(
-          sizeFactorSum / CGFloat(averageFilterWindowSize))
+      averageFilteredFloats.append(sum / CGFloat(windowSize))
     }
 
-    return averageFilteredSizeFactors
+    return averageFilteredFloats
   }
 }

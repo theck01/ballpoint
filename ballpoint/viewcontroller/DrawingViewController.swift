@@ -12,7 +12,8 @@ import UIKit
 
 
 class DrawingViewController: UIViewController, PainterTouchDelegate,
-    RendererColorPaletteUpdateListener, UIScrollViewDelegate {
+    PainterStrokeScaleProvider, RendererColorPaletteUpdateListener,
+    UIScrollViewDelegate {
   /// The separation between the canvas and the screen boundary.
   static let kCanvasMargin: CGFloat = 16
 
@@ -155,6 +156,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
     painterView.pendingStrokeRenderer = pendingStrokeRenderer
     painterView.painterTouchDelegate = self
+    painterView.painterStrokeScaleProvider = self
 
     twoTouchTapRecognizer.cancelsTouchesInView = true
     twoTouchTapRecognizer.delaysTouchesBegan = false
@@ -343,6 +345,13 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
         x: self.canvasBackingView.center.x + offset.x,
         y: self.canvasBackingView.center.y + offset.y)
     self.canvasShadowView.alpha = alpha
+  }
+
+
+  /// MARK: PainterStrokeScaleProvider methods
+
+  func getStrokeScaleFactor() -> CGFloat {
+    return 1 / rootScrollView.zoomScale
   }
 
 

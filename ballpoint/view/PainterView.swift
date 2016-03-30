@@ -24,6 +24,15 @@ protocol PainterTouchDelegate {
 
 
 
+protocol PainterStrokeScaleProvider {
+  /**
+   - returns: The scale factor that should be applied to stroke points.
+   */
+  func getStrokeScaleFactor() -> CGFloat
+}
+
+
+
 /// View that transforms user interaction events into drawing and application
 /// actions.
 class PainterView: UIView {
@@ -37,9 +46,13 @@ class PainterView: UIView {
     let stroke: MutableStroke
   }
 
-  /// The size factor to supply when 3D Touch is not available:
-  /// 1 (average touch force) / 6.667 (maximum touch force)
-  private static let kDefaultSizeFactor: CGFloat = 0.15
+  /// The minimum proportional stroke size from a light 3d touch.
+  private static let kMinProportionalStrokeRadius: CGFloat =
+      Constants.kProportionalStrokeRadius * 0.9
+
+  /// The maximum proportional stroke size from a strong 3d touch.
+  private static let kMaxProportionalStrokeRadius: CGFloat =
+      Constants.kProportionalStrokeRadius * 2
 
   /// The brush used to create strokes on the canvas.
   var brush: Brush
@@ -52,6 +65,8 @@ class PainterView: UIView {
   var pendingStrokeRenderer: StrokeRenderer?
 
   var painterTouchDelegate: PainterTouchDelegate?
+
+  var painterStrokeScaleProvider: PainterStrokeScaleProvider?
 
   /// An array of touch locations and pending strokes that last were updated to
   /// that location.
@@ -87,18 +102,26 @@ class PainterView: UIView {
   }
 
 
-  func createStrokePointFromTouch(touch: UITouch) -> StrokePoint {
+  func createStrokePointFromTouch(touch: UITouch) -> Stroke.Point {
     if #available(iOS 9.0, *) {
       if (traitCollection.forceTouchCapability ==
           UIForceTouchCapability.Available) {
-        let sizeFactor = touch.force / touch.maximumPossibleForce
-        return StrokePoint(
-            location: touch.locationInView(self), sizeFactor: sizeFactor)
+        let forceTouchFactor = touch.force / touch.maximumPossibleForce
+        let proportionalRadius =
+            (PainterView.kMaxProportionalStrokeRadius -
+            PainterView.kMinProportionalStrokeRadius) * forceTouchFactor +
+            PainterView.kMinProportionalStrokeRadius
+        let radius = proportionalRadius *
+            (painterStrokeScaleProvider?.getStrokeScaleFactor() ?? 1)
+        return Stroke.Point(
+            location: touch.locationInView(self),
+            radius: radius)
       }
     }
-    return StrokePoint(
+    return Stroke.Point(
         location: touch.locationInView(self),
-        sizeFactor: PainterView.kDefaultSizeFactor)
+        radius: Constants.kProportionalStrokeRadius *
+            (painterStrokeScaleProvider?.getStrokeScaleFactor() ?? 1))
   }
 
 
@@ -107,10 +130,7 @@ class PainterView: UIView {
   
   override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
     for touch in touches {
-      let stroke = MutableStroke(
-          color: paintColor, brush: brush,
-          minimumWidth: Constants.kMinimumStrokeWidth,
-          maximumWidth: Constants.kMaximumStrokeWidth)
+      let stroke = MutableStroke(color: paintColor, brush: brush)
       stroke.appendPoint(createStrokePointFromTouch(touch))
       pendingStrokeTuples.append(RenderingStrokeTuple(
           touchPointerId: unsafeAddressOf(touch), stroke: stroke))
