@@ -72,7 +72,8 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   private let twoTouchTapRecognizer: UITapGestureRecognizer
 
   /// The content offset of the scroll view prior to most recent rotation.
-  private var preRotationContentOffset = CGPoint.zero
+  private var preRotationSizes =
+      PreRotationSizes(contentOffset: CGPoint.zero, shadowFrame: CGRect.zero)
 
   /// The state of painter touches are presence on screen.
   private enum PainterTouchPresence {
@@ -205,8 +206,9 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
         CGSize(
             width: portraitViewportSize.height,
             height: portraitViewportSize.width)
-    let previousViewport =
-        CGRect(origin: preRotationContentOffset, size: previousViewportSize)
+    let previousViewport = CGRect(
+        origin: preRotationSizes.contentOffset,
+        size: previousViewportSize)
     let boundingPortraitSize = CGSize(
         width: portraitViewportSize.width * rootScrollView.zoomScale,
         height: portraitViewportSize.height * rootScrollView.zoomScale)
@@ -299,7 +301,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
             UIViewAnimationOptions.BeginFromCurrentState,
             UIViewAnimationOptions.CurveEaseOut],
         animations: {
-          self.updateShadowForPainterTouchPresence()
+          self.updateShadowForPainterTouchPresence(self.painterTouchPresence)
         },
         completion: nil)
   }
@@ -314,17 +316,18 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
             UIViewAnimationOptions.BeginFromCurrentState,
             UIViewAnimationOptions.CurveEaseOut],
         animations: {
-          self.updateShadowForPainterTouchPresence()
+          self.updateShadowForPainterTouchPresence(self.painterTouchPresence)
         },
         completion: nil)
   }
 
 
-  private func updateShadowForPainterTouchPresence() {
+  private func updateShadowForPainterTouchPresence(
+      touchPresence: PainterTouchPresence) {
     var overflow = CGSize.zero
     var offset = CGPoint.zero
     var alpha = canvasShadowView.alpha
-    switch(painterTouchPresence) {
+    switch(touchPresence) {
       case PainterTouchPresence.Present:
         overflow = DrawingViewController.kCanvasActiveTouchShadowOverflow
         offset = DrawingViewController.kCanvasActiveTouchShadowOffset
@@ -422,7 +425,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     canvasBackingView.frame = canvasFrame
     // Update shadow frame, after backing view has been set to ensure proper
     // shadow sizing.
-    updateShadowForPainterTouchPresence()
+    updateShadowForPainterTouchPresence(painterTouchPresence)
     drawingContainerView.frame = canvasFrame
     drawingImageView.frame = drawingFrame
     pendingStrokeRenderer.frame = drawingFrame
@@ -438,7 +441,8 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
       size: CGSize,
       withTransitionCoordinator coordinator:
           UIViewControllerTransitionCoordinator) {
-    preRotationContentOffset = rootScrollView.contentOffset
+    preRotationSizes = PreRotationSizes(
+        contentOffset: rootScrollView.contentOffset, shadowFrame: CGRect.zero)
 
     // Disable view animations during transitions to a new size. Specifically
     // this blocks animations due to screen rotations.
@@ -469,7 +473,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
         delay: 0,
         options: UIViewAnimationOptions.CurveEaseOut,
         animations: {
-          self.updateShadowForPainterTouchPresence()
+          self.updateShadowForPainterTouchPresence(self.painterTouchPresence)
           self.canvasBackingView.alpha = 1
         },
         completion: nil)
@@ -498,5 +502,11 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
   required init?(coder aDecoder: NSCoder) {
     fatalError("init(coder:) has not been implemented")
+  }
+
+
+  private struct PreRotationSizes {
+    let contentOffset: CGPoint
+    let shadowFrame: CGRect
   }
 }
