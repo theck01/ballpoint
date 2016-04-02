@@ -14,14 +14,16 @@ import CoreGraphics
 struct CircularEndCapScaffoldSegment: ScaffoldSegment {
   private let start: CGPoint
   private let end: CGPoint
+  private let strokeDirection: DirectedLine
 
   var origin: CGPoint { return start }
   var terminal: CGPoint { return end }
 
   
-  init(origin: CGPoint, terminal: CGPoint) {
+  init(origin: CGPoint, terminal: CGPoint, strokeDirection: DirectedLine) {
     start = origin
     end = terminal
+    self.strokeDirection = strokeDirection
   }
 
 
@@ -42,9 +44,15 @@ struct CircularEndCapScaffoldSegment: ScaffoldSegment {
     let radius = PointUtil.distance(start, end) / 2
     let vector = CGVectorMake(start.x - end.x, start.y - end.y)
     let startAngle = vector.angleInRadians
+    var angleDelta: CGFloat
+    if DirectedLine.orientationOfPoint(start, toLine: strokeDirection) ==
+        DirectedLine.Orientation.Left {
+      angleDelta = -CGFloat(M_PI)
+    } else {
+      angleDelta = CGFloat(M_PI)
+    }
     CGPathAddRelativeArc(
-        path, nil, arcCenter.x, arcCenter.y, radius, startAngle,
-        3 * CGFloat(M_PI))
+        path, nil, arcCenter.x, arcCenter.y, radius, startAngle, angleDelta)
 
     assert(
         CGPathGetCurrentPoint(path) =~= end,

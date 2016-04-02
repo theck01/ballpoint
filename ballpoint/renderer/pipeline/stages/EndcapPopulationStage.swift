@@ -17,11 +17,26 @@ struct EndcapPopulationStage: RenderPipelineStage {
       return
     }
 
-    scaffold.startCapSegment = CircularEndCapScaffoldSegment(
-        origin: scaffold.segmentPairs[0].right.terminal,
-        terminal: scaffold.segmentPairs[0].left.origin)
-    scaffold.endCapSegment = CircularEndCapScaffoldSegment(
-        origin: scaffold.segmentPairs.last!.left.terminal,
-        terminal: scaffold.segmentPairs.last!.right.origin)
+    assert(
+      stroke.points.count > 1,
+      "Assumption that stroke has more than one point is false.")
+
+    if let startDirectedLine = DirectedLine(
+        earlyPoint: stroke.points[1].location,
+        latePoint: stroke.points[0].location) {
+      scaffold.startCapSegment = CircularEndCapScaffoldSegment(
+          origin: scaffold.segmentPairs[0].right.terminal,
+          terminal: scaffold.segmentPairs[0].left.origin,
+          strokeDirection: startDirectedLine)
+    }
+
+    if let endDirectedLine = DirectedLine(
+        earlyPoint: stroke.points[stroke.points.count - 2].location,
+        latePoint: stroke.points.last!.location) {
+      scaffold.endCapSegment = CircularEndCapScaffoldSegment(
+          origin: scaffold.segmentPairs.last!.left.terminal,
+          terminal: scaffold.segmentPairs.last!.right.origin,
+          strokeDirection: endDirectedLine)
+    }
   }
 }
