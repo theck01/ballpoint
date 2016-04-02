@@ -17,10 +17,10 @@ struct EndcapPopulationStage: RenderPipelineStage {
       return
     }
 
-    scaffold.startCapSegment = LinearScaffoldSegment(
+    scaffold.startCapSegment = CircularEndCapScaffoldSegment(
         origin: scaffold.segmentPairs[0].right.terminal,
         terminal: scaffold.segmentPairs[0].left.origin)
-    scaffold.endCapSegment = LinearScaffoldSegment(
+    scaffold.endCapSegment = CircularEndCapScaffoldSegment(
         origin: scaffold.segmentPairs.last!.left.terminal,
         terminal: scaffold.segmentPairs.last!.right.origin)
   }

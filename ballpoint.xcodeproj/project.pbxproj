@@ -14,6 +14,7 @@
 		4233EA261BE5442E0017B76D /* PointUtil.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4233EA251BE5442E0017B76D /* PointUtil.swift */; };
 		4233EA281BE546DF0017B76D /* PointUtilTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4233EA271BE546DF0017B76D /* PointUtilTestCase.swift */; };
 		4244B9F51BD43F3400FE5BEB /* CGPoint+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4244B9F41BD43F3400FE5BEB /* CGPoint+ballpoint.swift */; };
+		4255EC011CB00EA200E092EF /* CircularEndCapScaffoldSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4255EC001CB00EA200E092EF /* CircularEndCapScaffoldSegment.swift */; };
 		426539F71B93CD14001345CB /* DrawingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426539F61B93CD14001345CB /* DrawingModel.swift */; };
 		426539FD1B93D78E001345CB /* DrawingRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426539FC1B93D78E001345CB /* DrawingRenderer.swift */; };
 		426992541BDD3CA900584CC8 /* LineSegmentTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426992531BDD3CA900584CC8 /* LineSegmentTestCase.swift */; };
@@ -41,7 +42,6 @@
 		42BA874B1B9DDA9000AC842E /* StrokeRendererView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BA874A1B9DDA9000AC842E /* StrokeRendererView.swift */; };
 		42BA87511B9DEB0300AC842E /* CGVector+ballpoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42BA87501B9DEB0300AC842E /* CGVector+ballpoint.swift */; };
 		42C013031BEEB18900E9D6CA /* ScaffoldSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C013021BEEB18900E9D6CA /* ScaffoldSegment.swift */; };
-		42C013061BEEB2A500E9D6CA /* LinearScaffoldSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C013051BEEB2A500E9D6CA /* LinearScaffoldSegment.swift */; };
 		42C013081BEEB6D100E9D6CA /* RenderScaffold.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C013071BEEB6D100E9D6CA /* RenderScaffold.swift */; };
 		42C49A891BEE551A00B0AA0C /* ScaffoldPoint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C49A881BEE551A00B0AA0C /* ScaffoldPoint.swift */; };
 		42C8498B1BB87A2F0054F65A /* Stroke.swift in Sources */ = {isa = PBXBuildFile; fileRef = 42C8498A1BB87A2F0054F65A /* Stroke.swift */; };
@@ -70,6 +70,7 @@
 		4233EA251BE5442E0017B76D /* PointUtil.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointUtil.swift; sourceTree = "<group>"; };
 		4233EA271BE546DF0017B76D /* PointUtilTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PointUtilTestCase.swift; sourceTree = "<group>"; };
 		4244B9F41BD43F3400FE5BEB /* CGPoint+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGPoint+ballpoint.swift"; sourceTree = "<group>"; };
+		4255EC001CB00EA200E092EF /* CircularEndCapScaffoldSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircularEndCapScaffoldSegment.swift; sourceTree = "<group>"; };
 		426539F61B93CD14001345CB /* DrawingModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DrawingModel.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		426539FC1B93D78E001345CB /* DrawingRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawingRenderer.swift; sourceTree = "<group>"; };
 		426992531BDD3CA900584CC8 /* LineSegmentTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineSegmentTestCase.swift; sourceTree = "<group>"; };
@@ -101,7 +102,6 @@
 		42BA874A1B9DDA9000AC842E /* StrokeRendererView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StrokeRendererView.swift; sourceTree = "<group>"; };
 		42BA87501B9DEB0300AC842E /* CGVector+ballpoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "CGVector+ballpoint.swift"; sourceTree = "<group>"; };
 		42C013021BEEB18900E9D6CA /* ScaffoldSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaffoldSegment.swift; sourceTree = "<group>"; };
-		42C013051BEEB2A500E9D6CA /* LinearScaffoldSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LinearScaffoldSegment.swift; sourceTree = "<group>"; };
 		42C013071BEEB6D100E9D6CA /* RenderScaffold.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = RenderScaffold.swift; sourceTree = "<group>"; };
 		42C49A881BEE551A00B0AA0C /* ScaffoldPoint.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = ScaffoldPoint.swift; sourceTree = "<group>"; };
 		42C8498A1BB87A2F0054F65A /* Stroke.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Stroke.swift; sourceTree = "<group>"; };
@@ -290,8 +290,8 @@
 			isa = PBXGroup;
 			children = (
 				4232117F1C44944F00562311 /* QuadraticBezierScaffoldSegment.swift */,
-				42C013051BEEB2A500E9D6CA /* LinearScaffoldSegment.swift */,
 				42C013021BEEB18900E9D6CA /* ScaffoldSegment.swift */,
+				4255EC001CB00EA200E092EF /* CircularEndCapScaffoldSegment.swift */,
 			);
 			path = segments;
 			sourceTree = "<group>";
@@ -434,6 +434,7 @@
 				42A5A0A51C1461B30022F663 /* EndcapPopulationStage.swift in Sources */,
 				42A112C31B8EB50A00503D9F /* Brush.swift in Sources */,
 				42C013031BEEB18900E9D6CA /* ScaffoldSegment.swift in Sources */,
+				4255EC011CB00EA200E092EF /* CircularEndCapScaffoldSegment.swift in Sources */,
 				42822CBD1BD438210028208A /* CGFloat+ballpoint.swift in Sources */,
 				42A112931B8EB1D000503D9F /* AppDelegate.swift in Sources */,
 				42A112CA1B8EB66300503D9F /* Constants.swift in Sources */,
@@ -452,7 +453,6 @@
 				426539F71B93CD14001345CB /* DrawingModel.swift in Sources */,
 				421273641C012EB70007FA48 /* PointPopulationStage.swift in Sources */,
 				42C013081BEEB6D100E9D6CA /* RenderScaffold.swift in Sources */,
-				42C013061BEEB2A500E9D6CA /* LinearScaffoldSegment.swift in Sources */,
 				42A5A0A71C1463500022F663 /* PipelineBrush.swift in Sources */,
 				4299E0391C6C172400A6C927 /* UIDevice+ballpoint.swift in Sources */,
 				4288226D1BDE45F400A0CDE8 /* operators.swift in Sources */,
