@@ -41,6 +41,21 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   static let kMaximumZoomLevel: CGFloat = 7
   static let kMinimumZoomLevel: CGFloat = 1
 
+  // The size of the menu view buttons.
+  static let kMenuButtonSize: CGFloat = 44
+
+  // The number of menu view buttons.
+  static let kMenuButtonCount: CGFloat = 5
+
+  // The size of the menu view.
+  static let kMenuViewSize = CGSize(
+      width: DrawingViewController.kMenuButtonSize *
+          DrawingViewController.kMenuButtonCount,
+      height: DrawingViewController.kMenuButtonSize)
+
+  // The duration of the menu hide-display animation
+  static let kMenuDisplayAnimationDuration: NSTimeInterval = 0.2
+
   /// The root scroll view of the view hierarchy.
   let rootScrollView: UIScrollView
 
@@ -64,6 +79,9 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
   /// The painter view that handles all user interaction.
   let painterView: PainterView
+
+  /// The menu view.
+  let menuView: UIView
 
   /// The size of the view that renders the drawing in portrait orientation.
   private let drawingViewSize: CGSize
@@ -111,12 +129,13 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
         paintColor:
             RendererColorPalette.defaultPalette[Constants.kBallpointInkColorId],
         frame: CGRect.zero)
+    menuView = UIView(frame: CGRect.zero)
     drawingViewSize = drawingSize
     twoTouchTapRecognizer = UITapGestureRecognizer()
 
     super.init(nibName: nil, bundle: nil)
 
-    self.view.addSubview(rootScrollView)
+    view.addSubview(rootScrollView)
     rootScrollView.addSubview(contentContainerView)
     contentContainerView.addSubview(canvasShadowView)
     contentContainerView.addSubview(canvasBackingView)
@@ -124,6 +143,8 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     drawingContainerView.addSubview(drawingImageView)
     drawingContainerView.addSubview(pendingStrokeRenderer)
     drawingContainerView.addSubview(painterView)
+    // menuView will be added to the root view of the view controller as needed
+    // for display.
 
     rootScrollView.backgroundColor = UIColor.launchScreenBackgroundColor()
     contentContainerView.backgroundColor = UIColor.launchScreenBackgroundColor()
@@ -134,6 +155,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     drawingImageView.backgroundColor = UIColor.clearColor()
     pendingStrokeRenderer.backgroundColor = UIColor.clearColor()
     painterView.backgroundColor = UIColor.clearColor()
+    menuView.backgroundColor = UIColor.blueColor()
 
     rootScrollView.alwaysBounceHorizontal = true
     rootScrollView.alwaysBounceVertical = true
@@ -496,7 +518,71 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
   @objc private func handleTwoTouchTapGesture(
       twoTouchTapGesture: UITapGestureRecognizer) {
-    self.drawingInteractionDelegate?.toggleTool()
+    let locationInView = twoTouchTapGesture.locationInView(view)
+    if menuView.superview == nil {
+      displayMenuViewFromLocation(locationInView)
+    } else {
+      hideMenuViewToLocation(locationInView)
+    }
+  }
+
+
+  private func hideMenuViewToLocation(location: CGPoint) {
+    UIView.animateWithDuration(
+      DrawingViewController.kMenuDisplayAnimationDuration,
+      animations: {
+        self.menuView.alpha = 0
+        self.menuView.frame = CGRect(origin: location, size: CGSize.zero)
+      },
+      completion: { (completed: Bool) in
+        self.menuView.removeFromSuperview()
+      })
+  }
+
+
+  private func displayMenuViewFromLocation(location: CGPoint) {
+    let initialFrame = CGRect(origin: location, size: CGSize.zero)
+
+    let finalSize = DrawingViewController.kMenuViewSize
+    let uncheckedFinalOrigin = CGPoint(
+        x: location.x - finalSize.width / 2,
+        y: location.y - finalSize.height / 2)
+    let unpositionedFinalFrame =
+        CGRect(origin: uncheckedFinalOrigin, size: finalSize)
+    let finalFrame =
+        shiftRect(unpositionedFinalFrame, withinBoundingRect: view.bounds)
+
+    menuView.alpha = 0
+    menuView.frame = initialFrame
+    view.addSubview(menuView)
+    UIView.animateWithDuration(
+        DrawingViewController.kMenuDisplayAnimationDuration) {
+      self.menuView.alpha = 1
+      self.menuView.frame = finalFrame
+    }
+  }
+
+  private func shiftRect(
+      rect: CGRect, withinBoundingRect boundingRect: CGRect) -> CGRect {
+    var offset = CGVector.zero
+
+    if rect.origin.x < boundingRect.origin.x {
+      offset.dx = boundingRect.origin.x - rect.origin.x
+    }
+    if rect.origin.y < boundingRect.origin.y {
+      offset.dy = boundingRect.origin.y - rect.origin.y
+    }
+    if CGRectGetMaxX(rect) > CGRectGetMaxX(boundingRect) {
+      offset.dx = CGRectGetMaxX(boundingRect) - CGRectGetMaxX(rect)
+    }
+    if CGRectGetMaxY(rect) > CGRectGetMaxY(boundingRect) {
+      offset.dy = CGRectGetMaxY(boundingRect) - CGRectGetMaxY(rect)
+    }
+
+    return CGRect(
+        origin:
+            CGPoint(x: rect.origin.x + offset.dx, y: rect.origin.y + offset.dy),
+        size: rect.size)
   }
 
 
