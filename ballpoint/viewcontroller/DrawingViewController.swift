@@ -56,6 +56,9 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   // The duration of the menu hide-display animation
   static let kMenuDisplayAnimationDuration: NSTimeInterval = 0.2
 
+  // The duration of the post rotation animation.
+  static let kPostRotationAnimationDuration: NSTimeInterval = 0.3
+
   /// The root scroll view of the view hierarchy.
   let rootScrollView: UIScrollView
 
@@ -92,6 +95,13 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   /// The content offset of the scroll view prior to most recent rotation.
   private var preRotationSizes =
       PreRotationSizes(contentOffset: CGPoint.zero, shadowFrame: CGRect.zero)
+
+  /// The block that sets up the view for the post rotation animation.
+  private var postRotationAnimationSetup: (() -> Void)?
+
+  /// The animation to run after the transition to the new rotation has
+  /// completed.
+  private var postRotationAnimation: (() -> Void)?
 
   /// The state of painter touches are presence on screen.
   private enum PainterTouchPresence {
@@ -234,12 +244,32 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     let boundingPortraitSize = CGSize(
         width: portraitViewportSize.width * rootScrollView.zoomScale,
         height: portraitViewportSize.height * rootScrollView.zoomScale)
-
     let newViewport = rotateRect(
         previousViewport, fromRotation: previousRotation, toRotation: rotation,
         withinBoundingSizeInPortraitOrientation: boundingPortraitSize)
     if let newContentOffset = newViewport?.origin {
       rootScrollView.contentOffset = newContentOffset
+    }
+
+    guard let shadowParentView = canvasShadowView.superview else {
+      return
+    }
+    let shadowParentPortraitSize = rotation % CGFloat(M_PI) == 0 ?
+        shadowParentView.bounds.size :
+        CGSize(
+            width: shadowParentView.bounds.height,
+            height: shadowParentView.bounds.width)
+    let oldShadowFrame = preRotationSizes.shadowFrame
+    let newShadowFrame = rotateRect(
+        oldShadowFrame, fromRotation: previousRotation, toRotation: rotation,
+        withinBoundingSizeInPortraitOrientation: shadowParentPortraitSize)
+    if let shadowFrame = newShadowFrame {
+      postRotationAnimationSetup = {
+        self.canvasShadowView.frame = shadowFrame
+      }
+      postRotationAnimation = {
+        self.updateShadowForPainterTouchPresence(self.painterTouchPresence)
+      }
     }
   }
 
@@ -305,7 +335,8 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
                 x: portraitRect.origin.y,
                 y: pbSize.width -
                     (portraitRect.origin.x + portraitRect.width)),
-            size: view.bounds.size)
+            size:
+                CGSize(width: portraitRect.height, height: portraitRect.width))
       default:
         return nil
     }
@@ -446,8 +477,11 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     contentContainerView.frame = view.bounds
     canvasBackingView.frame = canvasFrame
     // Update shadow frame, after backing view has been set to ensure proper
-    // shadow sizing.
-    updateShadowForPainterTouchPresence(painterTouchPresence)
+    // shadow sizing only if a post rotation animation block is not present, as
+    // that block will update the shadow after rotation completes.
+    if postRotationAnimation == nil && postRotationAnimationSetup == nil {
+      updateShadowForPainterTouchPresence(painterTouchPresence)
+    }
     drawingContainerView.frame = canvasFrame
     drawingImageView.frame = drawingFrame
     pendingStrokeRenderer.frame = drawingFrame
@@ -464,7 +498,8 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
       withTransitionCoordinator coordinator:
           UIViewControllerTransitionCoordinator) {
     preRotationSizes = PreRotationSizes(
-        contentOffset: rootScrollView.contentOffset, shadowFrame: CGRect.zero)
+        contentOffset: rootScrollView.contentOffset,
+        shadowFrame: canvasShadowView.frame)
 
     // Disable view animations during transitions to a new size. Specifically
     // this blocks animations due to screen rotations.
@@ -472,6 +507,16 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     coordinator.animateAlongsideTransition(nil) {
         (context: UIViewControllerTransitionCoordinatorContext) in
       UIView.setAnimationsEnabled(true)
+      if let animationSetup = self.postRotationAnimationSetup,
+             animation = self.postRotationAnimation {
+        animationSetup()
+        UIView.animateWithDuration(
+            DrawingViewController.kPostRotationAnimationDuration,
+            animations: animation)
+      }
+
+      self.postRotationAnimationSetup = nil
+      self.postRotationAnimation = nil
     }
   }
 
