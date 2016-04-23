@@ -97,9 +97,6 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
       contentOffset: CGPoint.zero, shadowFrame: CGRect.zero,
       menuCenter: CGPoint.zero)
 
-  /// The block that sets up the view for the post rotation animation.
-  private var postRotationAnimationSetup: (() -> Void)?
-
   /// The animation to run after the transition to the new rotation has
   /// completed.
   private var postRotationAnimation: (() -> Void)?
@@ -271,12 +268,10 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
         oldCenter, fromRotation: previousRotation, toRotation: rotation,
         withinBoundingSizeInPortraitOrientation: portraitViewportSize)
     if let shadowFrame = newShadowFrame, center = newCenter {
-      postRotationAnimationSetup = {
-        self.canvasShadowView.frame = shadowFrame
-        self.menuView.center = center.origin
-        self.menuView.transform =
-            CGAffineTransformMakeRotation(rotation - previousRotation)
-      }
+      canvasShadowView.frame = shadowFrame
+      menuView.center = center.origin
+      menuView.transform =
+          CGAffineTransformMakeRotation(rotation - previousRotation)
       postRotationAnimation = {
         self.updateShadowForPainterTouchPresence(self.painterTouchPresence)
         self.menuView.transform = CGAffineTransformIdentity
@@ -490,7 +485,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     // Update shadow frame, after backing view has been set to ensure proper
     // shadow sizing only if a post rotation animation block is not present, as
     // that block will update the shadow after rotation completes.
-    if postRotationAnimation == nil && postRotationAnimationSetup == nil {
+    if postRotationAnimation == nil {
       updateShadowForPainterTouchPresence(painterTouchPresence)
     }
     drawingContainerView.frame = canvasFrame
@@ -519,16 +514,12 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     coordinator.animateAlongsideTransition(nil) {
         (context: UIViewControllerTransitionCoordinatorContext) in
       UIView.setAnimationsEnabled(true)
-      if let animationSetup = self.postRotationAnimationSetup,
-             animation = self.postRotationAnimation {
-        animationSetup()
+      if let animation = self.postRotationAnimation {
         UIView.animateWithDuration(
             DrawingViewController.kPostRotationAnimationDuration,
             animations: animation)
+        self.postRotationAnimation = nil
       }
-
-      self.postRotationAnimationSetup = nil
-      self.postRotationAnimation = nil
     }
   }
 
