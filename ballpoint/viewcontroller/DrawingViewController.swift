@@ -93,8 +93,9 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   private let twoTouchTapRecognizer: UITapGestureRecognizer
 
   /// The content offset of the scroll view prior to most recent rotation.
-  private var preRotationSizes =
-      PreRotationSizes(contentOffset: CGPoint.zero, shadowFrame: CGRect.zero)
+  private var preRotationSizes = PreRotationSizes(
+      contentOffset: CGPoint.zero, shadowFrame: CGRect.zero,
+      menuCenter: CGPoint.zero)
 
   /// The block that sets up the view for the post rotation animation.
   private var postRotationAnimationSetup: (() -> Void)?
@@ -252,7 +253,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     }
 
     guard let shadowParentView = canvasShadowView.superview else {
-      return
+      fatalError("The shadow view should be attached to a parent.")
     }
     let shadowParentPortraitSize = rotation % CGFloat(M_PI) == 0 ?
         shadowParentView.bounds.size :
@@ -263,12 +264,22 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     let newShadowFrame = rotateRect(
         oldShadowFrame, fromRotation: previousRotation, toRotation: rotation,
         withinBoundingSizeInPortraitOrientation: shadowParentPortraitSize)
-    if let shadowFrame = newShadowFrame {
+
+    let oldCenter =
+        CGRect(origin: preRotationSizes.menuCenter, size: CGSizeZero)
+    let newCenter = rotateRect(
+        oldCenter, fromRotation: previousRotation, toRotation: rotation,
+        withinBoundingSizeInPortraitOrientation: portraitViewportSize)
+    if let shadowFrame = newShadowFrame, center = newCenter {
       postRotationAnimationSetup = {
         self.canvasShadowView.frame = shadowFrame
+        self.menuView.center = center.origin
+        self.menuView.transform =
+            CGAffineTransformMakeRotation(rotation - previousRotation)
       }
       postRotationAnimation = {
         self.updateShadowForPainterTouchPresence(self.painterTouchPresence)
+        self.menuView.transform = CGAffineTransformIdentity
       }
     }
   }
@@ -499,7 +510,8 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
           UIViewControllerTransitionCoordinator) {
     preRotationSizes = PreRotationSizes(
         contentOffset: rootScrollView.contentOffset,
-        shadowFrame: canvasShadowView.frame)
+        shadowFrame: canvasShadowView.frame,
+        menuCenter: menuView.center)
 
     // Disable view animations during transitions to a new size. Specifically
     // this blocks animations due to screen rotations.
@@ -639,5 +651,6 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   private struct PreRotationSizes {
     let contentOffset: CGPoint
     let shadowFrame: CGRect
+    let menuCenter: CGPoint
   }
 }
