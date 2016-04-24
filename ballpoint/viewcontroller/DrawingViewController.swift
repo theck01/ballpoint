@@ -152,6 +152,19 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     pendingStrokeRenderer.backgroundColor = UIColor.clearColor()
     painterView.backgroundColor = UIColor.clearColor()
 
+    menuView.eraseAction = {
+      self.drawingInteractionDelegate?.toggleTool()
+    }
+    menuView.undoAction = {
+      self.drawingInteractionDelegate?.undo()
+    }
+    menuView.redoAction = {
+      self.drawingInteractionDelegate?.redo()
+    }
+    menuView.clearAction = {
+      self.drawingInteractionDelegate?.clearDrawing()
+    }
+
     rootScrollView.alwaysBounceHorizontal = true
     rootScrollView.alwaysBounceVertical = true
     rootScrollView.delaysContentTouches = false
