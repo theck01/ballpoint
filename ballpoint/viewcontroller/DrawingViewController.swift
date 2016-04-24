@@ -41,18 +41,6 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   static let kMaximumZoomLevel: CGFloat = 7
   static let kMinimumZoomLevel: CGFloat = 1
 
-  // The size of the menu view buttons.
-  static let kMenuButtonSize: CGFloat = 44
-
-  // The number of menu view buttons.
-  static let kMenuButtonCount: CGFloat = 5
-
-  // The size of the menu view.
-  static let kMenuViewSize = CGSize(
-      width: DrawingViewController.kMenuButtonSize *
-          DrawingViewController.kMenuButtonCount,
-      height: DrawingViewController.kMenuButtonSize)
-
   // The duration of the menu hide-display animation
   static let kMenuDisplayAnimationDuration: NSTimeInterval = 0.2
 
@@ -84,7 +72,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   let painterView: PainterView
 
   /// The menu view.
-  let menuView: UIView
+  let menuView: MenuView
 
   /// The size of the view that renders the drawing in portrait orientation.
   private let drawingViewSize: CGSize
@@ -137,7 +125,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
         paintColor:
             RendererColorPalette.defaultPalette[Constants.kBallpointInkColorId],
         frame: CGRect.zero)
-    menuView = UIView(frame: CGRect.zero)
+    menuView = MenuView()
     drawingViewSize = drawingSize
     twoTouchTapRecognizer = UITapGestureRecognizer()
 
@@ -163,7 +151,6 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     drawingImageView.backgroundColor = UIColor.clearColor()
     pendingStrokeRenderer.backgroundColor = UIColor.clearColor()
     painterView.backgroundColor = UIColor.clearColor()
-    menuView.backgroundColor = UIColor.blueColor()
 
     rootScrollView.alwaysBounceHorizontal = true
     rootScrollView.alwaysBounceVertical = true
@@ -576,11 +563,18 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
 
   private func hideMenuViewToLocation(location: CGPoint) {
+    let hiddenMenuOrigin = CGPoint(
+        x: menuView.frame.origin.x + menuView.desiredSize.width / 4,
+        y: menuView.frame.origin.y + menuView.desiredSize.height / 4)
+    let hiddenMenuSize = CGSize(
+        width: menuView.desiredSize.width / 2,
+        height: menuView.desiredSize.height / 2)
     UIView.animateWithDuration(
       DrawingViewController.kMenuDisplayAnimationDuration,
       animations: {
         self.menuView.alpha = 0
-        self.menuView.frame = CGRect(origin: location, size: CGSize.zero)
+        self.menuView.frame =
+            CGRect(origin: hiddenMenuOrigin, size: hiddenMenuSize)
       },
       completion: { (completed: Bool) in
         self.menuView.removeFromSuperview()
@@ -589,9 +583,15 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
 
   private func displayMenuViewFromLocation(location: CGPoint) {
-    let initialFrame = CGRect(origin: location, size: CGSize.zero)
+    let hiddenMenuOrigin = CGPoint(
+        x: location.x - menuView.desiredSize.width / 4,
+        y: location.y - menuView.desiredSize.height / 4)
+    let hiddenMenuSize = CGSize(
+        width: menuView.desiredSize.width / 2,
+        height: menuView.desiredSize.height / 2)
+    let initialFrame = CGRect(origin: hiddenMenuOrigin, size: hiddenMenuSize)
 
-    let finalSize = DrawingViewController.kMenuViewSize
+    let finalSize = menuView.desiredSize
     let uncheckedFinalOrigin = CGPoint(
         x: location.x - finalSize.width / 2,
         y: location.y - finalSize.height / 2)
