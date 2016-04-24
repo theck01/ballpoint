@@ -183,7 +183,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     twoTouchTapRecognizer.numberOfTouchesRequired = 2
     twoTouchTapRecognizer.addTarget(
         self, action: #selector(handleTwoTouchTapGesture))
-    view.addGestureRecognizer(twoTouchTapRecognizer)
+    painterView.addGestureRecognizer(twoTouchTapRecognizer)
 
     RendererColorPalette.defaultPalette.registerColorPaletteUpdateListener(
         self)
