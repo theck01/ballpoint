@@ -269,12 +269,23 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
         withinBoundingSizeInPortraitOrientation: portraitViewportSize)
     if let shadowFrame = newShadowFrame, center = newCenter {
       canvasShadowView.frame = shadowFrame
+
+      // Calculate the center required to keep the menu within the bounds of
+      // the viewport before tranforming, so that the proper center can be
+      // applied as a part of the post rotation animation.
       menuView.center = center.origin
+      let shiftedMenuViewFrame =
+          shiftRect(menuView.frame, withinBoundingRect: view.bounds)
+      let shiftedMenuViewCenter = CGPoint(
+          x: CGRectGetMidX(shiftedMenuViewFrame),
+          y: CGRectGetMidY(shiftedMenuViewFrame))
+
       menuView.transform =
           CGAffineTransformMakeRotation(rotation - previousRotation)
       postRotationAnimation = {
         self.updateShadowForPainterTouchPresence(self.painterTouchPresence)
         self.menuView.transform = CGAffineTransformIdentity
+        self.menuView.center = shiftedMenuViewCenter
       }
     }
   }
