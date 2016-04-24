@@ -12,38 +12,38 @@ import UIKit
 
 extension UIColor {
   /// The backing instance for -launchScreenBackgroundColor
-  private static var _launchScreenBackgroundColor: UIColor?
+  private static var _launchScreenBackgroundColor =
+      UIColor(white: 0.938, alpha: 1)
 
   /// The backing instance for -ballpointInkColor
-  private static var _ballpointInkColor: UIColor?
+  private static var _ballpointInkColor =
+      UIColor(red: 0.004, green: 0.083, blue: 0.116, alpha: 1)
 
   /// The backing instance for -ballpointSurfaceColor
-  private static var _ballpointSurfaceColor: UIColor?
+  private static var _ballpointSurfaceColor = UIColor(white: 1, alpha: 1)
+
+  /// The backing instance for -ballpointPressedButtonColor: UIColor?
+  private static var _ballpointDepressedButtonColor =
+      UIColor(white: 0.3, alpha: 0.3)
 
 
   // MARK: Custom colors
 
   static func launchScreenBackgroundColor() -> UIColor {
-    if _launchScreenBackgroundColor == nil {
-      _launchScreenBackgroundColor = UIColor(white: 0.938, alpha: 1)
-    }
-    return _launchScreenBackgroundColor!
+    return _launchScreenBackgroundColor
   }
   
 
   static func ballpointInkColor() -> UIColor {
-    if _ballpointInkColor == nil {
-      _ballpointInkColor = UIColor(
-          red: 0.004, green: 0.083, blue: 0.116, alpha: 1)
-    }
-    return _ballpointInkColor!
+    return _ballpointInkColor
   }
 
   static func ballpointSurfaceColor() -> UIColor {
-    if _ballpointSurfaceColor == nil {
-      _ballpointSurfaceColor = UIColor(white: 1, alpha: 1)
-    }
-    return _ballpointSurfaceColor!
+    return _ballpointSurfaceColor
+  }
+
+  static func ballpointDepressedButtonColor() -> UIColor {
+    return _ballpointDepressedButtonColor
   }
 
 
