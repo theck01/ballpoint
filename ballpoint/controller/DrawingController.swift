@@ -23,15 +23,16 @@ class DrawingController: DrawingInteractionDelegate {
   }
 
   fileprivate let model: DrawingModel
-  fileprivate let viewController: DrawingViewController
+  
+  var viewDelegate: DrawingControllerViewDelegate?
 
   /// The current tool being used within the application.
   fileprivate var currentTool: EditingTool = .pen {
     didSet {
       switch (currentTool) {
       case .pen:
-        viewController.painterView.brush = Constants.kPenBrush
-        viewController.painterView.paintColor =
+        viewDelegate?.painterView.brush = Constants.kPenBrush
+        viewDelegate?.painterView.paintColor =
             RendererColorPalette.defaultPalette[Constants.kBallpointInkColorId]
 
         RendererColorPalette.defaultPalette.updatePalette([
@@ -40,8 +41,8 @@ class DrawingController: DrawingInteractionDelegate {
         ])
 
       case .eraser:
-        viewController.painterView.brush = Constants.kEraserBrush
-        viewController.painterView.paintColor =
+        viewDelegate?.painterView.brush = Constants.kEraserBrush
+        viewDelegate?.painterView.paintColor =
             RendererColorPalette.defaultPalette[
                 Constants.kBallpointSurfaceColorId]
 
@@ -54,9 +55,8 @@ class DrawingController: DrawingInteractionDelegate {
   }
 
 
-  init(model: DrawingModel, viewController: DrawingViewController) {
+  init(model: DrawingModel) {
     self.model = model
-    self.viewController = viewController
   }
 
 
@@ -66,7 +66,7 @@ class DrawingController: DrawingInteractionDelegate {
     let edit = DrawingModelEdit(
         type: DrawingModelEdit.EditType.addStrokes, strokes: strokes)
     model.applyEdit(edit)
-    viewController.updateDrawingSnapshot(model.drawingSnapshot)
+    viewDelegate?.updateDrawingSnapshot(model.drawingSnapshot)
   }
 
 
@@ -74,7 +74,7 @@ class DrawingController: DrawingInteractionDelegate {
     let edit = DrawingModelEdit(
         type: DrawingModelEdit.EditType.clear, strokes: [])
     model.applyEdit(edit)
-    viewController.updateDrawingSnapshot(model.drawingSnapshot)
+    viewDelegate?.updateDrawingSnapshot(model.drawingSnapshot)
   }
 
 
@@ -84,18 +84,18 @@ class DrawingController: DrawingInteractionDelegate {
     // Update the view controller's drawing snapshot after updating the current
     // tool, ensuring that the view controller gets a snapshot with the
     // appropriate color scheme.
-    viewController.updateDrawingSnapshot(model.drawingSnapshot)
+    viewDelegate?.updateDrawingSnapshot(model.drawingSnapshot)
   }
 
 
   func undo() {
     model.undo()
-    viewController.updateDrawingSnapshot(model.drawingSnapshot)
+    viewDelegate?.updateDrawingSnapshot(model.drawingSnapshot)
   }
 
 
   func redo() {
     model.redo()
-    viewController.updateDrawingSnapshot(model.drawingSnapshot)
+    viewDelegate?.updateDrawingSnapshot(model.drawingSnapshot)
   }
 }

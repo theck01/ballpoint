@@ -17,6 +17,7 @@
 		4255EC011CB00EA200E092EF /* CircularEndCapScaffoldSegment.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4255EC001CB00EA200E092EF /* CircularEndCapScaffoldSegment.swift */; };
 		426539F71B93CD14001345CB /* DrawingModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426539F61B93CD14001345CB /* DrawingModel.swift */; };
 		426539FD1B93D78E001345CB /* DrawingRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426539FC1B93D78E001345CB /* DrawingRenderer.swift */; };
+		4267C4591DAD378600CA9B38 /* DrawingControllerViewDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4267C4581DAD378600CA9B38 /* DrawingControllerViewDelegate.swift */; };
 		426992541BDD3CA900584CC8 /* LineSegmentTestCase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 426992531BDD3CA900584CC8 /* LineSegmentTestCase.swift */; };
 		4270F90C1BB0F95C00940AAE /* DrawingInteractionDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4270F90B1BB0F95C00940AAE /* DrawingInteractionDelegate.swift */; };
 		4270F90E1BB0F98000940AAE /* StrokeRenderer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4270F90D1BB0F98000940AAE /* StrokeRenderer.swift */; };
@@ -75,6 +76,7 @@
 		4255EC001CB00EA200E092EF /* CircularEndCapScaffoldSegment.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CircularEndCapScaffoldSegment.swift; sourceTree = "<group>"; };
 		426539F61B93CD14001345CB /* DrawingModel.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; lineEnding = 0; path = DrawingModel.swift; sourceTree = "<group>"; xcLanguageSpecificationIdentifier = xcode.lang.swift; };
 		426539FC1B93D78E001345CB /* DrawingRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawingRenderer.swift; sourceTree = "<group>"; };
+		4267C4581DAD378600CA9B38 /* DrawingControllerViewDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawingControllerViewDelegate.swift; sourceTree = "<group>"; };
 		426992531BDD3CA900584CC8 /* LineSegmentTestCase.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LineSegmentTestCase.swift; sourceTree = "<group>"; };
 		4270F90B1BB0F95C00940AAE /* DrawingInteractionDelegate.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DrawingInteractionDelegate.swift; sourceTree = "<group>"; };
 		4270F90D1BB0F98000940AAE /* StrokeRenderer.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = StrokeRenderer.swift; sourceTree = "<group>"; };
@@ -288,6 +290,7 @@
 			children = (
 				42E0FE8D1B99120300E2A0A1 /* DrawingController.swift */,
 				4270F90B1BB0F95C00940AAE /* DrawingInteractionDelegate.swift */,
+				4267C4581DAD378600CA9B38 /* DrawingControllerViewDelegate.swift */,
 			);
 			path = controller;
 			sourceTree = "<group>";
@@ -473,6 +476,7 @@
 				42C9A1841BDD391D005C867A /* LineSegment.swift in Sources */,
 				42A112C51B8EB50A00503D9F /* RenderedStroke.swift in Sources */,
 				426539FD1B93D78E001345CB /* DrawingRenderer.swift in Sources */,
+				4267C4591DAD378600CA9B38 /* DrawingControllerViewDelegate.swift in Sources */,
 				427DBC501BB7268A00122848 /* UIView+ballpoint.swift in Sources */,
 				428811991BEFE04C007B9844 /* RenderPipeline.swift in Sources */,
 				4270F90C1BB0F95C00940AAE /* DrawingInteractionDelegate.swift in Sources */,

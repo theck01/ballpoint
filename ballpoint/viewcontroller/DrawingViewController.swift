@@ -13,7 +13,7 @@ import UIKit
 
 class DrawingViewController: UIViewController, PainterTouchDelegate,
     PainterStrokeScaleProvider, RendererColorPaletteUpdateListener,
-    UIScrollViewDelegate {
+    UIScrollViewDelegate, DrawingControllerViewDelegate {
   /// The separation between the canvas and the screen boundary.
   static let kCanvasMargin: CGFloat = 16
 

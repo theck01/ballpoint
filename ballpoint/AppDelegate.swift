@@ -43,7 +43,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     self.drawingVC = drawingVC
     let renderer = DrawingRenderer(drawingSize: drawingSize)
     let model = DrawingModel(renderer: renderer)
-    let controller = DrawingController(model: model, viewController: drawingVC)
+    let controller = DrawingController(model: model)
+    controller.viewDelegate = drawingVC
     drawingVC.drawingInteractionDelegate = controller
 
     window.rootViewController = drawingVC
