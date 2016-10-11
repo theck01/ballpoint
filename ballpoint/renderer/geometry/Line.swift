@@ -68,7 +68,7 @@ public struct Line: Equatable {
   }
 
 
-  private init(slope: CGFloat, xIntercept: CGFloat?, yIntercept: CGFloat?) {
+  fileprivate init(slope: CGFloat, xIntercept: CGFloat?, yIntercept: CGFloat?) {
     if slope =~= 0 {
       assert(
           xIntercept == nil,
@@ -117,7 +117,7 @@ public extension Line {
   - returns: The intersection point between the two lines, or nil if the lines
       are parallel and do not intersect.
   */
-  public static func intersection(a: Line, _ b: Line) -> CGPoint? {
+  public static func intersection(_ a: Line, _ b: Line) -> CGPoint? {
     if a.slope =~= b.slope {
       return nil
     }
@@ -154,7 +154,7 @@ public extension Line {
 
   - returns: Whether the point is on the line.
   */
-  public static func isPoint(point: CGPoint, onLine line: Line) -> Bool {
+  public static func isPoint(_ point: CGPoint, onLine line: Line) -> Bool {
     if line.isVertical {
       guard let xIntercept = line.xIntercept else {
         fatalError("A vertical line must have an x-intercept.")
@@ -179,7 +179,7 @@ public extension Line {
       point on the line.
   */
   public static func pointsAtDistance(
-      distance: CGFloat, onLine line: Line, fromPoint point: CGPoint) ->
+      _ distance: CGFloat, onLine line: Line, fromPoint point: CGPoint) ->
       (CGPoint, CGPoint) {
     assert(
         isPoint(point, onLine: line),
@@ -230,7 +230,7 @@ public extension Line {
         point.
    */
   public static func linePerpendicularToLine(
-      line: Line, throughPoint point: CGPoint) -> Line {
+      _ line: Line, throughPoint point: CGPoint) -> Line {
     if line.isVertical {
       return Line(slope: 0, throughPoint: point)
     } else if line.isHorizontal {
@@ -247,7 +247,7 @@ public extension Line {
    - returns: The projection of the point onto the line.
    */
   public static func projectionOfPoint(
-      point: CGPoint, onLine line: Line) -> CGPoint {
+      _ point: CGPoint, onLine line: Line) -> CGPoint {
     return Line.intersection(
         linePerpendicularToLine(line, throughPoint: point), line)!
   }
@@ -260,7 +260,7 @@ public extension Line {
    - returns: Whether the points are on the same side of the line.
    */
   public static func arePoints(
-      points: (CGPoint, CGPoint), onSameSideOfLine line: Line) -> Bool {
+      _ points: (CGPoint, CGPoint), onSameSideOfLine line: Line) -> Bool {
     var diff0: CGFloat
     var diff1: CGFloat
     if line.isVertical {

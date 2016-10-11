@@ -32,20 +32,20 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   static let kCanvasAbsentTouchShadowOffset = CGPoint(x: 0, y: 3)
 
   /// The duration of the canvas raise animation.
-  static let kCanvasRaiseAnimationDuration: NSTimeInterval = 1
+  static let kCanvasRaiseAnimationDuration: TimeInterval = 1
 
   /// The duration of the shadow animation when painter touches are active.
-  static let kPainterTouchesActiveAnimationDuration: NSTimeInterval = 0.16
+  static let kPainterTouchesActiveAnimationDuration: TimeInterval = 0.16
 
   // The minimum and maximum values for the zoom level of the root UIScrollView.
   static let kMaximumZoomLevel: CGFloat = 7
   static let kMinimumZoomLevel: CGFloat = 1
 
   // The duration of the menu hide-display animation
-  static let kMenuDisplayAnimationDuration: NSTimeInterval = 0.2
+  static let kMenuDisplayAnimationDuration: TimeInterval = 0.2
 
   // The duration of the post rotation animation.
-  static let kPostRotationAnimationDuration: NSTimeInterval = 0.3
+  static let kPostRotationAnimationDuration: TimeInterval = 0.3
 
   /// The root scroll view of the view hierarchy.
   let rootScrollView: UIScrollView
@@ -75,29 +75,29 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   let menuView: MenuView
 
   /// The size of the view that renders the drawing in portrait orientation.
-  private let drawingViewSize: CGSize
+  fileprivate let drawingViewSize: CGSize
 
   /// The two touch tap recongizer that handles the tool change gesture.
-  private let twoTouchTapRecognizer: UITapGestureRecognizer
+  fileprivate let twoTouchTapRecognizer: UITapGestureRecognizer
 
   /// The content offset of the scroll view prior to most recent rotation.
-  private var preRotationSizes = PreRotationSizes(
+  fileprivate var preRotationSizes = PreRotationSizes(
       contentOffset: CGPoint.zero, shadowFrame: CGRect.zero,
       menuCenter: CGPoint.zero)
 
   /// The animation to run after the transition to the new rotation has
   /// completed.
-  private var postRotationAnimation: (() -> Void)?
+  fileprivate var postRotationAnimation: (() -> Void)?
 
   /// The state of painter touches are presence on screen.
-  private enum PainterTouchPresence {
-    case Present
-    case Absent
-    case Unknown
+  fileprivate enum PainterTouchPresence {
+    case present
+    case absent
+    case unknown
   }
 
   /// Whether touches are active on screen.
-  private var painterTouchPresence = PainterTouchPresence.Unknown
+  fileprivate var painterTouchPresence = PainterTouchPresence.unknown
 
   var drawingInteractionDelegate: DrawingInteractionDelegate? {
     get {
@@ -144,13 +144,13 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
     rootScrollView.backgroundColor = UIColor.launchScreenBackgroundColor()
     contentContainerView.backgroundColor = UIColor.launchScreenBackgroundColor()
-    canvasShadowView.backgroundColor = UIColor.darkGrayColor()
+    canvasShadowView.backgroundColor = UIColor.darkGray
     canvasBackingView.backgroundColor = RendererColorPalette.defaultPalette[
         Constants.kBallpointSurfaceColorId].backingColor
-    drawingContainerView.backgroundColor = UIColor.clearColor()
-    drawingImageView.backgroundColor = UIColor.clearColor()
-    pendingStrokeRenderer.backgroundColor = UIColor.clearColor()
-    painterView.backgroundColor = UIColor.clearColor()
+    drawingContainerView.backgroundColor = UIColor.clear
+    drawingImageView.backgroundColor = UIColor.clear
+    pendingStrokeRenderer.backgroundColor = UIColor.clear
+    painterView.backgroundColor = UIColor.clear
 
     menuView.eraseAction = {
       self.drawingInteractionDelegate?.toggleTool()
@@ -208,7 +208,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
    - parameter snapshot:
    */
-  func updateDrawingSnapshot(snapshot: UIImage) {
+  func updateDrawingSnapshot(_ snapshot: UIImage) {
     drawingImageView.image = snapshot
   }
 
@@ -221,17 +221,17 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
          content, in radians. May be infinity if there was no previous
          orientation.
    */
-  func setDrawingContentRotation(rotation: CGFloat, previousRotation: CGFloat) {
-    drawingContainerView.transform = CGAffineTransformMakeRotation(rotation)
+  func setDrawingContentRotation(_ rotation: CGFloat, previousRotation: CGFloat) {
+    drawingContainerView.transform = CGAffineTransform(rotationAngle: rotation)
     // Request a layout to properly position rotated view.
     view.setNeedsLayout()
 
     // Update the viewport within the scroll view to display the same portion
     // or content.
-    let portraitViewportSize = rotation % CGFloat(M_PI) == 0 ?
+    let portraitViewportSize = rotation.truncatingRemainder(dividingBy: CGFloat(M_PI)) == 0 ?
         view.bounds.size :
         CGSize(width: view.bounds.height, height: view.bounds.width)
-    let previousViewportSize = previousRotation % CGFloat(M_PI) == 0 ?
+    let previousViewportSize = previousRotation.truncatingRemainder(dividingBy: CGFloat(M_PI)) == 0 ?
         portraitViewportSize :
         CGSize(
             width: portraitViewportSize.height,
@@ -252,7 +252,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     guard let shadowParentView = canvasShadowView.superview else {
       fatalError("The shadow view should be attached to a parent.")
     }
-    let shadowParentPortraitSize = rotation % CGFloat(M_PI) == 0 ?
+    let shadowParentPortraitSize = rotation.truncatingRemainder(dividingBy: CGFloat(M_PI)) == 0 ?
         shadowParentView.bounds.size :
         CGSize(
             width: shadowParentView.bounds.height,
@@ -263,11 +263,11 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
         withinBoundingSizeInPortraitOrientation: shadowParentPortraitSize)
 
     let oldCenter =
-        CGRect(origin: preRotationSizes.menuCenter, size: CGSizeZero)
+        CGRect(origin: preRotationSizes.menuCenter, size: CGSize.zero)
     let newCenter = rotateRect(
         oldCenter, fromRotation: previousRotation, toRotation: rotation,
         withinBoundingSizeInPortraitOrientation: portraitViewportSize)
-    if let shadowFrame = newShadowFrame, center = newCenter {
+    if let shadowFrame = newShadowFrame, let center = newCenter {
       canvasShadowView.frame = shadowFrame
 
       // Calculate the center required to keep the menu within the bounds of
@@ -277,14 +277,14 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
       let shiftedMenuViewFrame =
           shiftRect(menuView.frame, withinBoundingRect: view.bounds)
       let shiftedMenuViewCenter = CGPoint(
-          x: CGRectGetMidX(shiftedMenuViewFrame),
-          y: CGRectGetMidY(shiftedMenuViewFrame))
+          x: shiftedMenuViewFrame.midX,
+          y: shiftedMenuViewFrame.midY)
 
       menuView.transform =
-          CGAffineTransformMakeRotation(rotation - previousRotation)
+          CGAffineTransform(rotationAngle: rotation - previousRotation)
       postRotationAnimation = {
         self.updateShadowForPainterTouchPresence(self.painterTouchPresence)
-        self.menuView.transform = CGAffineTransformIdentity
+        self.menuView.transform = CGAffineTransform.identity
         self.menuView.center = shiftedMenuViewCenter
       }
     }
@@ -298,8 +298,8 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
    - parameter rotation: The new rotation of the viewport in radians.
    - parameter rotation: The old rotation of the viewport in radians.
    */
-  private func rotateRect(
-      rect: CGRect, fromRotation: CGFloat, toRotation: CGFloat,
+  fileprivate func rotateRect(
+      _ rect: CGRect, fromRotation: CGFloat, toRotation: CGFloat,
       withinBoundingSizeInPortraitOrientation pbSize: CGSize) -> CGRect? {
     var portraitRect: CGRect
     switch (fromRotation) {
@@ -363,13 +363,13 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   // MARK: PainterTouchDelegate methods
 
   func painterTouchesActive() {
-    painterTouchPresence = PainterTouchPresence.Present
-    UIView.animateWithDuration(
-        DrawingViewController.kPainterTouchesActiveAnimationDuration,
+    painterTouchPresence = PainterTouchPresence.present
+    UIView.animate(
+        withDuration: DrawingViewController.kPainterTouchesActiveAnimationDuration,
         delay: 0,
         options: [
-            UIViewAnimationOptions.BeginFromCurrentState,
-            UIViewAnimationOptions.CurveEaseOut],
+            UIViewAnimationOptions.beginFromCurrentState,
+            UIViewAnimationOptions.curveEaseOut],
         animations: {
           self.updateShadowForPainterTouchPresence(self.painterTouchPresence)
         },
@@ -378,13 +378,13 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
 
   func painterTouchesAbsent() {
-    painterTouchPresence = PainterTouchPresence.Absent
-    UIView.animateWithDuration(
-        DrawingViewController.kPainterTouchesActiveAnimationDuration,
+    painterTouchPresence = PainterTouchPresence.absent
+    UIView.animate(
+        withDuration: DrawingViewController.kPainterTouchesActiveAnimationDuration,
         delay: 0,
         options: [
-            UIViewAnimationOptions.BeginFromCurrentState,
-            UIViewAnimationOptions.CurveEaseOut],
+            UIViewAnimationOptions.beginFromCurrentState,
+            UIViewAnimationOptions.curveEaseOut],
         animations: {
           self.updateShadowForPainterTouchPresence(self.painterTouchPresence)
         },
@@ -392,17 +392,17 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   }
 
 
-  private func updateShadowForPainterTouchPresence(
-      touchPresence: PainterTouchPresence) {
+  fileprivate func updateShadowForPainterTouchPresence(
+      _ touchPresence: PainterTouchPresence) {
     var overflow = CGSize.zero
     var offset = CGPoint.zero
     var alpha = canvasShadowView.alpha
     switch(touchPresence) {
-      case PainterTouchPresence.Present:
+      case PainterTouchPresence.present:
         overflow = DrawingViewController.kCanvasActiveTouchShadowOverflow
         offset = DrawingViewController.kCanvasActiveTouchShadowOffset
         alpha = DrawingViewController.kCanvasActiveTouchShadowOpacity
-      case PainterTouchPresence.Absent:
+      case PainterTouchPresence.absent:
         overflow = DrawingViewController.kCanvasAbsentTouchShadowOverflow
         offset = DrawingViewController.kCanvasAbsentTouchShadowOffset
         alpha = DrawingViewController.kCanvasAbsentTouchShadowOpacity
@@ -431,7 +431,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
   // MARK: RendererColorPaletteUpdateListener methods
 
-  func didUpdateRenderColorPalette(palette: RendererColorPalette) {
+  func didUpdateRenderColorPalette(_ palette: RendererColorPalette) {
     pendingStrokeRenderer.setNeedsDisplay()
     canvasBackingView.backgroundColor =
         palette[Constants.kBallpointSurfaceColorId].backingColor
@@ -440,12 +440,12 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
 
   // MARK: UIScrollViewDelegate methods
 
-  func viewForZoomingInScrollView(scrollView: UIScrollView) -> UIView? {
+  func viewForZooming(in scrollView: UIScrollView) -> UIView? {
     return contentContainerView
   }
 
 
-  func scrollViewDidZoom(scrollView: UIScrollView) {
+  func scrollViewDidZoom(_ scrollView: UIScrollView) {
     let horizontalInset: CGFloat = fmax(
         (scrollView.bounds.size.width - scrollView.contentSize.width) / 2,
         0)
@@ -510,9 +510,9 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   }
 
 
-  override func viewWillTransitionToSize(
-      size: CGSize,
-      withTransitionCoordinator coordinator:
+  override func viewWillTransition(
+      to size: CGSize,
+      with coordinator:
           UIViewControllerTransitionCoordinator) {
     preRotationSizes = PreRotationSizes(
         contentOffset: rootScrollView.contentOffset,
@@ -522,12 +522,12 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     // Disable view animations during transitions to a new size. Specifically
     // this blocks animations due to screen rotations.
     UIView.setAnimationsEnabled(false)
-    coordinator.animateAlongsideTransition(nil) {
+    coordinator.animate(alongsideTransition: nil) {
         (context: UIViewControllerTransitionCoordinatorContext) in
       UIView.setAnimationsEnabled(true)
       if let animation = self.postRotationAnimation {
-        UIView.animateWithDuration(
-            DrawingViewController.kPostRotationAnimationDuration,
+        UIView.animate(
+            withDuration: DrawingViewController.kPostRotationAnimationDuration,
             animations: animation)
         self.postRotationAnimation = nil
       }
@@ -535,24 +535,24 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   }
 
 
-  override func prefersStatusBarHidden() -> Bool {
+  override var prefersStatusBarHidden : Bool {
     return true
   }
 
 
-  override func supportedInterfaceOrientations() -> UIInterfaceOrientationMask {
-    return UIInterfaceOrientationMask.All
+  override var supportedInterfaceOrientations : UIInterfaceOrientationMask {
+    return UIInterfaceOrientationMask.all
   }
   
   
-  override func viewDidAppear(animated: Bool) {
+  override func viewDidAppear(_ animated: Bool) {
     super.viewDidAppear(animated)
 
-    painterTouchPresence = PainterTouchPresence.Absent
-    UIView.animateWithDuration(
-        DrawingViewController.kCanvasRaiseAnimationDuration,
+    painterTouchPresence = PainterTouchPresence.absent
+    UIView.animate(
+        withDuration: DrawingViewController.kCanvasRaiseAnimationDuration,
         delay: 0,
-        options: UIViewAnimationOptions.CurveEaseOut,
+        options: UIViewAnimationOptions.curveEaseOut,
         animations: {
           self.updateShadowForPainterTouchPresence(self.painterTouchPresence)
           self.canvasBackingView.alpha = 1
@@ -563,21 +563,21 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   }
 
 
-  override func viewDidDisappear(animated: Bool) {
+  override func viewDidDisappear(_ animated: Bool) {
     painterView.resignFirstResponder()
     
     canvasBackingView.alpha = 0
     canvasBackingView.layer.shadowOpacity = 0
     canvasBackingView.layer.shadowRadius = 0
-    canvasBackingView.layer.shadowOffset = CGSizeZero
+    canvasBackingView.layer.shadowOffset = CGSize.zero
 
     super.viewDidDisappear(animated)
   }
 
 
-  @objc private func handleTwoTouchTapGesture(
-      twoTouchTapGesture: UITapGestureRecognizer) {
-    let locationInView = twoTouchTapGesture.locationInView(view)
+  @objc fileprivate func handleTwoTouchTapGesture(
+      _ twoTouchTapGesture: UITapGestureRecognizer) {
+    let locationInView = twoTouchTapGesture.location(in: view)
     if menuView.superview == nil {
       displayMenuViewFromLocation(locationInView)
     } else {
@@ -586,15 +586,15 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   }
 
 
-  private func hideMenuViewToLocation(location: CGPoint) {
+  fileprivate func hideMenuViewToLocation(_ location: CGPoint) {
     let hiddenMenuOrigin = CGPoint(
         x: menuView.frame.origin.x + menuView.desiredSize.width / 4,
         y: menuView.frame.origin.y + menuView.desiredSize.height / 4)
     let hiddenMenuSize = CGSize(
         width: menuView.desiredSize.width / 2,
         height: menuView.desiredSize.height / 2)
-    UIView.animateWithDuration(
-      DrawingViewController.kMenuDisplayAnimationDuration,
+    UIView.animate(
+      withDuration: DrawingViewController.kMenuDisplayAnimationDuration,
       animations: {
         self.menuView.alpha = 0
         self.menuView.frame =
@@ -606,7 +606,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   }
 
 
-  private func displayMenuViewFromLocation(location: CGPoint) {
+  fileprivate func displayMenuViewFromLocation(_ location: CGPoint) {
     let hiddenMenuOrigin = CGPoint(
         x: location.x - menuView.desiredSize.width / 4,
         y: location.y - menuView.desiredSize.height / 4)
@@ -627,15 +627,15 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     menuView.alpha = 0
     menuView.frame = initialFrame
     view.addSubview(menuView)
-    UIView.animateWithDuration(
-        DrawingViewController.kMenuDisplayAnimationDuration) {
+    UIView.animate(
+        withDuration: DrawingViewController.kMenuDisplayAnimationDuration, animations: {
       self.menuView.alpha = 1
       self.menuView.frame = finalFrame
-    }
+    }) 
   }
 
-  private func shiftRect(
-      rect: CGRect, withinBoundingRect boundingRect: CGRect) -> CGRect {
+  fileprivate func shiftRect(
+      _ rect: CGRect, withinBoundingRect boundingRect: CGRect) -> CGRect {
     var offset = CGVector.zero
 
     if rect.origin.x < boundingRect.origin.x {
@@ -644,11 +644,11 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
     if rect.origin.y < boundingRect.origin.y {
       offset.dy = boundingRect.origin.y - rect.origin.y
     }
-    if CGRectGetMaxX(rect) > CGRectGetMaxX(boundingRect) {
-      offset.dx = CGRectGetMaxX(boundingRect) - CGRectGetMaxX(rect)
+    if rect.maxX > boundingRect.maxX {
+      offset.dx = boundingRect.maxX - rect.maxX
     }
-    if CGRectGetMaxY(rect) > CGRectGetMaxY(boundingRect) {
-      offset.dy = CGRectGetMaxY(boundingRect) - CGRectGetMaxY(rect)
+    if rect.maxY > boundingRect.maxY {
+      offset.dy = boundingRect.maxY - rect.maxY
     }
 
     return CGRect(
@@ -663,7 +663,7 @@ class DrawingViewController: UIViewController, PainterTouchDelegate,
   }
 
 
-  private struct PreRotationSizes {
+  fileprivate struct PreRotationSizes {
     let contentOffset: CGPoint
     let shadowFrame: CGRect
     let menuCenter: CGPoint

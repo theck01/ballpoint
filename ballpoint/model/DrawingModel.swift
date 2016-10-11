@@ -12,7 +12,7 @@ import UIKit
 /// Structure for an edit to the drawing model.
 struct DrawingModelEdit {
   enum EditType {
-    case AddStrokes, Clear
+    case addStrokes, clear
   }
 
   let type: EditType
@@ -24,7 +24,7 @@ struct DrawingModelEdit {
 /// Structure for a change to the snapshot of a drawing model.
 struct DrawingModelSnapshotDiff {
   enum DiffType {
-    case AddedStrokes, RemovedStrokes
+    case addedStrokes, removedStrokes
   }
 
   let type: DiffType
@@ -35,13 +35,13 @@ struct DrawingModelSnapshotDiff {
 
 /// An in-memory model of the current drawing.
 class DrawingModel: RendererColorPaletteUpdateListener {
-  private(set) var drawingSnapshot: UIImage
-  private(set) var strokesInSnapshot: [Stroke] = []
+  fileprivate(set) var drawingSnapshot: UIImage
+  fileprivate(set) var strokesInSnapshot: [Stroke] = []
 
-  private let renderer: DrawingRenderer
+  fileprivate let renderer: DrawingRenderer
 
-  private var edits: [DrawingModelEdit] = []
-  private var redoStack: [DrawingModelEdit] = []
+  fileprivate var edits: [DrawingModelEdit] = []
+  fileprivate var redoStack: [DrawingModelEdit] = []
 
 
   init (renderer: DrawingRenderer) {
@@ -56,9 +56,10 @@ class DrawingModel: RendererColorPaletteUpdateListener {
 
    - returns: The change in strokes included in the drawing snapshot.
    */
-  func applyEdit(edit: DrawingModelEdit) -> DrawingModelSnapshotDiff? {
+  @discardableResult
+  func applyEdit(_ edit: DrawingModelEdit) -> DrawingModelSnapshotDiff? {
     // Do not apply multiple clear edits in a row.
-    if edit.type == .Clear && edits.last?.type == .Clear {
+    if edit.type == .clear && edits.last?.type == .clear {
       return nil
     }
 
@@ -67,13 +68,13 @@ class DrawingModel: RendererColorPaletteUpdateListener {
     let addedStrokes = applyEdits([edit], toSnapshot: drawingSnapshot)
 
     switch edit.type {
-    case .AddStrokes:
+    case .addStrokes:
       strokesInSnapshot += addedStrokes
       return DrawingModelSnapshotDiff(
-          type: .AddedStrokes, strokes: addedStrokes)
-    case .Clear:
+          type: .addedStrokes, strokes: addedStrokes)
+    case .clear:
       let diff = DrawingModelSnapshotDiff(
-          type: .RemovedStrokes, strokes: strokesInSnapshot)
+          type: .removedStrokes, strokes: strokesInSnapshot)
       strokesInSnapshot = []
       return diff
     }
@@ -85,6 +86,7 @@ class DrawingModel: RendererColorPaletteUpdateListener {
 
    - returns: The edit undone on the model, if an edit could be undone.
    */
+  @discardableResult
   func undo() -> DrawingModelSnapshotDiff? {
     if edits.isEmpty {
       return nil
@@ -94,12 +96,12 @@ class DrawingModel: RendererColorPaletteUpdateListener {
     strokesInSnapshot = applyEdits(edits, toSnapshot: nil)
 
     switch undoneEdit.type {
-    case .AddStrokes:
+    case .addStrokes:
       return DrawingModelSnapshotDiff(
-          type: .RemovedStrokes, strokes: undoneEdit.strokes)
-    case .Clear:
+          type: .removedStrokes, strokes: undoneEdit.strokes)
+    case .clear:
       let diff = DrawingModelSnapshotDiff(
-          type: .AddedStrokes, strokes: strokesInSnapshot)
+          type: .addedStrokes, strokes: strokesInSnapshot)
       return diff
     }
   }
@@ -110,6 +112,7 @@ class DrawingModel: RendererColorPaletteUpdateListener {
 
    - returns: The edit redone on the model, if an edit could be redone.
    */
+  @discardableResult
   func redo() -> DrawingModelSnapshotDiff? {
     if redoStack.isEmpty {
       return nil
@@ -124,7 +127,7 @@ class DrawingModel: RendererColorPaletteUpdateListener {
 
   // MARK: RendererColorPaletteUpdateListener methods
 
-  func didUpdateRenderColorPalette(palette: RendererColorPalette) {
+  func didUpdateRenderColorPalette(_ palette: RendererColorPalette) {
     applyEdits(edits, toSnapshot: nil)
   }
 
@@ -139,16 +142,17 @@ class DrawingModel: RendererColorPaletteUpdateListener {
   
    - returns: The strokes added to the snapshot by applying the edits.
    */
-  private func applyEdits(
-      edits: [DrawingModelEdit], toSnapshot snapshot: UIImage?) -> [Stroke] {
+  @discardableResult
+  fileprivate func applyEdits(
+      _ edits: [DrawingModelEdit], toSnapshot snapshot: UIImage?) -> [Stroke] {
     var baseSnapshotForRender: UIImage? = snapshot
     var strokesToRender: [Stroke] = []
 
     for e in edits {
       switch e.type {
-      case .AddStrokes:
+      case .addStrokes:
         strokesToRender += e.strokes
-      case .Clear:
+      case .clear:
         strokesToRender = []
         baseSnapshotForRender = nil
       }

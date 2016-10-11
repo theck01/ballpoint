@@ -21,16 +21,16 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   var previousOrientationAngle = CGFloat.infinity
 
   func application(
-      application: UIApplication,
-      didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) ->
+      _ application: UIApplication,
+      didFinishLaunchingWithOptions launchOptions: [UIApplicationLaunchOptionsKey: Any]?) ->
           Bool {
     registerRendererColors()
 
-    let window = UIWindow(frame: UIScreen.mainScreen().bounds)
+    let window = UIWindow(frame: UIScreen.main.bounds)
     self.window = window
-    window.backgroundColor = UIColor.whiteColor()
+    window.backgroundColor = UIColor.white
 
-    let bounds = UIScreen.mainScreen().bounds
+    let bounds = UIScreen.main.bounds
     let drawingSize = bounds.width < bounds.height ?
          CGSize(
             width: bounds.width - 2 * DrawingViewController.kCanvasMargin,
@@ -49,17 +49,17 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     window.rootViewController = drawingVC
     window.makeKeyAndVisible()
 
-    NSNotificationCenter.defaultCenter().addObserver(
+    NotificationCenter.default.addObserver(
         self, selector: #selector(handleDeviceRotation),
-        name: UIDeviceOrientationDidChangeNotification, object: nil)
-    UIDevice.currentDevice().beginGeneratingDeviceOrientationNotifications()
+        name: NSNotification.Name.UIDeviceOrientationDidChange, object: nil)
+    UIDevice.current.beginGeneratingDeviceOrientationNotifications()
 
     return true
   }
 
 
   func handleDeviceRotation() {
-    let device = UIDevice.currentDevice()
+    let device = UIDevice.current
     if UIDeviceOrientationIsValidInterfaceOrientation(device.orientation) {
       let newAngle = device.deviceOrientationAngleOrDefault(0)
       if newAngle != previousOrientationAngle {
@@ -71,7 +71,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
   }
 
 
-  private func registerRendererColors() {
+  fileprivate func registerRendererColors() {
     RendererColorPalette.defaultPalette.registerPalette([
       Constants.kBallpointInkColorId: UIColor.ballpointInkColor(),
       Constants.kBallpointSurfaceColorId: UIColor.ballpointSurfaceColor(),

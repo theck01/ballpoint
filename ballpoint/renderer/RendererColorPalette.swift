@@ -31,7 +31,7 @@ protocol RendererColorPaletteUpdateListener {
 
    - parameter color: The color that updated its value.
    */
-  func didUpdateRenderColorPalette(palette: RendererColorPalette)
+  func didUpdateRenderColorPalette(_ palette: RendererColorPalette)
 }
 
 
@@ -39,7 +39,7 @@ protocol RendererColorPaletteUpdateListener {
 /// A collection of render color's that make up a unique unit.
 class RendererColorPalette {
   /// The backing instance for the default palette.
-  private static var defaultPaletteInstance: RendererColorPalette?
+  fileprivate static var defaultPaletteInstance: RendererColorPalette?
 
   /// The default shared palette used by most classes within an application.
   static var defaultPalette: RendererColorPalette {
@@ -49,10 +49,10 @@ class RendererColorPalette {
     return defaultPaletteInstance!
   }
 
-  private var colors: [RendererColorId: RendererColorImpl] = [:]
+  fileprivate var colors: [RendererColorId: RendererColorImpl] = [:]
 
   /// The listeners interested in changes to this palette.
-  private var listeners: [RendererColorPaletteUpdateListener] = []
+  fileprivate var listeners: [RendererColorPaletteUpdateListener] = []
 
 
   /**
@@ -73,7 +73,7 @@ class RendererColorPalette {
    - parameter colors: A map between renderer color IDs to update and initial
        backing colors.
    */
-  func registerPalette(colors: [RendererColorId: UIColor]) {
+  func registerPalette(_ colors: [RendererColorId: UIColor]) {
     for id in colors.keys {
       assert(
           self.colors[id] == nil,
@@ -89,7 +89,7 @@ class RendererColorPalette {
    - parameter listener:
    */
   func registerColorPaletteUpdateListener(
-      l: RendererColorPaletteUpdateListener) {
+      _ l: RendererColorPaletteUpdateListener) {
     listeners.append(l)
   }
 
@@ -101,7 +101,7 @@ class RendererColorPalette {
    - parameter colorChanges: A map between renderer color IDs to update and new
        backing colors.
    */
-  func updatePalette(colorChanges: [RendererColorId: UIColor]) {
+  func updatePalette(_ colorChanges: [RendererColorId: UIColor]) {
     for id in colorChanges.keys {
       assert(
           colors[id] != nil,
@@ -114,7 +114,7 @@ class RendererColorPalette {
 
 
   /// Updates the listeners that a color change occured.
-  private func updateListeners() {
+  fileprivate func updateListeners() {
     for l in listeners {
       l.didUpdateRenderColorPalette(self)
     }

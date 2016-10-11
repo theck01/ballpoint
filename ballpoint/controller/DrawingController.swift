@@ -13,23 +13,23 @@ import UIKit
 /// A controller responsible for transforming interactions into model edits and
 /// notifying listeners when the drawing updates.
 class DrawingController: DrawingInteractionDelegate {
-  private enum EditingTool {
-    case Pen
-    case Eraser
+  fileprivate enum EditingTool {
+    case pen
+    case eraser
 
     func toggle() -> EditingTool {
-      return self == .Pen ? .Eraser : .Pen
+      return self == .pen ? .eraser : .pen
     }
   }
 
-  private let model: DrawingModel
-  private let viewController: DrawingViewController
+  fileprivate let model: DrawingModel
+  fileprivate let viewController: DrawingViewController
 
   /// The current tool being used within the application.
-  private var currentTool: EditingTool = .Pen {
+  fileprivate var currentTool: EditingTool = .pen {
     didSet {
       switch (currentTool) {
-      case .Pen:
+      case .pen:
         viewController.painterView.brush = Constants.kPenBrush
         viewController.painterView.paintColor =
             RendererColorPalette.defaultPalette[Constants.kBallpointInkColorId]
@@ -39,7 +39,7 @@ class DrawingController: DrawingInteractionDelegate {
           Constants.kBallpointSurfaceColorId: UIColor.ballpointSurfaceColor()
         ])
 
-      case .Eraser:
+      case .eraser:
         viewController.painterView.brush = Constants.kEraserBrush
         viewController.painterView.paintColor =
             RendererColorPalette.defaultPalette[
@@ -62,9 +62,9 @@ class DrawingController: DrawingInteractionDelegate {
 
   // MARK: DrawingInteractionDelegate methods.
 
-  func completeStrokes(strokes: [Stroke]) {
+  func completeStrokes(_ strokes: [Stroke]) {
     let edit = DrawingModelEdit(
-        type: DrawingModelEdit.EditType.AddStrokes, strokes: strokes)
+        type: DrawingModelEdit.EditType.addStrokes, strokes: strokes)
     model.applyEdit(edit)
     viewController.updateDrawingSnapshot(model.drawingSnapshot)
   }
@@ -72,7 +72,7 @@ class DrawingController: DrawingInteractionDelegate {
 
   func clearDrawing() {
     let edit = DrawingModelEdit(
-        type: DrawingModelEdit.EditType.Clear, strokes: [])
+        type: DrawingModelEdit.EditType.clear, strokes: [])
     model.applyEdit(edit)
     viewController.updateDrawingSnapshot(model.drawingSnapshot)
   }

@@ -13,7 +13,7 @@ import CoreGraphics
 /// Creates render segments between all existing render points within a
 /// scaffold.
 struct SegmentPopulationStage: RenderPipelineStage {
-  func process(inout scaffold: RenderScaffold, stroke: Stroke) {
+  func process(_ scaffold: inout RenderScaffold, stroke: Stroke) {
     if scaffold.points.count < 3 {
       return
     }
@@ -41,8 +41,8 @@ struct SegmentPopulationStage: RenderPipelineStage {
    - returns: The scaffold segment that connects the midpoint of ab to the
        midpoint of bc.
    */
-  private func createQuadraticSegmentConnector(
-      a: CGPoint, b: CGPoint, c: CGPoint) -> ScaffoldSegment {
+  fileprivate func createQuadraticSegmentConnector(
+      _ a: CGPoint, b: CGPoint, c: CGPoint) -> ScaffoldSegment {
     var midpointAB = a
     if let segmentAB = LineSegment(point: a, otherPoint: b) {
       midpointAB = LineSegment.midpoint(segmentAB)

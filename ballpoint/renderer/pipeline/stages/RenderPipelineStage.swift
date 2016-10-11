@@ -14,5 +14,5 @@ protocol RenderPipelineStage {
    - parameter scaffold: The partially constructed renderer scaffold. Stages
        should update the scaffold in place.
    */
-  func process(inout scaffold: RenderScaffold, stroke: Stroke)
+  func process(_ scaffold: inout RenderScaffold, stroke: Stroke)
 }

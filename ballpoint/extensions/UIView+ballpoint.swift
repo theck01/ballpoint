@@ -20,40 +20,38 @@ extension UIView {
   - parameter shadowYOffset:
   */
   func animateShadowAppearanceWithDuration(
-      duration: NSTimeInterval, shadowOpacity: CGFloat, shadowRadius: CGFloat,
+      _ duration: TimeInterval, shadowOpacity: CGFloat, shadowRadius: CGFloat,
       shadowYOffset: CGFloat) {
     let shadowOpacityAnimation = CABasicAnimation(keyPath: "shadowOpacity")
-    shadowOpacityAnimation.fromValue = NSNumber(
-        double: Double(layer.shadowOpacity))
-    shadowOpacityAnimation.toValue = NSNumber(double: Double(shadowOpacity))
+    shadowOpacityAnimation.fromValue = NSNumber(value: Double(layer.shadowOpacity) as Double)
+    shadowOpacityAnimation.toValue = NSNumber(value: Double(shadowOpacity) as Double)
     shadowOpacityAnimation.duration = duration
     shadowOpacityAnimation.fillMode =
         Float(shadowOpacity) > layer.shadowOpacity ?
             kCAFillModeForwards :
             kCAFillModeBackwards
-    layer.addAnimation(shadowOpacityAnimation, forKey: "shadowOpacity")
+    layer.add(shadowOpacityAnimation, forKey: "shadowOpacity")
     layer.shadowOpacity = Float(shadowOpacity)
 
     let shadowRadiusAnimation = CABasicAnimation(keyPath: "shadowRadius")
-    shadowRadiusAnimation.fromValue = NSNumber(
-        double: Double(layer.shadowRadius))
-    shadowRadiusAnimation.toValue = NSNumber(double: Double(shadowRadius))
+    shadowRadiusAnimation.fromValue = NSNumber(value: Double(layer.shadowRadius) as Double)
+    shadowRadiusAnimation.toValue = NSNumber(value: Double(shadowRadius) as Double)
     shadowRadiusAnimation.duration = duration
     shadowRadiusAnimation.fillMode = shadowRadius > layer.shadowRadius ?
         kCAFillModeForwards :
         kCAFillModeBackwards
-    layer.addAnimation(shadowRadiusAnimation, forKey: "shadowRadius")
+    layer.add(shadowRadiusAnimation, forKey: "shadowRadius")
     layer.shadowRadius = shadowRadius
 
     let endShadowOffset = CGSize(width: 0, height: shadowYOffset)
     let shadowOffsetAnimation = CABasicAnimation(keyPath: "shadowOffset")
-    shadowOffsetAnimation.fromValue = NSValue(CGSize: layer.shadowOffset)
-    shadowOffsetAnimation.toValue = NSValue(CGSize: endShadowOffset)
+    shadowOffsetAnimation.fromValue = NSValue(cgSize: layer.shadowOffset)
+    shadowOffsetAnimation.toValue = NSValue(cgSize: endShadowOffset)
     shadowOffsetAnimation.duration = duration
     shadowRadiusAnimation.fillMode = shadowYOffset > layer.shadowOffset.height ?
         kCAFillModeForwards :
         kCAFillModeBackwards
-    layer.addAnimation(shadowOffsetAnimation, forKey: "shadowOffset")
+    layer.add(shadowOffsetAnimation, forKey: "shadowOffset")
     layer.shadowOffset = endShadowOffset
   }
 }

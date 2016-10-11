@@ -12,8 +12,8 @@ import UIKit
 /// A button-like view that changes background opacity based on touch state
 /// and triggers an action when a press is processed.
 class DepressableButton: UIButton {
-  private static let kNoTouchOpacity: CGFloat = 0
-  private static let kTouchOpacity: CGFloat = 0.3
+  fileprivate static let kNoTouchOpacity: CGFloat = 0
+  fileprivate static let kTouchOpacity: CGFloat = 0.3
 
   // The action that is triggered when
   var pressAction: (() -> Void)?
@@ -23,15 +23,15 @@ class DepressableButton: UIButton {
     super.init(frame: frame)
     addTarget(
         self, action: #selector(onPress),
-        forControlEvents: UIControlEvents.TouchUpInside)
+        for: UIControlEvents.touchUpInside)
     addTarget(
         self, action: #selector(onRelease),
-        forControlEvents:
-            [UIControlEvents.TouchUpInside, UIControlEvents.TouchDragExit])
+        for:
+            [UIControlEvents.touchUpInside, UIControlEvents.touchDragExit])
     addTarget(
         self, action: #selector(onDepress),
-        forControlEvents:
-            [UIControlEvents.TouchDown, UIControlEvents.TouchDragEnter])
+        for:
+            [UIControlEvents.touchDown, UIControlEvents.touchDragEnter])
   }
 
 
@@ -40,7 +40,7 @@ class DepressableButton: UIButton {
   }
 
 
-  @objc private func onPress() {
+  @objc fileprivate func onPress() {
     guard let action = pressAction else {
       return
     }
@@ -48,13 +48,13 @@ class DepressableButton: UIButton {
   }
 
 
-  @objc private func onDepress() {
+  @objc fileprivate func onDepress() {
     backgroundColor = UIColor.ballpointDepressedButtonColor()
   }
 
 
-  @objc private func onRelease() {
-    backgroundColor = UIColor.clearColor()
+  @objc fileprivate func onRelease() {
+    backgroundColor = UIColor.clear
   }
 
 

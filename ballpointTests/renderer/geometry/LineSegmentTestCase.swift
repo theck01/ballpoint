@@ -13,13 +13,13 @@ import ballpoint
 
 
 class LineSegmentTestCase: XCTestCase {
-  private static let kCGPointInf = CGPoint(
+  fileprivate static let kCGPointInf = CGPoint(
       x: CGFloat.infinity, y: CGFloat.infinity)
 
   // Verify that constructing a segment with identical points generates a nil
   // value.
   func testIdenticalPointsGenerateNil() {
-    let segment = LineSegment(point: CGPointZero, otherPoint: CGPointZero)
+    let segment = LineSegment(point: CGPoint.zero, otherPoint: CGPoint.zero)
     XCTAssertNil(
         segment, "Expected identical points to generate a nil segment.")
   }
@@ -27,7 +27,7 @@ class LineSegmentTestCase: XCTestCase {
   // Verifes that isPoint:onLineSegment: works.
   func testIsPointOnLineSegment() {
     let segment = LineSegment(
-        point: CGPointZero, otherPoint: CGPoint(x: 5, y: 5))!
+        point: CGPoint.zero, otherPoint: CGPoint(x: 5, y: 5))!
     let horizontalSegment = LineSegment(
         point: CGPoint(x: 0, y: 2), otherPoint: CGPoint(x: 1, y: 2))!
 
@@ -48,13 +48,13 @@ class LineSegmentTestCase: XCTestCase {
   // Verifies that intersection works.
   func testIntersection() {
     let inclinedSegment = LineSegment(
-        point: CGPointZero, otherPoint: CGPoint(x: 5, y: 5))!
+        point: CGPoint.zero, otherPoint: CGPoint(x: 5, y: 5))!
     let verticalSegment = LineSegment(
-        point: CGPointZero, otherPoint: CGPoint(x: 0, y: 5))!
+        point: CGPoint.zero, otherPoint: CGPoint(x: 0, y: 5))!
     let horizontalSegment = LineSegment(
         point: CGPoint(x: 2, y: 2), otherPoint: CGPoint(x: 5, y: 2))!
     
-    var expectedIntersection = CGPointZero
+    var expectedIntersection = CGPoint.zero
     var actualIntersection = LineSegment.intersection(
         inclinedSegment, verticalSegment)
     XCTAssertNotNil(actualIntersection)
@@ -80,7 +80,7 @@ class LineSegmentTestCase: XCTestCase {
   func testMidpoint() {
     let segment = LineSegment(
         point: CGPoint(x: -4, y: 4), otherPoint: CGPoint(x: 4, y: -4))!
-    let expectedMidpoint = CGPointZero
+    let expectedMidpoint = CGPoint.zero
     XCTAssertTrue(LineSegment.midpoint(segment) =~= expectedMidpoint)
   }
 }

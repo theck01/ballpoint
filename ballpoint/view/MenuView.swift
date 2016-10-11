@@ -13,10 +13,10 @@ import UIKit
 // The menu of buttons that trigger actions within the app.
 class MenuView: UIView {
   // The desired size of the menu view buttons.
-  private static let kMenuButtonSize: CGFloat = 44
+  fileprivate static let kMenuButtonSize: CGFloat = 44
 
   // The number of menu view buttons.
-  private static let kMenuButtonCount: Int = 5
+  fileprivate static let kMenuButtonCount: Int = 5
 
   // The opacity of the menu shadow.
   static let kShadowOpacity: CGFloat = 0.2
@@ -74,17 +74,17 @@ class MenuView: UIView {
   }
 
   // The shadow of the menu.
-  private let menuShadow: UIView
+  fileprivate let menuShadow: UIView
 
   // The containing view for underlying buttons.
-  private let buttonContainer: UIView
+  fileprivate let buttonContainer: UIView
 
   // Buttons within the menu.
-  private let eraseButton: DepressableButton
-  private let undoButton: DepressableButton
-  private let redoButton: DepressableButton
-  private let saveButton: DepressableButton
-  private let clearButton: DepressableButton
+  fileprivate let eraseButton: DepressableButton
+  fileprivate let undoButton: DepressableButton
+  fileprivate let redoButton: DepressableButton
+  fileprivate let saveButton: DepressableButton
+  fileprivate let clearButton: DepressableButton
 
 
   // The menu will be created at desired size, and can be resized as needed
@@ -129,27 +129,27 @@ class MenuView: UIView {
       saveButton, clearButton
     ]
     let autoSizeParams: UIViewAutoresizing = [
-      UIViewAutoresizing.FlexibleHeight,
-      UIViewAutoresizing.FlexibleWidth,
-      UIViewAutoresizing.FlexibleTopMargin,
-      UIViewAutoresizing.FlexibleBottomMargin,
-      UIViewAutoresizing.FlexibleLeftMargin,
-      UIViewAutoresizing.FlexibleRightMargin,
+      UIViewAutoresizing.flexibleHeight,
+      UIViewAutoresizing.flexibleWidth,
+      UIViewAutoresizing.flexibleTopMargin,
+      UIViewAutoresizing.flexibleBottomMargin,
+      UIViewAutoresizing.flexibleLeftMargin,
+      UIViewAutoresizing.flexibleRightMargin,
     ]
     for view in allViews {
       view.autoresizingMask = autoSizeParams
     }
 
-    menuShadow.backgroundColor = UIColor.darkGrayColor()
+    menuShadow.backgroundColor = UIColor.darkGray
     menuShadow.alpha = MenuView.kShadowOpacity
-    buttonContainer.backgroundColor = UIColor.lightGrayColor()
+    buttonContainer.backgroundColor = UIColor.lightGray
 
 
-    eraseButton.setTitle("E", forState: UIControlState.Normal)
-    undoButton.setTitle("U", forState: UIControlState.Normal)
-    redoButton.setTitle("R", forState: UIControlState.Normal)
-    saveButton.setTitle("S", forState: UIControlState.Normal)
-    clearButton.setTitle("C", forState: UIControlState.Normal)
+    eraseButton.setTitle("E", for: UIControlState())
+    undoButton.setTitle("U", for: UIControlState())
+    redoButton.setTitle("R", for: UIControlState())
+    saveButton.setTitle("S", for: UIControlState())
+    clearButton.setTitle("C", for: UIControlState())
   }
 
 

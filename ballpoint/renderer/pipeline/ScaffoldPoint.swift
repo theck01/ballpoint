@@ -17,8 +17,8 @@ import CoreGraphics
 struct ScaffoldPoint {
   let modelLocation: CGPoint
   let modelTangentLine: DirectedLine
-  private(set) var left: CGPoint
-  private(set) var right: CGPoint
+  fileprivate(set) var left: CGPoint
+  fileprivate(set) var right: CGPoint
 
 
   init(modelLocation: CGPoint, modelTangentLine: DirectedLine, radius: CGFloat) {
@@ -35,7 +35,7 @@ struct ScaffoldPoint {
         radius, onLine: perpendicularLine, fromPoint: modelLocation)
     
     if DirectedLine.orientationOfPoint(a, toLine: modelTangentLine) ==
-        DirectedLine.Orientation.Left {
+        DirectedLine.Orientation.left {
       left = a
       right = b
     } else {

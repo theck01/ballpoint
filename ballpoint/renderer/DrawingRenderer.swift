@@ -13,7 +13,7 @@ import UIKit
 /// The object responsible for rendering strokes on a bitmap.
 class DrawingRenderer {
   /// The size of the rendered output.
-  private let drawingSize: CGSize
+  fileprivate let drawingSize: CGSize
 
   /// An image containing a drawing composed of no strokes.
   let emptyDrawing: UIImage
@@ -23,18 +23,18 @@ class DrawingRenderer {
     self.drawingSize = drawingSize
 
     UIGraphicsBeginImageContextWithOptions(drawingSize, false, 0)
-    self.emptyDrawing = UIGraphicsGetImageFromCurrentImageContext()
+    self.emptyDrawing = UIGraphicsGetImageFromCurrentImageContext()!
     UIGraphicsEndImageContext()
   }
 
 
   func renderStrokes(
-      strokes: [Stroke], onImage image: UIImage? = nil) -> UIImage {
+      _ strokes: [Stroke], onImage image: UIImage? = nil) -> UIImage {
     UIGraphicsBeginImageContextWithOptions(drawingSize, false, 0.0)
 
     // Draw image on the new context, using -drawInRect to ensure that the
     // image is oriented properly within the context.
-    image?.drawInRect(CGRect(origin: CGPointZero, size: drawingSize))
+    image?.draw(in: CGRect(origin: CGPoint.zero, size: drawingSize))
 
     // Draw remaining strokes directly on the bitmap context.
     if let bmpContext = UIGraphicsGetCurrentContext() {
@@ -48,6 +48,6 @@ class DrawingRenderer {
     let snapshot = UIGraphicsGetImageFromCurrentImageContext()
     UIGraphicsEndImageContext()
 
-    return snapshot
+    return snapshot!
   }
 }

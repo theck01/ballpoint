@@ -31,7 +31,7 @@ extension CGVector {
    - returns: The minimum angle between the two vectors in degrees,
         counter-clockwise or clockwise.
    */
-  func angleBetweenVector(vector: CGVector) -> CGFloat {
+  func angleBetweenVector(_ vector: CGVector) -> CGFloat {
     let selfAngle = angleInDegrees
     let otherAngle = vector.angleInDegrees
 
@@ -53,7 +53,7 @@ extension CGVector {
    - returns: A vector in the same direction as this vector, but with the given
         magnitude.
    */
-  func vectorWithMagnitude(magnitude: CGFloat) -> CGVector {
+  func vectorWithMagnitude(_ magnitude: CGFloat) -> CGVector {
     let selfAngle = angleInRadians
     return CGVector(
         dx: cos(selfAngle) * magnitude, dy: sin(selfAngle) * magnitude)
@@ -66,7 +66,7 @@ extension CGVector {
    - returns: A vector with the same magnitude as this vector, after having
        been rotated.
    */
-  func vectorRotatedBy(angleInRadians: CGFloat) -> CGVector {
+  func vectorRotatedBy(_ angleInRadians: CGFloat) -> CGVector {
     let newAngle = angleInRadians + self.angleInRadians
     let selfMagnitude = magnitude
     return CGVector(

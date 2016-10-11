@@ -27,7 +27,7 @@ extension CGPoint: RoughlyEquatable {
   }
   */
 
-  public func roughlyEquals<T : RoughlyEquatable>(otherValue: T) -> Bool {
+  public func roughlyEquals<T : RoughlyEquatable>(_ otherValue: T) -> Bool {
     guard let otherPoint = otherValue as? CGPoint else {
       return false
     }

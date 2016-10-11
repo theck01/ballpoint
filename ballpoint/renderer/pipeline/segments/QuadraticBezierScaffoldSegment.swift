@@ -12,9 +12,9 @@ import CoreGraphics
 
 /// A quadratic bezier curve connection between ScaffoldPoints.
 struct QuadraticBezierScaffoldSegment: ScaffoldSegment {
-  private let start: CGPoint
-  private let end: CGPoint
-  private let controlPoint: CGPoint
+  fileprivate let start: CGPoint
+  fileprivate let end: CGPoint
+  fileprivate let controlPoint: CGPoint
 
   var origin: CGPoint { return start }
   var terminal: CGPoint { return end }
@@ -27,16 +27,15 @@ struct QuadraticBezierScaffoldSegment: ScaffoldSegment {
   }
 
 
-  func extendPath(path: CGMutablePath) {
-    if CGPathIsEmpty(path) {
-      CGPathMoveToPoint(path, nil, start.x, start.y)
+  func extendPath(_ path: CGMutablePath) {
+    if path.isEmpty {
+      path.move(to: start)
     }
 
     assert(
-        CGPathGetCurrentPoint(path) =~= start,
+        path.currentPoint =~= start,
         "Cannot extend a path that is not currently at the expected path " +
         "starting point")
-    CGPathAddQuadCurveToPoint(
-        path, nil, controlPoint.x, controlPoint.y, end.x, end.y)
+    path.addQuadCurve(to: end, control: controlPoint)
   }
 }

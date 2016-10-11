@@ -13,7 +13,7 @@ import CoreGraphics
 public struct LineSegment {
   let line: Line
   let endPoints: (CGPoint, CGPoint)
-  private let boundingBox: CGRect
+  fileprivate let boundingBox: CGRect
 
 
   public init?(point: CGPoint, otherPoint: CGPoint) {
@@ -39,20 +39,20 @@ public extension LineSegment {
    - returns: Whether the point is on the line segment.
    */
   public static func isPoint(
-      point: CGPoint, onLineSegment segment: LineSegment) -> Bool {
+      _ point: CGPoint, onLineSegment segment: LineSegment) -> Bool {
     var isPointWithinSegmentBounds = true
     isPointWithinSegmentBounds &&=
-        point.x > CGRectGetMinX(segment.boundingBox) ||
-        point.x =~= CGRectGetMinX(segment.boundingBox)
+        point.x > segment.boundingBox.minX ||
+        point.x =~= segment.boundingBox.minX
     isPointWithinSegmentBounds &&=
-        point.x < CGRectGetMaxX(segment.boundingBox) ||
-        point.x =~= CGRectGetMaxX(segment.boundingBox)
+        point.x < segment.boundingBox.maxX ||
+        point.x =~= segment.boundingBox.maxX
     isPointWithinSegmentBounds &&=
-        point.y > CGRectGetMinY(segment.boundingBox) ||
-        point.y =~= CGRectGetMinY(segment.boundingBox)
+        point.y > segment.boundingBox.minY ||
+        point.y =~= segment.boundingBox.minY
     isPointWithinSegmentBounds &&=
-        point.y < CGRectGetMaxY(segment.boundingBox) ||
-        point.y =~= CGRectGetMaxY(segment.boundingBox)
+        point.y < segment.boundingBox.maxY ||
+        point.y =~= segment.boundingBox.maxY
     return
         isPointWithinSegmentBounds && Line.isPoint(point, onLine: segment.line)
   }
@@ -66,7 +66,7 @@ public extension LineSegment {
         intersection exists.
    */
   public static func intersection(
-      a: LineSegment, _ b: LineSegment) -> CGPoint? {
+      _ a: LineSegment, _ b: LineSegment) -> CGPoint? {
     if let lineIntersection = Line.intersection(a.line, b.line) {
       if LineSegment.isPoint(lineIntersection, onLineSegment: a) &&
           LineSegment.isPoint(lineIntersection, onLineSegment: b) {
@@ -82,7 +82,7 @@ public extension LineSegment {
 
    - returns: The midpoint of the line segment.
    */
-  public static func midpoint(segment: LineSegment) -> CGPoint {
+  public static func midpoint(_ segment: LineSegment) -> CGPoint {
     return CGPoint(
         x: (segment.endPoints.0.x + segment.endPoints.1.x) / 2,
         y: (segment.endPoints.0.y + segment.endPoints.1.y) / 2)

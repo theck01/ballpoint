@@ -10,13 +10,14 @@ import CoreGraphics
 
 
 extension CGFloat: RoughlyEquatable {
-  private static let kAcceptableDiffForRoughEquality: CGFloat = 0.00001
+  fileprivate static let kAcceptableDiffForRoughEquality: CGFloat = 0.00001
 
 
-  public func roughlyEquals<T : RoughlyEquatable>(otherValue: T) -> Bool {
+  public func roughlyEquals<T : RoughlyEquatable>(_ otherValue: T) -> Bool {
     guard let floatValue = otherValue as? CGFloat else {
       return false
     }
-    return fabs(self - floatValue) <= CGFloat.kAcceptableDiffForRoughEquality
+    return self == floatValue ||
+      fabs(self - floatValue) <= CGFloat.kAcceptableDiffForRoughEquality
   }
 }

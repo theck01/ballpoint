@@ -10,13 +10,13 @@ import CoreGraphics
 
 
 
-public class PointUtil {
+open class PointUtil {
   /**
    - parameter points:
 
    - returns: Whether the points all exist on a line.
    */
-  public static func arePointsCollinear(points: [CGPoint]) -> Bool {
+  open static func arePointsCollinear(_ points: [CGPoint]) -> Bool {
     if points.count < 2 {
       return false
     }
@@ -54,7 +54,7 @@ public class PointUtil {
 
    - returns: Whether the points all exist on a line.
    */
-  public static func arePointsCollinear(points: CGPoint...) -> Bool {
+  open static func arePointsCollinear(_ points: CGPoint...) -> Bool {
     return PointUtil.arePointsCollinear(points)
   }
 
@@ -65,7 +65,7 @@ public class PointUtil {
 
    - returns: The distance between points a and b
    */
-  public static func distance(a: CGPoint, _ b: CGPoint) -> CGFloat {
+  open static func distance(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
     return sqrt(pow(a.y - b.y, 2) + pow(a.x - b.x, 2))
   }
 }

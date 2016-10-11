@@ -9,6 +9,9 @@
 
 
 
+/// Custom infix operator for rough equality.
+infix operator =~=: ComparisonPrecedence
+
 /// Protocol for a type where exact equivalence is less important than
 /// approximate equivalence.
 public protocol RoughlyEquatable {
@@ -19,12 +22,10 @@ public protocol RoughlyEquatable {
 
   - returns: Whether the points are within a given difference from each other.
   */
-  func roughlyEquals<T: RoughlyEquatable>(otherValue: T) -> Bool
+  func roughlyEquals<T: RoughlyEquatable>(_ otherValue: T) -> Bool
 }
 
-
-/// Custom infix operator for rough equality.
-infix operator =~= { associativity none precedence 130 }
+  
 public func =~= <T: RoughlyEquatable> (left: T, right: T) -> Bool {
   return left.roughlyEquals(right)
 }

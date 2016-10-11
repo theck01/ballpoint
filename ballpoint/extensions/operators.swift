@@ -9,21 +9,15 @@
 
 
 /// Custom infix operator for boolean && assignment.
-infix operator &&= { associativity right precedence 90 }
-public func &&= (inout left: Bool, right: Bool) {
-  left = left && right
-}
+infix operator &&=: AssignmentPrecedence
+infix operator ||=: AssignmentPrecedence
 
-
-/// Custom infix operator for boolean || assignment.
-infix operator ||= { associativity right precedence 90 }
-public func ||= (inout left: Bool, right: Bool) {
-  left = left || right
-}
-
-
-/// Custom infix operator for optional initialization assignment.
-infix operator ??= { associativity right precedence 90 }
-public func ??= <T> (inout left: T?, right: T) {
-  left = left ?? right
+extension Bool {
+  public static func &&= (left: inout Bool, right: Bool) {
+    left = left && right
+  }
+  
+  public static func ||= (left: inout Bool, right: Bool) {
+    left = left || right
+  }
 }

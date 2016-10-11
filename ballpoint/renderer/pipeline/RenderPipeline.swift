@@ -12,7 +12,7 @@ import UIKit
 
 /// A pipeline that transforms model strokes into renderer strokes.
 class RenderPipeline {
-  private let stages: [RenderPipelineStage]
+  fileprivate let stages: [RenderPipelineStage]
 
 
   init(stages: RenderPipelineStage...) {
@@ -25,7 +25,7 @@ class RenderPipeline {
 
    - returns: The model stroke rendered as a CGPath.
    */
-  func render(stroke: Stroke) -> [RenderedStroke.Path] {
+  func render(_ stroke: Stroke) -> [RenderedStroke.Path] {
     var scaffold = RenderScaffold()
     for s in stages {
       s.process(&scaffold, stroke: stroke)
@@ -36,20 +36,20 @@ class RenderPipeline {
         "Cannot render a RenderScaffold that does not describe a complete " +
         "stroke.")
 
-    let path = CGPathCreateMutable()
+    let path = CGMutablePath()
     for segment in scaffold.segments {
       segment.extendPath(path)
     }
 
-    if CGPathIsEmpty(path) {
+    if path.isEmpty {
       return []
     }
 
-    CGPathCloseSubpath(path)
+    path.closeSubpath()
     var renderedPaths: [RenderedStroke.Path] = []
     renderedPaths.append(RenderedStroke.Path(
         cgPath: path, color: stroke.color.backingColor,
-        mode: CGPathDrawingMode.Fill))
+        mode: CGPathDrawingMode.fill))
 
     return renderedPaths
   }

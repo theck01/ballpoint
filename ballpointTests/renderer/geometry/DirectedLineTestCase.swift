@@ -18,18 +18,18 @@ class DirectedLineTestCase: XCTestCase {
         earlyPoint: CGPoint.zero, latePoint: CGPoint(x: -1, y: 10))!
     XCTAssertEqual(
         DirectedLine.orientationOfPoint(CGPoint(x: -10, y: 1), toLine: line),
-        DirectedLine.Orientation.Left)
+        DirectedLine.Orientation.left)
 
     line = DirectedLine(
         earlyPoint: CGPoint(x: 0, y : 5), latePoint: CGPoint(x: 10, y: 5))!
     XCTAssertEqual(
         DirectedLine.orientationOfPoint(CGPoint(x: -10, y: 1), toLine: line),
-        DirectedLine.Orientation.Right)
+        DirectedLine.Orientation.right)
 
     line = DirectedLine(
         earlyPoint: CGPoint(x: 0, y : 5), latePoint: CGPoint(x: -1, y: 5))!
     XCTAssertEqual(
         DirectedLine.orientationOfPoint(CGPoint(x: -10, y: 4), toLine: line),
-        DirectedLine.Orientation.Left)
+        DirectedLine.Orientation.left)
   }
 }

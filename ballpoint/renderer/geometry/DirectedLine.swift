@@ -51,7 +51,7 @@ public struct DirectedLine {
 /// Collection of static methods for operating on DirectedLine objects.
 public extension DirectedLine {
   enum Orientation {
-    case Left, Right, Neither
+    case left, right, neither
   }
 
 
@@ -63,7 +63,7 @@ public extension DirectedLine {
        themself to view the line as if directed straight upwards.
    */
   public static func orientationOfPoint(
-      point: CGPoint, toLine line: DirectedLine) -> Orientation {
+      _ point: CGPoint, toLine line: DirectedLine) -> Orientation {
     // The shift required to shift the line such that it traverses through the
     // origin.
     var centerLineShift: CGVector
@@ -80,7 +80,7 @@ public extension DirectedLine {
           pointVector.vectorRotatedBy(-line.direction.angleInRadians)
         
     return rotatedPointVector.dy =~= 0 ?
-        Orientation.Neither :
-        rotatedPointVector.dy > 0 ? Orientation.Left : Orientation.Right
+        Orientation.neither :
+        rotatedPointVector.dy > 0 ? Orientation.left : Orientation.right
   }
 }

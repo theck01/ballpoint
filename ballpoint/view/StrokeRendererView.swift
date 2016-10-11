@@ -9,16 +9,16 @@
 import UIKit
 
 class StrokeRendererView: UIView, StrokeRenderer {
-  private var strokesToRender: [Stroke] = []
+  fileprivate var strokesToRender: [Stroke] = []
 
 
-  func renderStrokes(strokes: [Stroke]) {
+  func renderStrokes(_ strokes: [Stroke]) {
     strokesToRender = strokes
     setNeedsDisplay()
   }
 
 
-  override func drawRect(rect: CGRect) {
+  override func draw(_ rect: CGRect) {
     if let context = UIGraphicsGetCurrentContext() {
       for stroke in strokesToRender {
         if let renderedStroke = stroke.brush.render(stroke) {

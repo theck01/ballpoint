@@ -15,7 +15,7 @@ protocol DrawingInteractionDelegate {
    
    - parameter stroke:
    */
-  func completeStrokes(strokes: [Stroke])
+  func completeStrokes(_ strokes: [Stroke])
 
   /**
    Clear the drawing, presenting a blank canvas.

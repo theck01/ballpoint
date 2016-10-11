@@ -36,7 +36,7 @@ struct RenderScaffold {
     if let endCap = endCapSegment {
       list.append(endCap)
     }
-    list += segmentPairs.reverse().map { $0.right }
+    list += segmentPairs.reversed().map { $0.right }
     if let startCap = startCapSegment {
       list.append(startCap)
     }

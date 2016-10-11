@@ -38,20 +38,20 @@ protocol PainterStrokeScaleProvider {
 class PainterView: UIView {
 
   /// A tuple containing all information required to process pending strokes.
-  private struct RenderingStrokeTuple {
+  fileprivate struct RenderingStrokeTuple {
     /// The raw address of the UITouch object used to generate the stroke.
-    let touchPointerId: UnsafePointer<Void>
+    let touchPointerId: UnsafeRawPointer
 
     /// The underlying stroke object.
     let stroke: MutableStroke
   }
 
   /// The minimum proportional stroke size from a light 3d touch.
-  private static let kMinProportionalStrokeRadius: CGFloat =
+  fileprivate static let kMinProportionalStrokeRadius: CGFloat =
       Constants.kProportionalStrokeRadius * 0.75
 
   /// The maximum proportional stroke size from a strong 3d touch.
-  private static let kMaxProportionalStrokeRadius: CGFloat =
+  fileprivate static let kMaxProportionalStrokeRadius: CGFloat =
       Constants.kProportionalStrokeRadius * 2
 
   /// The brush used to create strokes on the canvas.
@@ -70,7 +70,7 @@ class PainterView: UIView {
 
   /// An array of touch locations and pending strokes that last were updated to
   /// that location.
-  private var pendingStrokeTuples: [RenderingStrokeTuple] = [] {
+  fileprivate var pendingStrokeTuples: [RenderingStrokeTuple] = [] {
     didSet {
       if pendingStrokeTuples.count > 0 && oldValue.count == 0 {
         painterTouchDelegate?.painterTouchesActive()
@@ -80,7 +80,7 @@ class PainterView: UIView {
     }
   }
 
-  private var pendingStrokes: [MutableStroke] {
+  fileprivate var pendingStrokes: [MutableStroke] {
     return pendingStrokeTuples.map { $0.stroke }
   }
 
@@ -92,20 +92,20 @@ class PainterView: UIView {
    - parameter brush: The initial brush used to create strokes.
    - parameter paintColor: The initial color of strokes to generate.
    */
-  init(brush: Brush, paintColor: RendererColor, frame: CGRect = CGRectZero) {
+  init(brush: Brush, paintColor: RendererColor, frame: CGRect = CGRect.zero) {
     self.brush = brush
     self.paintColor = paintColor
 
     super.init(frame: frame)
 
-    multipleTouchEnabled = true
+    isMultipleTouchEnabled = true
   }
 
 
-  func createStrokePointFromTouch(touch: UITouch) -> Stroke.Point {
+  func createStrokePointFromTouch(_ touch: UITouch) -> Stroke.Point {
     if #available(iOS 9.0, *) {
       if (traitCollection.forceTouchCapability ==
-          UIForceTouchCapability.Available) {
+          UIForceTouchCapability.available) {
         let forceTouchFactor = touch.force / touch.maximumPossibleForce
         let proportionalRadius =
             (PainterView.kMaxProportionalStrokeRadius -
@@ -114,12 +114,12 @@ class PainterView: UIView {
         let radius = proportionalRadius *
             (painterStrokeScaleProvider?.getStrokeScaleFactor() ?? 1)
         return Stroke.Point(
-            location: touch.locationInView(self),
+            location: touch.location(in: self),
             radius: radius)
       }
     }
     return Stroke.Point(
-        location: touch.locationInView(self),
+        location: touch.location(in: self),
         radius: Constants.kProportionalStrokeRadius *
             (painterStrokeScaleProvider?.getStrokeScaleFactor() ?? 1))
   }
@@ -128,26 +128,26 @@ class PainterView: UIView {
   // MARK: Touch event handlers.
   
   
-  override func touchesBegan(touches: Set<UITouch>, withEvent event: UIEvent?) {
+  override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
     for touch in touches {
       let stroke = MutableStroke(color: paintColor, brush: brush)
       stroke.appendPoint(createStrokePointFromTouch(touch))
       pendingStrokeTuples.append(RenderingStrokeTuple(
-          touchPointerId: unsafeAddressOf(touch), stroke: stroke))
+          touchPointerId: Unmanaged.passUnretained(touch).toOpaque(), stroke: stroke))
     }
 
     self.pendingStrokeRenderer?.renderStrokes(pendingStrokes)
   }
   
   
-  override func touchesMoved(touches: Set<UITouch>, withEvent event: UIEvent?) {
+  override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
     for touch in touches {
-      let touchPointerId = unsafeAddressOf(touch)
+      let touchPointerId = Unmanaged.passUnretained(touch).toOpaque()
 
       // Update the location-stroke pairs, updating the pair associated with
       // the given touch and extending the stroke to the new touch location.
       for t in pendingStrokeTuples {
-        if t.touchPointerId == touchPointerId {
+        if t.touchPointerId == UnsafeRawPointer(touchPointerId) {
           t.stroke.appendPoint(createStrokePointFromTouch(touch))
         }
       }
@@ -157,26 +157,26 @@ class PainterView: UIView {
   }
   
   
-  override func touchesEnded(touches: Set<UITouch>, withEvent event: UIEvent?) {
+  override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
     let tupleCountPriorToTouchEnd = pendingStrokeTuples.count
     var activeCompletedStrokes: [Stroke] = []
     
     for touch in touches {
-      let touchPointerId = unsafeAddressOf(touch)
+      let touchPointerId = Unmanaged.passUnretained(touch).toOpaque()
 
       // Update the location stroke pairs, droping pairs associated with the
       // touch that has ended.
       pendingStrokeTuples = pendingStrokeTuples.filter {
         // If the pending stroke is not associated with the end location then
         // do not end the stroke.
-        if ($0.touchPointerId != touchPointerId) {
+        if ($0.touchPointerId != UnsafeRawPointer(touchPointerId)) {
           return true
         }
 
         // If the touch ended at a different location than the previous location
         // then append the final location to the stroke.
-        let location = touch.locationInView(self)
-        if !(location =~= touch.previousLocationInView(self)) {
+        let location = touch.location(in: self)
+        if !(location =~= touch.previousLocation(in: self)) {
           $0.stroke.appendPoint(createStrokePointFromTouch(touch))
         }
 
@@ -196,7 +196,7 @@ class PainterView: UIView {
   
   
   override func touchesCancelled(
-      touches: Set<UITouch>?, withEvent event: UIEvent?) {
+      _ touches: Set<UITouch>, with event: UIEvent?) {
     /// Clear the strokes cancelled due to touch cancellation rather than just
     /// cancelling, as these strokes will never be ended by -touchesEnded.
     pendingStrokeTuples = []
@@ -206,7 +206,7 @@ class PainterView: UIView {
 
   // MARK: UIResponder method overrides.
 
-  override func canBecomeFirstResponder() -> Bool {
+  override var canBecomeFirstResponder : Bool {
     return true
   }
 

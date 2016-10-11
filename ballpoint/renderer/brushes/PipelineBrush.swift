@@ -11,10 +11,10 @@ import CoreGraphics
 
 
 class PipelineBrush: Brush {
-  private let pipeline: RenderPipeline = RenderPipeline(stages:
+  fileprivate let pipeline: RenderPipeline = RenderPipeline(stages:
       PointPopulationStage(), SegmentPopulationStage(), EndcapPopulationStage())
 
-  func render(stroke: Stroke) -> RenderedStroke? {
+  func render(_ stroke: Stroke) -> RenderedStroke? {
     return RenderedStroke(paths: pipeline.render(stroke))
   }
 }

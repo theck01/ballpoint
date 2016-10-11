@@ -16,15 +16,15 @@ extension UIDevice {
   @nonobjc static let kUpsideDownPortraitAngle = CGFloat(M_PI)
   @nonobjc static let kLandscapeLeftAngle = CGFloat(3 * M_PI_2)
 
-  func deviceOrientationAngleOrDefault(defaultAngle: CGFloat) -> CGFloat {
+  func deviceOrientationAngleOrDefault(_ defaultAngle: CGFloat) -> CGFloat {
     switch (orientation) {
-      case UIDeviceOrientation.Portrait:
+      case UIDeviceOrientation.portrait:
         return UIDevice.kPortraitAngle
-      case UIDeviceOrientation.PortraitUpsideDown:
+      case UIDeviceOrientation.portraitUpsideDown:
         return UIDevice.kUpsideDownPortraitAngle
-      case UIDeviceOrientation.LandscapeLeft:
+      case UIDeviceOrientation.landscapeLeft:
         return UIDevice.kLandscapeLeftAngle
-      case UIDeviceOrientation.LandscapeRight:
+      case UIDeviceOrientation.landscapeRight:
         return UIDevice.kLandscapeRightAngle
       default:
         return defaultAngle

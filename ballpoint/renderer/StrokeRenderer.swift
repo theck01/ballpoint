@@ -17,5 +17,5 @@ protocol StrokeRenderer {
 
    - parameter strokes: The strokes with renderings to be updated.
    */
-  func renderStrokes(strokes: [Stroke])
+  func renderStrokes(_ strokes: [Stroke])
 }

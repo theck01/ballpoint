@@ -21,5 +21,5 @@ protocol ScaffoldSegment {
   /**
    - parameter path: The path to extend with the scaffold's path.
    */
-  func extendPath(path: CGMutablePath)
+  func extendPath(_ path: CGMutablePath)
 }

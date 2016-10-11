@@ -13,10 +13,10 @@ import CoreGraphics
 
 struct PointPopulationStage: RenderPipelineStage {
   /// The number of points to include in the averaging filter's window.
-  private static let kAverageFilterWindowSize = 5
+  fileprivate static let kAverageFilterWindowSize = 5
 
 
-  func process(inout scaffold: RenderScaffold, stroke: Stroke) {
+  func process(_ scaffold: inout RenderScaffold, stroke: Stroke) {
     assert(
         stroke.points.count > 0,
         "Cannot populate scaffold points for an empty stroke.")
@@ -67,7 +67,7 @@ struct PointPopulationStage: RenderPipelineStage {
    - returns: The array of point radii that should be used for each
        scaffold point.
    */
-  private func calculatePointRadii(stroke: Stroke) -> [CGFloat] {
+  fileprivate func calculatePointRadii(_ stroke: Stroke) -> [CGFloat] {
     let radii = stroke.points.map { $0.radius }
     return averageFilter(
       radii, windowSize: PointPopulationStage.kAverageFilterWindowSize)
@@ -81,8 +81,8 @@ struct PointPopulationStage: RenderPipelineStage {
    - returns: An array of size factors that has been average filtered with the
        given window.
    */
-  private func averageFilter(
-      floats: [CGFloat], windowSize: Int) -> [CGFloat] {
+  fileprivate func averageFilter(
+      _ floats: [CGFloat], windowSize: Int) -> [CGFloat] {
     var averageFilteredFloats: [CGFloat] = []
     for i in 0..<floats.count {
       var sum: CGFloat = 0
